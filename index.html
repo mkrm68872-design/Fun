@@ -1,1 +1,1004 @@
-dbhd
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>تحدي المذاكرة - نسخ محظور</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            /* منع التحديد والنسخ */
+            user-select: none; /* منع تحديد النص */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 100%;
+            width: 100%;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 16px;
+            padding: 20px 15px;
+        }
+
+        h1, h2, h3, p, label, td, th {
+            font-weight: 700;
+            letter-spacing: 0;
+            text-shadow: none;
+        }
+
+        /* منع السحب والنسخ الإضافي */
+        input, textarea, [contenteditable] {
+            user-select: text; /* يسمح بالكتابة داخل الحقول مع بقاء منع النسخ خارجياً */
+        }
+
+        /* شاشة الدخول */
+        .login-box {
+            max-width: 350px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .login-box h1 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #000;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            font-size: 1.1rem;
+            border: 2px solid #000;
+            border-radius: 8px;
+            background: white;
+            font-weight: 700;
+            outline: none;
+        }
+
+        .login-box input:focus {
+            background: #f5f5f5;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.1s;
+        }
+
+        .login-box button:hover {
+            background: #000;
+            color: white;
+        }
+
+        .error {
+            color: #d32f2f;
+            margin-top: 10px;
+            font-weight: 700;
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            display: none;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .user-badge {
+            font-size: 1.4rem;
+            font-weight: 900;
+            background: #000;
+            color: white;
+            padding: 5px 18px;
+            border-radius: 30px;
+        }
+
+        .logout-btn {
+            background: white;
+            border: 2px solid #000;
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #000;
+            color: white;
+        }
+
+        /* الجدول */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #000;
+            min-width: 600px;
+        }
+
+        th {
+            background: #000;
+            color: white;
+            font-weight: 900;
+            padding: 12px 8px;
+            font-size: 1rem;
+            border: 1px solid #000;
+        }
+
+        td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        td input, td span {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 700;
+            text-align: center;
+            outline: none;
+            padding: 6px 3px;
+        }
+
+        td input[type="date"] {
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        td input:focus {
+            background: #f0f0f0;
+            border: 1px solid #000;
+        }
+
+        td span {
+            display: inline-block;
+            background: #f0f0f0;
+            border-radius: 4px;
+            padding: 6px 3px;
+        }
+
+        .editable-row {
+            background: #fafafa;
+        }
+
+        .disabled-row td {
+            background: #eeeeee;
+            color: #666;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .disabled-row input, .disabled-row td span {
+            background: #ddd;
+            border-color: #aaa;
+        }
+
+        /* العداد */
+        .timer-section {
+            margin: 30px 0 20px;
+            padding: 15px;
+            border: 2px solid #000;
+            border-radius: 16px;
+            background: white;
+        }
+
+        .timer-display {
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-align: center;
+            font-family: monospace;
+            background: #f5f5f5;
+            border-radius: 16px;
+            padding: 10px;
+            border: 2px solid #000;
+            direction: ltr;
+        }
+
+        .timer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .timer-btn {
+            background: white;
+            border: 2px solid #000;
+            border-radius: 30px;
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            cursor: pointer;
+            flex: 1 1 0;
+            min-width: 120px;
+            transition: 0.1s;
+        }
+
+        .timer-btn:hover {
+            background: #000;
+            color: white;
+        }
+
+        .timer-btn.pause {
+            background: #000;
+            color: white;
+        }
+        .timer-btn.pause:hover {
+            background: #333;
+        }
+
+        .timer-btn.reset {
+            background: white;
+            border: 2px solid #000;
+        }
+        .timer-btn.reset:hover {
+            background: #000;
+            color: white;
+        }
+
+        /* عناصر تحفيزية */
+        .motivation {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #f5f5f5;
+            border: 2px solid #000;
+            border-radius: 16px;
+            padding: 15px;
+            margin: 20px 0 10px;
+        }
+
+        .leader {
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .progress-container {
+            width: 100%;
+        }
+
+        .progress-bg {
+            background: white;
+            border: 2px solid #000;
+            height: 25px;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #000;
+            transition: width 0.3s;
+        }
+
+        .quote {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+            border-top: 2px solid #000;
+            padding-top: 12px;
+        }
+
+        /* قسم السجل (الحافظة) */
+        .history-section {
+            margin-top: 30px;
+            border-top: 3px solid #000;
+            padding-top: 20px;
+        }
+
+        .history-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .history-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .history-tab {
+            padding: 8px 20px;
+            border: 2px solid #000;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            background: white;
+        }
+
+        .history-tab.active {
+            background: #000;
+            color: white;
+        }
+
+        .history-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #000;
+            font-size: 0.9rem;
+        }
+
+        .history-table th {
+            background: #333;
+            color: white;
+            padding: 10px 5px;
+            border: 1px solid #000;
+        }
+
+        .history-table td {
+            padding: 8px 5px;
+            border: 1px solid #000;
+            text-align: center;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 15px 10px;
+            }
+            .timer-display {
+                font-size: 2.8rem;
+            }
+            .timer-btn {
+                font-size: 1rem;
+                padding: 10px 12px;
+                min-width: 100px;
+            }
+            .user-badge {
+                font-size: 1.2rem;
+                padding: 5px 12px;
+            }
+            .logout-btn {
+                padding: 6px 14px;
+                font-size: 1rem;
+            }
+            th, td {
+                padding: 6px 4px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- شاشة تسجيل الدخول -->
+        <div id="loginSection" class="login-box">
+            <h1>تحدي المذاكرة</h1>
+            <p style="margin-bottom: 15px;">أدخل الكود الخاص بك</p>
+            <input type="text" id="codeInput" placeholder="الكود" autocomplete="off">
+            <input type="password" id="passwordInput" placeholder="الرقم السري">
+            <button id="loginBtn">دخول</button>
+            <div id="loginError" class="error"></div>
+        </div>
+
+        <!-- المحتوى الرئيسي بعد تسجيل الدخول -->
+        <div id="mainContent" class="main-content">
+            <div class="header">
+                <div class="user-badge" id="currentUserBadge">ضيف</div>
+                <button class="logout-btn" id="logoutBtn">تسجيل خروج</button>
+            </div>
+
+            <!-- الجدول الرئيسي -->
+            <div class="table-wrapper">
+                <table id="studyTable">
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>التاريخ</th>
+                            <th>ساعات اليوم</th>
+                            <th>مجموع الساعات</th>
+                            <th>ملاحظات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="rowMohamed" data-user="mohamed">
+                            <td class="user-name">محمد</td>
+                            <td><input type="date" class="date-input" id="mohamedDate" value=""></td>
+                            <td><input type="number" step="0.1" min="0" class="hours-input" id="mohamedHours" value="0" placeholder="0.0"></td>
+                            <td><span class="total-span" id="mohamedTotal">0.0</span></td>
+                            <td><input type="text" class="notes-input" id="mohamedNotes" placeholder="..." maxlength="50"></td>
+                        </tr>
+                        <tr id="rowZead" data-user="zead">
+                            <td class="user-name">زياد</td>
+                            <td><input type="date" class="date-input" id="zeadDate" value=""></td>
+                            <td><input type="number" step="0.1" min="0" class="hours-input" id="zeadHours" value="0" placeholder="0.0"></td>
+                            <td><span class="total-span" id="zeadTotal">0.0</span></td>
+                            <td><input type="text" class="notes-input" id="zeadNotes" placeholder="..." maxlength="50"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- عداد المذاكرة (بدون زر إضافة) -->
+            <div class="timer-section">
+                <div class="timer-display" id="timerDisplay">00:00:00</div>
+                <div class="timer-buttons">
+                    <button class="timer-btn" id="startTimer">بدء</button>
+                    <button class="timer-btn pause" id="pauseTimer">توقف</button>
+                    <button class="timer-btn reset" id="resetTimer">تصفير العداد</button>
+                </div>
+                <p style="text-align: center; margin-top: 10px; font-size: 0.9rem;">"توقف" مؤقت، "تصفير" لإعادة الضبط</p>
+            </div>
+
+            <!-- عناصر تحفيزية -->
+            <div class="motivation">
+                <div class="leader" id="leaderText">من المتقدم؟</div>
+                <div class="progress-container">
+                    <div class="progress-bg">
+                        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+                    </div>
+                </div>
+                <div class="quote" id="quoteText">ابدأ المنافسة الآن</div>
+            </div>
+
+            <!-- قسم السجل (الحافظة) -->
+            <div class="history-section">
+                <div class="history-title"> سجل الأيام السابقة</div>
+                <div class="history-tabs">
+                    <div class="history-tab active" id="tabMohamed">محمد</div>
+                    <div class="history-tab" id="tabZead">زياد</div>
+                </div>
+                <div id="historyMohamed" class="history-table-wrapper">
+                    <!-- سيتم ملؤها عبر JS -->
+                </div>
+                <div id="historyZead" class="history-table-wrapper" style="display: none;">
+                    <!-- سيتم ملؤها عبر JS -->
+                </div>
+            </div>
+
+            <footer>يتم حفظ السجل تلقائيًا يوميًا بعد 12 منتصف الليل</footer>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // منع النسخ واللصق والطباعة والتصوير
+            document.addEventListener('copy', (e) => { e.preventDefault(); return false; });
+            document.addEventListener('cut', (e) => { e.preventDefault(); return false; });
+            document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }); // منع القائمة
+            document.addEventListener('keydown', (e) => {
+                // منع PrintScreen (بدرجة معينة) وطباعة
+                if (e.key === 'PrintScreen' || e.key === 'Print' || (e.ctrlKey && e.key === 'p') || (e.metaKey && e.key === 'p')) {
+                    e.preventDefault();
+                    alert('❌ لا يمكن أخذ لقطة شاشة أو طباعة الصفحة');
+                    return false;
+                }
+                // منع حفظ الصفحة (Ctrl+S)
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            // محاولة تعطيل اختصارات التصوير عبر تغطية الشاشة بلون أسود لميلي ثانية (غير مضمونة)
+            window.addEventListener('keyup', function(e) {
+                if (e.key === 'PrintScreen') {
+                    document.body.style.transition = '0s';
+                    document.body.style.backgroundColor = 'black';
+                    setTimeout(() => document.body.style.backgroundColor = '', 100);
+                }
+            });
+
+            // ---------- الإعدادات والبيانات ----------
+            const VALID_CODES = {
+                mohamed: { password: '12234', name: 'محمد' },
+                zyad: { password: '1234', name: 'زياد' }
+            };
+
+            const STORAGE_KEYS = {
+                studyData: 'studyData',
+                historyLog: 'historyLog',     // سجل الأيام
+                lastTimerDate: 'lastTimerDate',
+                currentUser: 'currentUser'
+            };
+
+            const defaultStudyData = {
+                mohamed: { days: {}, total: 0 },
+                zead: { days: {}, total: 0 }
+            };
+
+            let currentUser = null;
+            let studyData = JSON.parse(JSON.stringify(defaultStudyData));
+            let historyLog = { mohamed: [], zead: [] }; // مصفوفة لكل مستخدم تحتوي على { date, hours, notes, totalSoFar }
+            let timerInterval = null;
+            let timerSeconds = 0;
+            let isTimerRunning = false;
+
+            // عناصر DOM
+            const loginSection = document.getElementById('loginSection');
+            const mainContent = document.getElementById('mainContent');
+            const codeInput = document.getElementById('codeInput');
+            const passwordInput = document.getElementById('passwordInput');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginError = document.getElementById('loginError');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const currentUserBadge = document.getElementById('currentUserBadge');
+
+            const mohamedDate = document.getElementById('mohamedDate');
+            const mohamedHours = document.getElementById('mohamedHours');
+            const mohamedTotalSpan = document.getElementById('mohamedTotal');
+            const mohamedNotes = document.getElementById('mohamedNotes');
+            const zeadDate = document.getElementById('zeadDate');
+            const zeadHours = document.getElementById('zeadHours');
+            const zeadTotalSpan = document.getElementById('zeadTotal');
+            const zeadNotes = document.getElementById('zeadNotes');
+
+            const rowMohamed = document.getElementById('rowMohamed');
+            const rowZead = document.getElementById('rowZead');
+
+            const timerDisplay = document.getElementById('timerDisplay');
+            const startTimerBtn = document.getElementById('startTimer');
+            const pauseTimerBtn = document.getElementById('pauseTimer');
+            const resetTimerBtn = document.getElementById('resetTimer');
+            const leaderText = document.getElementById('leaderText');
+            const progressFill = document.getElementById('progressFill');
+            const quoteText = document.getElementById('quoteText');
+
+            // عناصر السجل
+            const tabMohamed = document.getElementById('tabMohamed');
+            const tabZead = document.getElementById('tabZead');
+            const historyMohamedDiv = document.getElementById('historyMohamed');
+            const historyZeadDiv = document.getElementById('historyZead');
+
+            const quotes = [
+                'المذاكرة اليوم = نصر الغد',
+                'تفوق على نفسك أولاً',
+                'كل ساعة تحسب لك',
+                'زياد ومحمد في السباق',
+                'استمر، النجاح قريب',
+                'اجعل رقمك يتصدر'
+            ];
+
+            // دوال مساعدة
+            function getTodayDateString() {
+                const d = new Date();
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            // تحميل البيانات
+            function loadStudyData() {
+                const stored = localStorage.getItem(STORAGE_KEYS.studyData);
+                if (stored) {
+                    try {
+                        studyData = JSON.parse(stored);
+                        if (!studyData.mohamed) studyData.mohamed = { days: {}, total: 0 };
+                        if (!studyData.zead) studyData.zead = { days: {}, total: 0 };
+                        if (!studyData.mohamed.days) studyData.mohamed.days = {};
+                        if (!studyData.zead.days) studyData.zead.days = {};
+                    } catch (e) {
+                        studyData = JSON.parse(JSON.stringify(defaultStudyData));
+                    }
+                } else {
+                    studyData = JSON.parse(JSON.stringify(defaultStudyData));
+                }
+
+                const historyStored = localStorage.getItem(STORAGE_KEYS.historyLog);
+                if (historyStored) {
+                    try {
+                        historyLog = JSON.parse(historyStored);
+                    } catch (e) {
+                        historyLog = { mohamed: [], zead: [] };
+                    }
+                } else {
+                    historyLog = { mohamed: [], zead: [] };
+                }
+
+                recalcAllTotals();
+            }
+
+            function saveStudyData() {
+                localStorage.setItem(STORAGE_KEYS.studyData, JSON.stringify(studyData));
+            }
+
+            function saveHistory() {
+                localStorage.setItem(STORAGE_KEYS.historyLog, JSON.stringify(historyLog));
+            }
+
+            // إعادة حساب المجموع الكلي
+            function recalcAllTotals() {
+                let totalMohamed = 0;
+                if (studyData.mohamed && studyData.mohamed.days) {
+                    Object.values(studyData.mohamed.days).forEach(day => {
+                        totalMohamed += (parseFloat(day.hours) || 0);
+                    });
+                }
+                studyData.mohamed.total = totalMohamed;
+
+                let totalZead = 0;
+                if (studyData.zead && studyData.zead.days) {
+                    Object.values(studyData.zead.days).forEach(day => {
+                        totalZead += (parseFloat(day.hours) || 0);
+                    });
+                }
+                studyData.zead.total = totalZead;
+
+                updateTotalsDisplay();
+                updateMotivation();
+            }
+
+            function updateTotalsDisplay() {
+                mohamedTotalSpan.innerText = (studyData.mohamed.total || 0).toFixed(1);
+                zeadTotalSpan.innerText = (studyData.zead.total || 0).toFixed(1);
+            }
+
+            // تحميل بيانات التاريخ الحالي
+            function loadDateData(dateStr) {
+                if (studyData.mohamed.days[dateStr]) {
+                    mohamedHours.value = studyData.mohamed.days[dateStr].hours || 0;
+                    mohamedNotes.value = studyData.mohamed.days[dateStr].notes || '';
+                } else {
+                    mohamedHours.value = 0;
+                    mohamedNotes.value = '';
+                }
+                if (studyData.zead.days[dateStr]) {
+                    zeadHours.value = studyData.zead.days[dateStr].hours || 0;
+                    zeadNotes.value = studyData.zead.days[dateStr].notes || '';
+                } else {
+                    zeadHours.value = 0;
+                    zeadNotes.value = '';
+                }
+            }
+
+            // حفظ بيانات يوم لمستخدم معين
+            function saveDayData(user, dateStr, hours, notes) {
+                if (!studyData[user].days[dateStr]) {
+                    studyData[user].days[dateStr] = { hours: 0, notes: '' };
+                }
+                studyData[user].days[dateStr].hours = parseFloat(hours) || 0;
+                studyData[user].days[dateStr].notes = notes || '';
+                recalcAllTotals();
+                saveStudyData();
+                // تحديث السجل إذا كان هذا اليوم أمس أو أقدم (لكن سنعتمد على الدالة المنفصلة للأرشفة)
+                // لا نضيف تلقائياً هنا، بل نعتمد على كشف منتصف الليل
+            }
+
+            function updateRowsEditable() {
+                if (!currentUser) return;
+                rowMohamed.classList.remove('disabled-row', 'editable-row');
+                rowZead.classList.remove('disabled-row', 'editable-row');
+
+                if (currentUser === 'mohamed') {
+                    rowMohamed.classList.add('editable-row');
+                    rowZead.classList.add('disabled-row');
+                } else if (currentUser === 'zead') {
+                    rowZead.classList.add('editable-row');
+                    rowMohamed.classList.add('disabled-row');
+                }
+            }
+
+            function updateMotivation() {
+                const totalM = studyData.mohamed.total || 0;
+                const totalZ = studyData.zead.total || 0;
+                const maxTotal = Math.max(totalM, totalZ);
+                if (maxTotal === 0) {
+                    leaderText.innerText = 'ابدأ المنافسة!';
+                    progressFill.style.width = '0%';
+                } else {
+                    const percentM = (totalM / maxTotal) * 100;
+                    const percentZ = (totalZ / maxTotal) * 100;
+                    if (totalM > totalZ) {
+                        leaderText.innerText = `محمد متقدم: ${totalM.toFixed(1)} ساعة`;
+                        progressFill.style.width = `${percentM}%`;
+                    } else if (totalZ > totalM) {
+                        leaderText.innerText = `زياد متقدم: ${totalZ.toFixed(1)} ساعة`;
+                        progressFill.style.width = `${percentZ}%`;
+                    } else {
+                        leaderText.innerText = `تعادل ${totalM.toFixed(1)} - ${totalZ.toFixed(1)}`;
+                        progressFill.style.width = '100%';
+                    }
+                }
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                quoteText.innerText = randomQuote;
+            }
+
+            // دوال السجل
+            function renderHistory(user) {
+                const container = user === 'mohamed' ? historyMohamedDiv : historyZeadDiv;
+                const list = historyLog[user] || [];
+                if (list.length === 0) {
+                    container.innerHTML = '<div class="no-data">لا توجد أيام مسجلة بعد</div>';
+                    return;
+                }
+                // ترتيب تنازلي (الأحدث أولاً)
+                const sorted = [...list].sort((a,b) => b.date.localeCompare(a.date));
+                let html = '<table class="history-table"><tr><th>التاريخ</th><th>ساعات اليوم</th><th>الملاحظات</th><th>المجموع الكلي</th></tr>';
+                sorted.forEach(item => {
+                    html += `<tr>
+                        <td>${item.date}</td>
+                        <td>${item.hours.toFixed(1)}</td>
+                        <td>${item.notes || '---'}</td>
+                        <td>${item.totalSoFar.toFixed(1)}</td>
+                    </tr>`;
+                });
+                html += '</table>';
+                container.innerHTML = html;
+            }
+
+            // أرشفة اليوم السابق إذا كان اليوم الجديد مختلفاً عن آخر يوم في السجل
+            function archivePreviousDayIfNeeded() {
+                const today = getTodayDateString();
+                // نبحث عن أمس: اليوم - 1
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yStr = yesterday.toISOString().split('T')[0];
+
+                // أرشفة لمحمد
+                if (studyData.mohamed.days[yStr]) {
+                    const dayData = studyData.mohamed.days[yStr];
+                    // نتحقق إذا كان هذا اليوم موجوداً مسبقاً في السجل
+                    const exists = historyLog.mohamed.some(item => item.date === yStr);
+                    if (!exists) {
+                        historyLog.mohamed.push({
+                            date: yStr,
+                            hours: dayData.hours,
+                            notes: dayData.notes || '',
+                            totalSoFar: studyData.mohamed.total // أو يمكن حساب المجموع حتى ذلك اليوم لكننا نأخذ المجموع الحالي (النهائي)
+                        });
+                    }
+                }
+
+                // أرشفة لزياد
+                if (studyData.zead.days[yStr]) {
+                    const dayData = studyData.zead.days[yStr];
+                    const exists = historyLog.zead.some(item => item.date === yStr);
+                    if (!exists) {
+                        historyLog.zead.push({
+                            date: yStr,
+                            hours: dayData.hours,
+                            notes: dayData.notes || '',
+                            totalSoFar: studyData.zead.total
+                        });
+                    }
+                }
+
+                saveHistory();
+                renderHistory('mohamed');
+                renderHistory('zead');
+            }
+
+            // التحقق كل دقيقة إذا تغير اليوم
+            function startMidnightChecker() {
+                setInterval(() => {
+                    const today = getTodayDateString();
+                    const lastDate = localStorage.getItem(STORAGE_KEYS.lastTimerDate);
+                    if (lastDate && lastDate !== today) {
+                        // اليوم تغير -> نؤرشف الأمس
+                        archivePreviousDayIfNeeded();
+                        // نعيد ضبط العداد إذا كان اليوم جديداً
+                        resetTimer();
+                        localStorage.setItem(STORAGE_KEYS.lastTimerDate, today);
+                        // تحديث حقول التاريخ في الجدول لتعكس اليوم الجديد
+                        mohamedDate.value = today;
+                        zeadDate.value = today;
+                        loadDateData(today);
+                    }
+                }, 60000); // كل دقيقة
+            }
+
+            // دوال العداد
+            function updateTimerDisplay() {
+                const hrs = Math.floor(timerSeconds / 3600);
+                const mins = Math.floor((timerSeconds % 3600) / 60);
+                const secs = timerSeconds % 60;
+                timerDisplay.innerText = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+
+            function startTimer() {
+                if (isTimerRunning) return;
+                isTimerRunning = true;
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+
+            function pauseTimer() {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                isTimerRunning = false;
+            }
+
+            function resetTimer() {
+                pauseTimer();
+                timerSeconds = 0;
+                updateTimerDisplay();
+            }
+
+            // تسجيل الدخول
+            function login(code, password) {
+                const lowerCode = code.trim().toLowerCase();
+                if (lowerCode === 'mohamed' && password === VALID_CODES.mohamed.password) {
+                    currentUser = 'mohamed';
+                } else if (lowerCode === 'zead' && password === VALID_CODES.zead.password) {
+                    currentUser = 'zead';
+                } else {
+                    loginError.innerText = 'كود أو رقم سري غير صحيح';
+                    return false;
+                }
+
+                loginError.innerText = '';
+                localStorage.setItem(STORAGE_KEYS.currentUser, currentUser);
+                currentUserBadge.innerText = VALID_CODES[currentUser].name;
+                loginSection.style.display = 'none';
+                mainContent.style.display = 'block';
+
+                loadStudyData();
+
+                const today = getTodayDateString();
+                mohamedDate.value = today;
+                zeadDate.value = today;
+                loadDateData(today);
+
+                updateRowsEditable();
+
+                const lastTimerDate = localStorage.getItem(STORAGE_KEYS.lastTimerDate);
+                if (lastTimerDate !== today) {
+                    resetTimer();
+                    localStorage.setItem(STORAGE_KEYS.lastTimerDate, today);
+                    // أرشفة اليوم السابق (الذي انتهى)
+                    archivePreviousDayIfNeeded();
+                } else {
+                    pauseTimer();
+                    timerSeconds = 0;
+                    updateTimerDisplay();
+                }
+
+                // عرض السجل
+                renderHistory('mohamed');
+                renderHistory('zead');
+
+                updateMotivation();
+                return true;
+            }
+
+            function logout() {
+                pauseTimer();
+                currentUser = null;
+                localStorage.removeItem(STORAGE_KEYS.currentUser);
+                loginSection.style.display = 'block';
+                mainContent.style.display = 'none';
+                codeInput.value = '';
+                passwordInput.value = '';
+                loginError.innerText = '';
+            }
+
+            // الأحداث
+            loginBtn.addEventListener('click', () => {
+                login(codeInput.value, passwordInput.value);
+            });
+
+            passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') loginBtn.click();
+            });
+
+            logoutBtn.addEventListener('click', logout);
+
+            // تبديل tabs السجل
+            tabMohamed.addEventListener('click', () => {
+                tabMohamed.classList.add('active');
+                tabZead.classList.remove('active');
+                historyMohamedDiv.style.display = 'block';
+                historyZeadDiv.style.display = 'none';
+            });
+            tabZead.addEventListener('click', () => {
+                tabZead.classList.add('active');
+                tabMohamed.classList.remove('active');
+                historyZeadDiv.style.display = 'block';
+                historyMohamedDiv.style.display = 'none';
+            });
+
+            // حفظ التغييرات في الجدول
+            mohamedDate.addEventListener('change', function() {
+                if (currentUser !== 'mohamed') return;
+                if (this.value) loadDateData(this.value);
+            });
+            zeadDate.addEventListener('change', function() {
+                if (currentUser !== 'zead') return;
+                if (this.value) loadDateData(this.value);
+            });
+
+            mohamedHours.addEventListener('input', function() {
+                if (currentUser !== 'mohamed') return;
+                const date = mohamedDate.value || getTodayDateString();
+                saveDayData('mohamed', date, this.value, mohamedNotes.value);
+            });
+            mohamedNotes.addEventListener('input', function() {
+                if (currentUser !== 'mohamed') return;
+                const date = mohamedDate.value || getTodayDateString();
+                saveDayData('mohamed', date, mohamedHours.value, this.value);
+            });
+
+            zeadHours.addEventListener('input', function() {
+                if (currentUser !== 'zead') return;
+                const date = zeadDate.value || getTodayDateString();
+                saveDayData('zead', date, this.value, zeadNotes.value);
+            });
+            zeadNotes.addEventListener('input', function() {
+                if (currentUser !== 'zead') return;
+                const date = zeadDate.value || getTodayDateString();
+                saveDayData('zead', date, zeadHours.value, this.value);
+            });
+
+            // العداد
+            startTimerBtn.addEventListener('click', startTimer);
+            pauseTimerBtn.addEventListener('click', pauseTimer);
+            resetTimerBtn.addEventListener('click', resetTimer);
+
+            // استعادة الجلسة وبدء مراقبة منتصف الليل
+            (function initSession() {
+                const savedUser = localStorage.getItem(STORAGE_KEYS.currentUser);
+                if (savedUser && (savedUser === 'mohamed' || savedUser === 'zead')) {
+                    login(savedUser, VALID_CODES[savedUser].password);
+                }
+                startMidnightChecker();
+            })();
+        })();
+    </script>
+</body>
+</html>
