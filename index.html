@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>تحدي المذاكرة - سجل الأيام</title>
+    <title>تحدي المذاكرة - 90 يوم</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -11,7 +11,6 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
-            /* منع التحديد والنسخ */
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -43,12 +42,10 @@
             text-shadow: none;
         }
 
-        /* السماح بالكتابة داخل الحقول */
         input, textarea, [contenteditable] {
             user-select: text;
         }
 
-        /* شاشة الدخول */
         .login-box {
             max-width: 350px;
             margin: 0 auto;
@@ -103,7 +100,6 @@
             font-weight: 700;
         }
 
-        /* المحتوى الرئيسي */
         .main-content {
             display: none;
         }
@@ -141,7 +137,6 @@
             color: white;
         }
 
-        /* الجدول الرئيسي */
         .table-wrapper {
             overflow-x: auto;
             margin: 15px 0;
@@ -181,11 +176,6 @@
             padding: 6px 3px;
         }
 
-        td input[type="date"] {
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.9rem;
-        }
-
         td input:focus {
             background: #f0f0f0;
             border: 1px solid #000;
@@ -214,7 +204,13 @@
             border-color: #aaa;
         }
 
-        /* العداد */
+        .day-display {
+            background: #f0f0f0;
+            border-radius: 4px;
+            padding: 6px 3px;
+            font-weight: 700;
+        }
+
         .timer-section {
             margin: 30px 0 20px;
             padding: 15px;
@@ -278,7 +274,6 @@
             color: white;
         }
 
-        /* عناصر تحفيزية */
         .motivation {
             display: flex;
             flex-direction: column;
@@ -323,7 +318,6 @@
             padding-top: 12px;
         }
 
-        /* قسم سجل الأيام (للمستقبل أيضاً) */
         .history-section {
             margin-top: 30px;
             border-top: 3px solid #000;
@@ -385,15 +379,6 @@
             padding: 8px 5px;
             border: 1px solid #000;
             text-align: center;
-        }
-
-        .future-row {
-            background-color: #f9f9f9;
-            color: #777;
-        }
-
-        .future-row td {
-            font-style: italic;
         }
 
         .no-data {
@@ -462,7 +447,7 @@
                     <thead>
                         <tr>
                             <th>الاسم</th>
-                            <th>التاريخ</th>
+                            <th>اليوم</th>
                             <th>ساعات اليوم</th>
                             <th>مجموع الساعات</th>
                             <th>ملاحظات</th>
@@ -471,14 +456,14 @@
                     <tbody>
                         <tr id="rowMohamed" data-user="mohamed">
                             <td class="user-name">محمد</td>
-                            <td><input type="date" class="date-input" id="mohamedDate" value=""></td>
+                            <td><span class="day-display" id="mohamedDayDisplay">اليوم <span id="mohamedDayNumber">1</span></span></td>
                             <td><input type="number" step="0.1" min="0" class="hours-input" id="mohamedHours" value="0" placeholder="0.0"></td>
                             <td><span class="total-span" id="mohamedTotal">0.0</span></td>
                             <td><input type="text" class="notes-input" id="mohamedNotes" placeholder="..." maxlength="50"></td>
                         </tr>
                         <tr id="rowZead" data-user="zead">
                             <td class="user-name">زياد</td>
-                            <td><input type="date" class="date-input" id="zeadDate" value=""></td>
+                            <td><span class="day-display" id="zeadDayDisplay">اليوم <span id="zeadDayNumber">1</span></span></td>
                             <td><input type="number" step="0.1" min="0" class="hours-input" id="zeadHours" value="0" placeholder="0.0"></td>
                             <td><span class="total-span" id="zeadTotal">0.0</span></td>
                             <td><input type="text" class="notes-input" id="zeadNotes" placeholder="..." maxlength="50"></td>
@@ -487,7 +472,7 @@
                 </table>
             </div>
 
-            <!-- عداد المذاكرة (بدون زر إضافة) -->
+            <!-- عداد المذاكرة -->
             <div class="timer-section">
                 <div class="timer-display" id="timerDisplay">00:00:00</div>
                 <div class="timer-buttons">
@@ -509,9 +494,9 @@
                 <div class="quote" id="quoteText">ابدأ المنافسة الآن</div>
             </div>
 
-            <!-- قسم سجل الأيام (يشمل الماضي والمستقبل) -->
+            <!-- قسم سجل الأيام (1-90) -->
             <div class="history-section">
-                <div class="history-title">📋 سجل الأيام</div>
+                <div class="history-title">📋 سجل الأيام (1-90)</div>
                 <div class="history-tabs">
                     <div class="history-tab active" id="tabMohamed">محمد</div>
                     <div class="history-tab" id="tabZead">زياد</div>
@@ -547,24 +532,55 @@
             });
 
             // ---------- الإعدادات والبيانات ----------
+            // 🛠️ غيّر هذا الرقم يدوياً كل يوم (1 = اليوم الأول، 2 = الثاني، ... حتى 90)
+            let currentDay = 1;
+
+            // 🛠️ اكتب هنا ساعات محمد لكل يوم (من 1 إلى 90)
+            // مثال: 1: 2.5  (اليوم الأول: 2.5 ساعة)، 2: 3.0، ... إلخ
+            const MOHAMED_DAYS_HOURS = {
+                1: 0.0,
+                2: 0.0,
+                3: 0.0,
+                4: 0.0,
+                // ... أضف بقية الأيام بنفس الطريقة، اتركها فارغة إذا لم ترد قيمة (ستكون 0)
+            };
+
+            // 🛠️ اكتب هنا ساعات زياد لكل يوم
+            const ZEAD_DAYS_HOURS = {
+                1: 0.0,
+                2: 0.0,
+                3: 0.0,
+                4: 0.0,
+                // ...
+            };
+
             const VALID_CODES = {
                 mohamed: { password: '12234', name: 'محمد' },
                 zead: { password: '1234', name: 'زياد' }
             };
 
             const STORAGE_KEYS = {
-                studyData: 'studyData',
+                studyData: 'studyDataDays_v2', // تغيير المفتاح لبدء بيانات جديدة
                 lastTimerDate: 'lastTimerDate',
                 currentUser: 'currentUser'
             };
 
-            const defaultStudyData = {
-                mohamed: { days: {}, total: 0 },
-                zead: { days: {}, total: 0 }
-            };
+            // دالة لإنشاء الكائن الافتراضي من القيم الثابتة
+            function createDefaultStudyData() {
+                const mohamedDays = {};
+                const zeadDays = {};
+                for (let i = 1; i <= 90; i++) {
+                    mohamedDays[i] = { hours: MOHAMED_DAYS_HOURS[i] || 0, notes: '' };
+                    zeadDays[i] = { hours: ZEAD_DAYS_HOURS[i] || 0, notes: '' };
+                }
+                return {
+                    mohamed: { days: mohamedDays, total: 0 },
+                    zead: { days: zeadDays, total: 0 }
+                };
+            }
 
             let currentUser = null;
-            let studyData = JSON.parse(JSON.stringify(defaultStudyData));
+            let studyData = createDefaultStudyData(); // يتم ملؤها لاحقاً بالدمج مع المحفوظ
             let timerInterval = null;
             let timerSeconds = 0;
             let isTimerRunning = false;
@@ -579,11 +595,11 @@
             const logoutBtn = document.getElementById('logoutBtn');
             const currentUserBadge = document.getElementById('currentUserBadge');
 
-            const mohamedDate = document.getElementById('mohamedDate');
+            const mohamedDayNumber = document.getElementById('mohamedDayNumber');
             const mohamedHours = document.getElementById('mohamedHours');
             const mohamedTotalSpan = document.getElementById('mohamedTotal');
             const mohamedNotes = document.getElementById('mohamedNotes');
-            const zeadDate = document.getElementById('zeadDate');
+            const zeadDayNumber = document.getElementById('zeadDayNumber');
             const zeadHours = document.getElementById('zeadHours');
             const zeadTotalSpan = document.getElementById('zeadTotal');
             const zeadNotes = document.getElementById('zeadNotes');
@@ -599,7 +615,6 @@
             const progressFill = document.getElementById('progressFill');
             const quoteText = document.getElementById('quoteText');
 
-            // عناصر السجل
             const tabMohamed = document.getElementById('tabMohamed');
             const tabZead = document.getElementById('tabZead');
             const historyMohamedDiv = document.getElementById('historyMohamed');
@@ -623,105 +638,27 @@
                 return `${year}-${month}-${day}`;
             }
 
-            // إنشاء قائمة بالتواريخ من أقدم يوم في البيانات إلى 30 يوم في المستقبل
-            function generateDateRange() {
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                
-                // أقدم تاريخ موجود في بيانات محمد أو زياد
-                let oldestDate = today;
-                for (let user of ['mohamed', 'zead']) {
-                    if (studyData[user] && studyData[user].days) {
-                        Object.keys(studyData[user].days).forEach(dateStr => {
-                            const d = new Date(dateStr + 'T00:00:00');
-                            if (d < oldestDate) oldestDate = d;
-                        });
-                    }
-                }
-                
-                // إذا لم يوجد أي بيانات سابقة، نبدأ من اليوم - 7 أيام (خلفية بسيطة)
-                if (oldestDate >= today) {
-                    oldestDate = new Date(today);
-                    oldestDate.setDate(today.getDate() - 7);
-                }
-
-                const dates = [];
-                const endDate = new Date(today);
-                endDate.setDate(today.getDate() + 30); // 30 يوم في المستقبل
-
-                let current = new Date(oldestDate);
-                while (current <= endDate) {
-                    const year = current.getFullYear();
-                    const month = String(current.getMonth() + 1).padStart(2, '0');
-                    const day = String(current.getDate()).padStart(2, '0');
-                    dates.push(`${year}-${month}-${day}`);
-                    current.setDate(current.getDate() + 1);
-                }
-                return dates;
-            }
-
-            // عرض سجل المستخدم
-            function renderHistory(user) {
-                const container = user === 'mohamed' ? historyMohamedDiv : historyZeadDiv;
-                const dates = generateDateRange();
-                const todayStr = getTodayDateString();
-                
-                let html = '<table class="history-table"><tr><th>التاريخ</th><th>ساعات اليوم</th><th>مجموع الساعات</th><th>الملاحظات</th></tr>';
-                
-                dates.forEach(dateStr => {
-                    const dayData = studyData[user].days[dateStr];
-                    const isFuture = dateStr > todayStr;
-                    const rowClass = isFuture ? 'future-row' : '';
-                    
-                    let hoursDisplay, totalDisplay, notesDisplay;
-                    
-                    if (isFuture) {
-                        hoursDisplay = 'لم ياتي بعد';
-                        totalDisplay = 'لم ياتي بعد';
-                        notesDisplay = 'لم ياتي بعد';
-                    } else {
-                        hoursDisplay = dayData ? dayData.hours.toFixed(1) : '0.0';
-                        // المجموع الكلي حتى ذلك اليوم: نحتاج لحسابه بشكل تراكمي
-                        // يمكننا حسابه بتجميع الأيام حتى هذا التاريخ
-                        let totalUpToDate = 0;
-                        if (studyData[user].days) {
-                            Object.entries(studyData[user].days).forEach(([d, data]) => {
-                                if (d <= dateStr) {
-                                    totalUpToDate += (parseFloat(data.hours) || 0);
-                                }
-                            });
-                        }
-                        totalDisplay = totalUpToDate.toFixed(1);
-                        notesDisplay = dayData ? (dayData.notes || '---') : '---';
-                    }
-                    
-                    html += `<tr class="${rowClass}">
-                        <td>${dateStr}</td>
-                        <td>${hoursDisplay}</td>
-                        <td>${totalDisplay}</td>
-                        <td>${notesDisplay}</td>
-                    </tr>`;
-                });
-                
-                html += '</table>';
-                container.innerHTML = html;
-            }
-
-            // تحميل البيانات من localStorage
+            // تحميل البيانات من localStorage ودمجها مع القيم الافتراضية
             function loadStudyData() {
                 const stored = localStorage.getItem(STORAGE_KEYS.studyData);
                 if (stored) {
                     try {
-                        studyData = JSON.parse(stored);
-                        if (!studyData.mohamed) studyData.mohamed = { days: {}, total: 0 };
-                        if (!studyData.zead) studyData.zead = { days: {}, total: 0 };
-                        if (!studyData.mohamed.days) studyData.mohamed.days = {};
-                        if (!studyData.zead.days) studyData.zead.days = {};
+                        const saved = JSON.parse(stored);
+                        // دمج القيم المحفوظة مع الافتراضية (المحفوظة لها الأولوية)
+                        if (saved.mohamed && saved.mohamed.days) {
+                            for (let day in saved.mohamed.days) {
+                                studyData.mohamed.days[day] = saved.mohamed.days[day];
+                            }
+                        }
+                        if (saved.zead && saved.zead.days) {
+                            for (let day in saved.zead.days) {
+                                studyData.zead.days[day] = saved.zead.days[day];
+                            }
+                        }
                     } catch (e) {
-                        studyData = JSON.parse(JSON.stringify(defaultStudyData));
+                        // إذا حدث خطأ، نستخدم الافتراضي
+                        studyData = createDefaultStudyData();
                     }
-                } else {
-                    studyData = JSON.parse(JSON.stringify(defaultStudyData));
                 }
                 recalcAllTotals();
             }
@@ -756,29 +693,40 @@
                 zeadTotalSpan.innerText = (studyData.zead.total || 0).toFixed(1);
             }
 
-            function loadDateData(dateStr) {
-                if (studyData.mohamed.days[dateStr]) {
-                    mohamedHours.value = studyData.mohamed.days[dateStr].hours || 0;
-                    mohamedNotes.value = studyData.mohamed.days[dateStr].notes || '';
+            // تحميل بيانات اليوم الحالي (حسب currentDay)
+            function loadCurrentDayData() {
+                if (!currentUser) return;
+
+                // تحديث عرض رقم اليوم
+                mohamedDayNumber.innerText = currentDay;
+                zeadDayNumber.innerText = currentDay;
+
+                const mohamedDayData = studyData.mohamed.days[currentDay];
+                if (mohamedDayData) {
+                    mohamedHours.value = mohamedDayData.hours || 0;
+                    mohamedNotes.value = mohamedDayData.notes || '';
                 } else {
                     mohamedHours.value = 0;
                     mohamedNotes.value = '';
                 }
-                if (studyData.zead.days[dateStr]) {
-                    zeadHours.value = studyData.zead.days[dateStr].hours || 0;
-                    zeadNotes.value = studyData.zead.days[dateStr].notes || '';
+
+                const zeadDayData = studyData.zead.days[currentDay];
+                if (zeadDayData) {
+                    zeadHours.value = zeadDayData.hours || 0;
+                    zeadNotes.value = zeadDayData.notes || '';
                 } else {
                     zeadHours.value = 0;
                     zeadNotes.value = '';
                 }
             }
 
-            function saveDayData(user, dateStr, hours, notes) {
-                if (!studyData[user].days[dateStr]) {
-                    studyData[user].days[dateStr] = { hours: 0, notes: '' };
+            // حفظ بيانات يوم معين
+            function saveDayData(user, dayNumber, hours, notes) {
+                if (!studyData[user].days[dayNumber]) {
+                    studyData[user].days[dayNumber] = { hours: 0, notes: '' };
                 }
-                studyData[user].days[dateStr].hours = parseFloat(hours) || 0;
-                studyData[user].days[dateStr].notes = notes || '';
+                studyData[user].days[dayNumber].hours = parseFloat(hours) || 0;
+                studyData[user].days[dayNumber].notes = notes || '';
                 recalcAllTotals();
                 saveStudyData();
                 // تحديث السجل
@@ -823,6 +771,25 @@
                 }
                 const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
                 quoteText.innerText = randomQuote;
+            }
+
+            // عرض سجل المستخدم (الأيام 1-90)
+            function renderHistory(user) {
+                const container = user === 'mohamed' ? historyMohamedDiv : historyZeadDiv;
+                let html = '<table class="history-table"><tr><th>اليوم</th><th>عدد الساعات</th></tr>';
+                
+                for (let day = 1; day <= 90; day++) {
+                    const dayData = studyData[user].days[day];
+                    const hours = dayData ? dayData.hours.toFixed(1) : '0.0';
+                    
+                    html += `<tr>
+                        <td>${day}</td>
+                        <td>${hours}</td>
+                    </tr>`;
+                }
+                
+                html += '</table>';
+                container.innerHTML = html;
             }
 
             // دوال العداد
@@ -874,15 +841,12 @@
                 loginSection.style.display = 'none';
                 mainContent.style.display = 'block';
 
-                loadStudyData();
-
-                const today = getTodayDateString();
-                mohamedDate.value = today;
-                zeadDate.value = today;
-                loadDateData(today);
+                loadStudyData();      // تحميل مع الدمج
+                loadCurrentDayData(); // تحميل بيانات اليوم الحالي
 
                 updateRowsEditable();
 
+                const today = getTodayDateString();
                 const lastTimerDate = localStorage.getItem(STORAGE_KEYS.lastTimerDate);
                 if (lastTimerDate !== today) {
                     resetTimer();
@@ -937,36 +901,23 @@
                 historyMohamedDiv.style.display = 'none';
             });
 
-            // حفظ التغييرات في الجدول
-            mohamedDate.addEventListener('change', function() {
-                if (currentUser !== 'mohamed') return;
-                if (this.value) loadDateData(this.value);
-            });
-            zeadDate.addEventListener('change', function() {
-                if (currentUser !== 'zead') return;
-                if (this.value) loadDateData(this.value);
-            });
-
+            // حفظ التغييرات في الجدول الرئيسي (اليوم الحالي)
             mohamedHours.addEventListener('input', function() {
                 if (currentUser !== 'mohamed') return;
-                const date = mohamedDate.value || getTodayDateString();
-                saveDayData('mohamed', date, this.value, mohamedNotes.value);
+                saveDayData('mohamed', currentDay, this.value, mohamedNotes.value);
             });
             mohamedNotes.addEventListener('input', function() {
                 if (currentUser !== 'mohamed') return;
-                const date = mohamedDate.value || getTodayDateString();
-                saveDayData('mohamed', date, mohamedHours.value, this.value);
+                saveDayData('mohamed', currentDay, mohamedHours.value, this.value);
             });
 
             zeadHours.addEventListener('input', function() {
                 if (currentUser !== 'zead') return;
-                const date = zeadDate.value || getTodayDateString();
-                saveDayData('zead', date, this.value, zeadNotes.value);
+                saveDayData('zead', currentDay, this.value, zeadNotes.value);
             });
             zeadNotes.addEventListener('input', function() {
                 if (currentUser !== 'zead') return;
-                const date = zeadDate.value || getTodayDateString();
-                saveDayData('zead', date, zeadHours.value, this.value);
+                saveDayData('zead', currentDay, zeadHours.value, this.value);
             });
 
             // العداد
@@ -982,13 +933,6 @@
                 }
             })();
 
-            // تحديث السجل كل دقيقة (للتأكد من ظهور تواريخ جديدة)
-            setInterval(() => {
-                if (currentUser) {
-                    renderHistory('mohamed');
-                    renderHistory('zead');
-                }
-            }, 60000);
         })();
     </script>
 </body>
