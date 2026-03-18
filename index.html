@@ -34,6 +34,7 @@
             border: 2px solid #000;
             border-radius: 16px;
             padding: 20px 15px;
+            position: relative;
         }
 
         h1, h2, h3, p, label, td, th {
@@ -120,6 +121,63 @@
             color: white;
             padding: 5px 18px;
             border-radius: 30px;
+        }
+
+        /* حاوية الجرس والنقطة */
+        .notification-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px; /* مسافة بين الاسم والجرس */
+        }
+
+        /* أيقونة الجرس - أصغر ولون أسود */
+        .notification-bell {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: black;
+            transition: transform 0.2s;
+            line-height: 1;
+        }
+        .notification-bell:hover {
+            transform: scale(1.1);
+        }
+
+        /* النقطة الحمراء للإشعار الجديد */
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            border: 1px solid white;
+        }
+
+        /* لوحة الإشعارات */
+        .notification-panel {
+            position: absolute;
+            top: 70px;
+            left: 20px;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 12px;
+            padding: 15px;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .notification-panel ul {
+            list-style: none;
+        }
+        .notification-panel li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            font-weight: 700;
+        }
+        .notification-panel li:last-child {
+            border-bottom: none;
         }
 
         .logout-btn {
@@ -437,8 +495,25 @@
         <!-- المحتوى الرئيسي بعد تسجيل الدخول -->
         <div id="mainContent" class="main-content">
             <div class="header">
-                <div class="user-badge" id="currentUserBadge">ضيف</div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <!-- الاسم أولاً ثم الجرس (على اليمين) -->
+                    <div class="user-badge" id="currentUserBadge">ضيف</div>
+                    <!-- حاوية الجرس والنقطة -->
+                    <div class="notification-container" id="notificationContainer">
+                        <div class="notification-bell" id="notificationBell">🔔</div>
+                        <!-- النقطة الحمراء (تظهر افتراضياً) -->
+                        <div class="notification-dot" id="notificationDot"></div>
+                    </div>
+                </div>
                 <button class="logout-btn" id="logoutBtn">تسجيل خروج</button>
+            </div>
+
+            <!-- لوحة الإشعارات (تظهر عند النقر على الجرس) -->
+            <div class="notification-panel" id="notificationPanel" style="display: none;">
+                <ul>
+                    <li>روح ذاكر يعلق بلاش دلع</li>
+                    <!-- يمكنك إضافة المزيد من الرسائل هنا -->
+                </ul>
             </div>
 
             <!-- الجدول الرئيسي (اليوم الحالي) -->
@@ -536,13 +611,12 @@
             let currentDay = 1;
 
             // 🛠️ اكتب هنا ساعات محمد لكل يوم (من 1 إلى 90)
-            // مثال: 1: 2.5  (اليوم الأول: 2.5 ساعة)، 2: 3.0، ... إلخ
             const MOHAMED_DAYS_HOURS = {
                 1: 0.0,
                 2: 0.0,
                 3: 0.0,
                 4: 0.0,
-                // ... أضف بقية الأيام بنفس الطريقة، اتركها فارغة إذا لم ترد قيمة (ستكون 0)
+                // ...
             };
 
             // 🛠️ اكتب هنا ساعات زياد لكل يوم
@@ -560,12 +634,11 @@
             };
 
             const STORAGE_KEYS = {
-                studyData: 'studyDataDays_v2', // تغيير المفتاح لبدء بيانات جديدة
+                studyData: 'studyDataDays_v2',
                 lastTimerDate: 'lastTimerDate',
                 currentUser: 'currentUser'
             };
 
-            // دالة لإنشاء الكائن الافتراضي من القيم الثابتة
             function createDefaultStudyData() {
                 const mohamedDays = {};
                 const zeadDays = {};
@@ -580,10 +653,13 @@
             }
 
             let currentUser = null;
-            let studyData = createDefaultStudyData(); // يتم ملؤها لاحقاً بالدمج مع المحفوظ
+            let studyData = createDefaultStudyData();
             let timerInterval = null;
             let timerSeconds = 0;
             let isTimerRunning = false;
+
+            // متغير لحالة الإشعار الجديد
+            let hasNewNotification = true; // يبدأ بـ true لإظهار النقطة الحمراء
 
             // عناصر DOM
             const loginSection = document.getElementById('loginSection');
@@ -594,6 +670,9 @@
             const loginError = document.getElementById('loginError');
             const logoutBtn = document.getElementById('logoutBtn');
             const currentUserBadge = document.getElementById('currentUserBadge');
+            const notificationBell = document.getElementById('notificationBell');
+            const notificationPanel = document.getElementById('notificationPanel');
+            const notificationDot = document.getElementById('notificationDot');
 
             const mohamedDayNumber = document.getElementById('mohamedDayNumber');
             const mohamedHours = document.getElementById('mohamedHours');
@@ -629,6 +708,42 @@
                 'اجعل رقمك يتصدر'
             ];
 
+            // تحديث ظهور النقطة الحمراء بناءً على hasNewNotification
+            function updateNotificationDot() {
+                if (hasNewNotification) {
+                    notificationDot.style.display = 'block';
+                } else {
+                    notificationDot.style.display = 'none';
+                }
+            }
+
+            // وظيفة إظهار/إخفاء لوحة الإشعارات
+            function toggleNotificationPanel(e) {
+                e.stopPropagation();
+                if (notificationPanel.style.display === 'none' || notificationPanel.style.display === '') {
+                    notificationPanel.style.display = 'block';
+                    // عند فتح اللوحة، نعتبر الإشعار مقروءاً
+                    if (hasNewNotification) {
+                        hasNewNotification = false;
+                        updateNotificationDot();
+                    }
+                } else {
+                    notificationPanel.style.display = 'none';
+                }
+            }
+
+            // إغلاق اللوحة عند النقر في أي مكان خارجها
+            function closeNotificationPanel(e) {
+                if (!notificationPanel.contains(e.target) && e.target !== notificationBell) {
+                    notificationPanel.style.display = 'none';
+                }
+            }
+
+            // إضافة مستمعي الأحداث
+            notificationBell.addEventListener('click', toggleNotificationPanel);
+            document.addEventListener('click', closeNotificationPanel);
+            notificationPanel.addEventListener('click', (e) => e.stopPropagation());
+
             // دوال مساعدة
             function getTodayDateString() {
                 const d = new Date();
@@ -638,13 +753,11 @@
                 return `${year}-${month}-${day}`;
             }
 
-            // تحميل البيانات من localStorage ودمجها مع القيم الافتراضية
             function loadStudyData() {
                 const stored = localStorage.getItem(STORAGE_KEYS.studyData);
                 if (stored) {
                     try {
                         const saved = JSON.parse(stored);
-                        // دمج القيم المحفوظة مع الافتراضية (المحفوظة لها الأولوية)
                         if (saved.mohamed && saved.mohamed.days) {
                             for (let day in saved.mohamed.days) {
                                 studyData.mohamed.days[day] = saved.mohamed.days[day];
@@ -656,7 +769,6 @@
                             }
                         }
                     } catch (e) {
-                        // إذا حدث خطأ، نستخدم الافتراضي
                         studyData = createDefaultStudyData();
                     }
                 }
@@ -693,11 +805,8 @@
                 zeadTotalSpan.innerText = (studyData.zead.total || 0).toFixed(1);
             }
 
-            // تحميل بيانات اليوم الحالي (حسب currentDay)
             function loadCurrentDayData() {
                 if (!currentUser) return;
-
-                // تحديث عرض رقم اليوم
                 mohamedDayNumber.innerText = currentDay;
                 zeadDayNumber.innerText = currentDay;
 
@@ -720,7 +829,6 @@
                 }
             }
 
-            // حفظ بيانات يوم معين
             function saveDayData(user, dayNumber, hours, notes) {
                 if (!studyData[user].days[dayNumber]) {
                     studyData[user].days[dayNumber] = { hours: 0, notes: '' };
@@ -729,7 +837,6 @@
                 studyData[user].days[dayNumber].notes = notes || '';
                 recalcAllTotals();
                 saveStudyData();
-                // تحديث السجل
                 renderHistory('mohamed');
                 renderHistory('zead');
             }
@@ -773,26 +880,18 @@
                 quoteText.innerText = randomQuote;
             }
 
-            // عرض سجل المستخدم (الأيام 1-90)
             function renderHistory(user) {
                 const container = user === 'mohamed' ? historyMohamedDiv : historyZeadDiv;
                 let html = '<table class="history-table"><tr><th>اليوم</th><th>عدد الساعات</th></tr>';
-                
                 for (let day = 1; day <= 90; day++) {
                     const dayData = studyData[user].days[day];
                     const hours = dayData ? dayData.hours.toFixed(1) : '0.0';
-                    
-                    html += `<tr>
-                        <td>${day}</td>
-                        <td>${hours}</td>
-                    </tr>`;
+                    html += `<tr><td>${day}</td><td>${hours}</td></tr>`;
                 }
-                
                 html += '</table>';
                 container.innerHTML = html;
             }
 
-            // دوال العداد
             function updateTimerDisplay() {
                 const hrs = Math.floor(timerSeconds / 3600);
                 const mins = Math.floor((timerSeconds % 3600) / 60);
@@ -823,7 +922,6 @@
                 updateTimerDisplay();
             }
 
-            // تسجيل الدخول
             function login(code, password) {
                 const lowerCode = code.trim().toLowerCase();
                 if (lowerCode === 'mohamed' && password === VALID_CODES.mohamed.password) {
@@ -841,9 +939,8 @@
                 loginSection.style.display = 'none';
                 mainContent.style.display = 'block';
 
-                loadStudyData();      // تحميل مع الدمج
-                loadCurrentDayData(); // تحميل بيانات اليوم الحالي
-
+                loadStudyData();
+                loadCurrentDayData();
                 updateRowsEditable();
 
                 const today = getTodayDateString();
@@ -857,11 +954,14 @@
                     updateTimerDisplay();
                 }
 
-                // عرض السجل
                 renderHistory('mohamed');
                 renderHistory('zead');
-
                 updateMotivation();
+
+                // إعادة تعيين حالة الإشعار عند تسجيل الدخول (يمكنك تعديل ذلك حسب رغبتك)
+                hasNewNotification = true;
+                updateNotificationDot();
+
                 return true;
             }
 
@@ -887,7 +987,6 @@
 
             logoutBtn.addEventListener('click', logout);
 
-            // تبديل tabs السجل
             tabMohamed.addEventListener('click', () => {
                 tabMohamed.classList.add('active');
                 tabZead.classList.remove('active');
@@ -901,7 +1000,6 @@
                 historyMohamedDiv.style.display = 'none';
             });
 
-            // حفظ التغييرات في الجدول الرئيسي (اليوم الحالي)
             mohamedHours.addEventListener('input', function() {
                 if (currentUser !== 'mohamed') return;
                 saveDayData('mohamed', currentDay, this.value, mohamedNotes.value);
@@ -920,7 +1018,6 @@
                 saveDayData('zead', currentDay, zeadHours.value, this.value);
             });
 
-            // العداد
             startTimerBtn.addEventListener('click', startTimer);
             pauseTimerBtn.addEventListener('click', pauseTimer);
             resetTimerBtn.addEventListener('click', resetTimer);
@@ -933,6 +1030,8 @@
                 }
             })();
 
+            // تحديث النقطة عند التحميل الأول
+            updateNotificationDot();
         })();
     </script>
 </body>
