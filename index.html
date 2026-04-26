@@ -2,617 +2,748 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>الأسد الملكي - 4K Ultra Realistic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>متجر رونق - تسوق بأحدث التصاميم</title>
+    <!-- Font Awesome 6 (مجاني) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Tajawal (عربية حديثة) -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
+            font-family: 'Tajawal', sans-serif;
         }
 
         body {
-            background: #0a0a0a;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            width: 100vw;
-            height: 100vh;
-            position: fixed;
+            background: #f9fafc;
+            color: #1e293b;
+            scroll-behavior: smooth;
         }
 
-        .container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+        /* شريط التمرير المخصص */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c084fc;
+            border-radius: 10px;
         }
 
-        .image-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            touch-action: none;
-        }
-
-        .lion-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 20%;
-            filter: contrast(1.15) saturate(1.25) brightness(1.05) sharpness(1.2);
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            will-change: transform;
-            -webkit-user-drag: none;
-            user-select: none;
-        }
-
-        /* خصلات الشعر المتقدمة */
-        .hair-container {
-            position: absolute;
+        /* Header ونافبار */
+        .navbar {
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 1rem 2rem;
+            position: sticky;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .hair-strand {
-            position: absolute;
-            pointer-events: none;
-            opacity: 0.7;
-            filter: blur(0.5px);
-            border-radius: 50%;
-            transform-origin: top center;
-            will-change: transform;
-        }
-
-        /* خصلات الجانب الأيسر */
-        .strand-l1 {
-            top: 18%;
-            left: 5%;
-            width: 80px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #8B4513 30%, #D2691E 70%, transparent 100%);
-            animation: swayWind1 2.5s ease-in-out infinite;
-        }
-
-        .strand-l2 {
-            top: 28%;
-            left: 2%;
-            width: 100px;
-            height: 1.5px;
-            background: linear-gradient(90deg, transparent 0%, #CD853F 40%, #DEB887 80%, transparent 100%);
-            animation: swayWind2 3.2s ease-in-out infinite;
-            animation-delay: 0.5s;
-        }
-
-        .strand-l3 {
-            top: 38%;
-            left: 8%;
-            width: 90px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #A0522D 30%, #D2691E 60%, transparent 100%);
-            animation: swayWind3 2.8s ease-in-out infinite;
-            animation-delay: 1s;
-        }
-
-        .strand-l4 {
-            top: 48%;
-            left: 3%;
-            width: 85px;
-            height: 1.8px;
-            background: linear-gradient(90deg, transparent 0%, #8B4513 35%, #CD853F 75%, transparent 100%);
-            animation: swayWind1 3.5s ease-in-out infinite;
-            animation-delay: 1.5s;
-        }
-
-        .strand-l5 {
-            top: 58%;
-            left: 6%;
-            width: 75px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #D2691E 40%, #DEB887 80%, transparent 100%);
-            animation: swayWind2 2.2s ease-in-out infinite;
-            animation-delay: 0.8s;
-        }
-
-        /* خصلات الجانب الأيمن */
-        .strand-r1 {
-            top: 20%;
-            right: 5%;
-            width: 85px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #8B4513 30%, #D2691E 70%, transparent 100%);
-            animation: swayWind1 2.7s ease-in-out infinite reverse;
-        }
-
-        .strand-r2 {
-            top: 30%;
-            right: 2%;
-            width: 95px;
-            height: 1.5px;
-            background: linear-gradient(90deg, transparent 0%, #CD853F 40%, #DEB887 80%, transparent 100%);
-            animation: swayWind3 3.0s ease-in-out infinite reverse;
-            animation-delay: 0.6s;
-        }
-
-        .strand-r3 {
-            top: 40%;
-            right: 7%;
-            width: 80px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #A0522D 30%, #D2691E 60%, transparent 100%);
-            animation: swayWind2 3.3s ease-in-out infinite reverse;
-            animation-delay: 1.2s;
-        }
-
-        .strand-r4 {
-            top: 50%;
-            right: 4%;
-            width: 90px;
-            height: 1.8px;
-            background: linear-gradient(90deg, transparent 0%, #8B4513 35%, #CD853F 75%, transparent 100%);
-            animation: swayWind1 2.9s ease-in-out infinite reverse;
-            animation-delay: 0.4s;
-        }
-
-        .strand-r5 {
-            top: 60%;
-            right: 6%;
-            width: 70px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #D2691E 40%, #DEB887 80%, transparent 100%);
-            animation: swayWind3 2.6s ease-in-out infinite reverse;
-            animation-delay: 1.8s;
-        }
-
-        /* خصلات إضافية للعمق */
-        .strand-deep1 {
-            top: 25%;
-            left: 12%;
-            width: 60px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(139,69,19,0.5), transparent);
-            animation: swayWind2 4s ease-in-out infinite;
-            opacity: 0.4;
-        }
-
-        .strand-deep2 {
-            top: 45%;
-            right: 10%;
-            width: 65px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(205,133,63,0.5), transparent);
-            animation: swayWind1 3.8s ease-in-out infinite reverse;
-            opacity: 0.4;
-        }
-
-        @keyframes swayWind1 {
-            0%, 100% { transform: rotate(0deg) translateX(0) scaleX(1); }
-            25% { transform: rotate(4deg) translateX(8px) scaleX(1.05); }
-            50% { transform: rotate(0deg) translateX(0) scaleX(1); }
-            75% { transform: rotate(-3deg) translateX(-6px) scaleX(0.95); }
-        }
-
-        @keyframes swayWind2 {
-            0%, 100% { transform: rotate(0deg) translateX(0) scaleY(1); }
-            33% { transform: rotate(-5deg) translateX(-10px) scaleY(1.1); }
-            66% { transform: rotate(3deg) translateX(6px) scaleY(0.9); }
-        }
-
-        @keyframes swayWind3 {
-            0%, 100% { transform: rotate(0deg) translateX(0); }
-            20% { transform: rotate(6deg) translateX(12px); }
-            40% { transform: rotate(-2deg) translateX(-4px); }
-            60% { transform: rotate(4deg) translateX(8px); }
-            80% { transform: rotate(-5deg) translateX(-10px); }
-        }
-
-        /* تأثير الضباب والإضاءة */
-        .atmosphere {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background: 
-                radial-gradient(ellipse at 30% 20%, rgba(255,200,100,0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(255,150,50,0.08) 0%, transparent 40%);
-            mix-blend-mode: overlay;
-            animation: lightShift 8s ease-in-out infinite;
-        }
-
-        @keyframes lightShift {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        /* جسيمات عائمة */
-        .particle {
-            position: absolute;
-            background: rgba(255, 220, 150, 0.4);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: float linear infinite;
-            will-change: transform;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) translateX(0) scale(0);
-                opacity: 0;
-            }
-            10% { opacity: 1; transform: scale(1); }
-            90% { opacity: 1; }
-            100% {
-                transform: translateY(-10vh) translateX(30px) scale(0.5);
-                opacity: 0;
-            }
-        }
-
-        /* معلومات */
-        .info-overlay {
-            position: absolute;
-            bottom: 20px;
-            left: 15px;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 12px;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 12px 18px;
-            border-radius: 12px;
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            max-width: 200px;
-        }
-
-        .info-overlay h1 {
-            font-size: 18px;
-            margin-bottom: 4px;
-            color: #FFD700;
-            text-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
-        }
-
-        .info-overlay p {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.4;
-        }
-
-        .quality-badge {
-            position: absolute;
-            top: 20px;
-            right: 15px;
-            background: linear-gradient(135deg, #FFD700, #FF8C00);
-            color: #000;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 13px;
-            z-index: 10;
-            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
-        }
-
-        .touch-hint {
-            position: absolute;
-            bottom: 20px;
-            right: 15px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 11px;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 8px 14px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        /* تأثير التنفس */
-        .breathing {
-            animation: breathe 5s ease-in-out infinite;
-        }
-
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-        }
-
-        /* تأثير اللمعان على العيون */
-        .eye-glow {
-            position: absolute;
-            top: 35%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 8%;
-            background: radial-gradient(ellipse, rgba(255,215,0,0.1) 0%, transparent 70%);
-            pointer-events: none;
-            animation: eyeShine 4s ease-in-out infinite;
-            filter: blur(8px);
-        }
-
-        @keyframes eyeShine {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.7; }
-        }
-
-        /* شريط التحميل */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             z-index: 1000;
-            transition: opacity 0.5s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #f1f5f9;
         }
-
-        .loader.hidden {
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #ec489a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .logo i {
+            background: none;
+            color: #8b5cf6;
+            margin-left: 6px;
+        }
+        .nav-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .nav-icons button {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: #334155;
+            transition: 0.2s;
+            position: relative;
+        }
+        .nav-icons button:hover {
+            color: #8b5cf6;
+            transform: scale(1.05);
+        }
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #ec489a;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 30px;
+        }
+        .admin-badge {
+            background: #1e293b;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        /* الحاوية الرئيسية */
+        .container {
+            max-width: 1300px;
+            margin: auto;
+            padding: 2rem;
+        }
+        /* شبكة المنتجات */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        .product-card {
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #f0f2f8;
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 40px rgba(139,92,246,0.12);
+            border-color: #e9d5ff;
+        }
+        .product-img {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(145deg, #f1f5f9, #eef2ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #8b5cf6;
+        }
+        .product-info {
+            padding: 1.2rem;
+        }
+        .product-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+        .product-price {
+            color: #8b5cf6;
+            font-weight: 700;
+            margin: 8px 0;
+            font-size: 1.25rem;
+        }
+        .add-to-cart {
+            width: 100%;
+            background: #8b5cf6;
+            border: none;
+            padding: 10px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            margin-top: 8px;
+            transition: 0.2s;
+            cursor: pointer;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+        }
+        .add-to-cart:hover {
+            background: #6d28d9;
+            transform: scale(0.98);
+        }
+        /* لوحة الأدمن */
+        .admin-panel {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin-top: 3rem;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.08);
+            border: 1px solid #ede9fe;
+        }
+        .form-admin {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .form-admin input {
+            flex: 1;
+            padding: 12px 18px;
+            border-radius: 60px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            font-size: 1rem;
+        }
+        .form-admin button {
+            background: #10b981;
+            border: none;
+            padding: 0 24px;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .admin-products-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .admin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fef9ff;
+            padding: 10px 18px;
+            border-radius: 60px;
+            border-right: 5px solid #c084fc;
+        }
+        .delete-btn {
+            background: #f43f5e;
+            border: none;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        /* نافذة السلة */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 380px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+            z-index: 1100;
+            transition: 0.4s ease-in-out;
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            overflow-y: auto;
+        }
+        .cart-modal.open {
+            right: 0;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(3px);
+            z-index: 1050;
+            visibility: hidden;
             opacity: 0;
-            pointer-events: none;
+            transition: 0.2s;
         }
-
-        .loader-text {
-            color: #FFD700;
-            font-size: 18px;
-            animation: loaderPulse 1.5s ease-in-out infinite;
+        .overlay.active {
+            visibility: visible;
+            opacity: 1;
         }
-
-        @keyframes loaderPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #f1f5f9;
+            padding: 10px 0;
+        }
+        .login-box {
+            background: white;
+            border-radius: 32px;
+            padding: 1.5rem;
+            max-width: 400px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        .login-input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 60px;
+            border: 1px solid #ddd;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            cursor: pointer;
+        }
+        .logout-btn {
+            background: #475569;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+        }
+        @media (max-width: 700px) {
+            .navbar { flex-direction: column; gap: 12px; }
+            .cart-modal { width: 100%; }
         }
     </style>
 </head>
 <body>
-    <!-- شاشة التحميل -->
-    <div class="loader" id="loader">
-        <div class="loader-text">جاري تحميل الأسد الملكي...</div>
-    </div>
 
-    <div class="container">
-        <div class="image-wrapper" id="wrapper">
-            <img src="https://img.freepik.com/premium-photo/strength-beauty-lion-captured-8k-realistic-detail_1110513-11596.jpg?semt=ais_hybrid&w=1920&q=95" 
-                 alt="أسد ملكي بتفاصيل فائقة الواقعية" 
-                 class="lion-image breathing" 
-                 id="lionImg"
-                 loading="eager">
-            
-            <!-- خصلات الشعر -->
-            <div class="hair-container" id="hairContainer">
-                <div class="hair-strand strand-l1"></div>
-                <div class="hair-strand strand-l2"></div>
-                <div class="hair-strand strand-l3"></div>
-                <div class="hair-strand strand-l4"></div>
-                <div class="hair-strand strand-l5"></div>
-                <div class="hair-strand strand-r1"></div>
-                <div class="hair-strand strand-r2"></div>
-                <div class="hair-strand strand-r3"></div>
-                <div class="hair-strand strand-r4"></div>
-                <div class="hair-strand strand-r5"></div>
-                <div class="hair-strand strand-deep1"></div>
-                <div class="hair-strand strand-deep2"></div>
-            </div>
-            
-            <!-- لمعان العيون -->
-            <div class="eye-glow"></div>
-            
-            <!-- طبقة الجو -->
-            <div class="atmosphere"></div>
-            
-            <!-- معلومات -->
-            <div class="info-overlay">
-                <h1>الأسد الملكي</h1>
-                <p>صورة فائقة الوضوح 4K مع تأثيرات حركية واقعية وتفاعل لمس</p>
-            </div>
-            
-            <div class="quality-badge">4K ULTRA HD</div>
-            <div class="touch-hint" id="touchHint">المس الشاشة للتفاعل</div>
+<div class="navbar">
+    <div class="logo">
+        <i class="fas fa-gem"></i> رونق | RONAQ
+    </div>
+    <div class="nav-icons">
+        <button id="cartIconBtn"><i class="fas fa-shopping-cart"></i><span id="cartCounter" class="cart-count">0</span></button>
+        <button id="adminLoginBtn"><i class="fas fa-user-cog"></i></button>
+        <span id="adminStatusSpan"></span>
+    </div>
+</div>
+
+<div class="container">
+    <!-- قسم المنتجات للمستخدمين -->
+    <h2><i class="fas fa-fire"></i> أحدث التشكيلات</h2>
+    <div id="productsContainer" class="products-grid"></div>
+
+    <!-- لوحة تحكم الأدمن (تظهر فقط بعد تسجيل الدخول) -->
+    <div id="adminPanelSection" class="admin-panel hidden">
+        <div style="display: flex; justify-content: space-between;">
+            <h3><i class="fas fa-laptop-code"></i> لوحة مدير المتجر</h3>
+            <button id="adminLogoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</button>
         </div>
+        <div class="form-admin">
+            <input type="text" id="productName" placeholder="اسم المنتج (مثال: حذاء رياضي)">
+            <input type="number" id="productPrice" placeholder="السعر بالجنيه">
+            <input type="text" id="productIcon" placeholder="رمز أيقوني (مثل: fa-shoe-prints)">
+            <button id="addProductBtn"><i class="fas fa-plus"></i> إضافة منتج</button>
+        </div>
+        <h4>المنتجات الحالية (قابلة للحذف)</h4>
+        <div id="adminProductsList" class="admin-products-list"></div>
     </div>
+</div>
 
-    <script>
-        // إخفاء شاشة التحميل
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 1000);
-        });
+<!-- نافذة السلة الجانبية -->
+<div id="cartOverlay" class="overlay"></div>
+<div id="cartSidebar" class="cart-modal">
+    <div style="display: flex; justify-content: space-between;">
+        <h3><i class="fas fa-bag-shopping"></i> سلتي</h3>
+        <button id="closeCartBtn" style="background: none; border: none; font-size: 1.5rem;">&times;</button>
+    </div>
+    <div id="cartItemsList"></div>
+    <div style="margin-top: auto; border-top: 1px solid #ccc; padding-top: 1rem;">
+        <strong>الإجمالي: </strong><span id="cartTotal">0</span> ج.م
+        <button id="checkoutBtn" style="background:#8b5cf6; width:100%; margin-top:12px; padding:12px; border-radius:40px; border:none; color:white;">إتمام الشراء</button>
+    </div>
+</div>
 
-        // إنشاء جسيمات عائمة
-        function createParticles() {
-            const wrapper = document.getElementById('wrapper');
-            for (let i = 0; i < 15; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                const size = Math.random() * 2.5 + 0.5;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDuration = (Math.random() * 8 + 8) + 's';
-                particle.style.animationDelay = Math.random() * 8 + 's';
-                wrapper.appendChild(particle);
+<script>
+    // ========== بيانات المتجر الأساسية ==========
+    let products = [
+        { id: "p1", name: "حذاء رياضي نيو", price: 850, icon: "fa-shoe-prints" },
+        { id: "p2", name: "ساعة ذكية", price: 1250, icon: "fa-clock" },
+        { id: "p3", name: "شنطة جلدية", price: 920, icon: "fa-bag-shopping" },
+        { id: "p4", name: "نظارة شمسية", price: 350, icon: "fa-glasses" }
+    ];
+
+    let cart = []; // { id, name, price, quantity }
+
+    // متغيرات حالة الأدمن
+    let isAdminLogged = false;
+    const ADMIN_CRED = { username: "admin", password: "admin123" }; // كلمة مرور آمنة (يمكنك تغييرها)
+
+    // العناصر الرئيسية
+    const productsContainer = document.getElementById("productsContainer");
+    const adminPanelSection = document.getElementById("adminPanelSection");
+    const adminStatusSpan = document.getElementById("adminStatusSpan");
+    const cartSidebar = document.getElementById("cartSidebar");
+    const cartOverlay = document.getElementById("cartOverlay");
+    const cartCounterSpan = document.getElementById("cartCounter");
+    const cartItemsList = document.getElementById("cartItemsList");
+    const cartTotalSpan = document.getElementById("cartTotal");
+
+    // حفظ البيانات في localStorage
+    function saveData() {
+        localStorage.setItem("roq_products", JSON.stringify(products));
+        localStorage.setItem("roq_cart", JSON.stringify(cart));
+    }
+
+    function loadData() {
+        const storedProducts = localStorage.getItem("roq_products");
+        if(storedProducts) products = JSON.parse(storedProducts);
+        const storedCart = localStorage.getItem("roq_cart");
+        if(storedCart) cart = JSON.parse(storedCart);
+        updateCartUI();
+        renderProducts();
+        if(isAdminLogged) renderAdminProductsList();
+    }
+
+    // تحديث واجهة السلة وعدادها
+    function updateCartUI() {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCounterSpan.innerText = totalItems;
+        let totalPrice = 0;
+        if(cartItemsList) {
+            cartItemsList.innerHTML = "";
+            if(cart.length === 0) {
+                cartItemsList.innerHTML = "<p>🛒 سلة فارغة</p>";
+            } else {
+                cart.forEach((item, idx) => {
+                    totalPrice += item.price * item.quantity;
+                    const div = document.createElement("div");
+                    div.className = "cart-item";
+                    div.innerHTML = `
+                        <div><strong>${item.name}</strong><br>${item.price} ج.م × ${item.quantity}</div>
+                        <div>
+                            <button class="cart-inc" data-id="${item.id}" style="background:#d9f99d; border:none; border-radius:30px; padding:5px 10px;">+</button>
+                            <button class="cart-dec" data-id="${item.id}" style="background:#fed7aa; border:none; border-radius:30px; padding:5px 10px;">-</button>
+                            <button class="cart-remove" data-id="${item.id}" style="background:#fecaca; border:none; border-radius:30px; padding:5px 10px;">×</button>
+                        </div>
+                    `;
+                    cartItemsList.appendChild(div);
+                });
             }
+            cartTotalSpan.innerText = totalPrice;
         }
-
-        // متغيرات التفاعل
-        const wrapper = document.getElementById('wrapper');
-        const lionImg = document.getElementById('lionImg');
-        const hairContainer = document.getElementById('hairContainer');
-        const touchHint = document.getElementById('touchHint');
-        let isTouching = false;
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let currentX = 0;
-        let currentY = 0;
-
-        // تفاعل اللمس (Touch)
-        wrapper.addEventListener('touchstart', (e) => {
-            isTouching = true;
-            touchHint.style.opacity = '0';
-            const touch = e.touches[0];
-            touchStartX = touch.clientX;
-            touchStartY = touch.clientY;
-            
-            // اهتزاز خفيف (إذا كان مدعوماً)
-            if (navigator.vibrate) navigator.vibrate(10);
-        }, { passive: true });
-
-        wrapper.addEventListener('touchmove', (e) => {
-            if (!isTouching) return;
-            e.preventDefault();
-            
-            const touch = e.touches[0];
-            const deltaX = (touch.clientX - touchStartX) / 10;
-            const deltaY = (touch.clientY - touchStartY) / 10;
-            
-            currentX = deltaX;
-            currentY = deltaY;
-            
-            // تحريك الصورة
-            lionImg.style.transform = `scale(1.1) translate(${-deltaX}px, ${-deltaY}px)`;
-            
-            // تحريك خصلات الشعر بشكل مكثف
-            const strands = document.querySelectorAll('.hair-strand');
-            strands.forEach((strand, index) => {
-                const intensity = (index % 2 === 0) ? 1.5 : -1.5;
-                const delay = index * 0.1;
-                strand.style.transform = `
-                    rotate(${deltaX * intensity}deg) 
-                    translateX(${deltaX * 3}px) 
-                    translateY(${deltaY * 2}px)
-                    scaleX(${1 + Math.abs(deltaX) * 0.01})
-                `;
-                strand.style.transition = `transform ${0.1 + delay}s ease-out`;
+        // ربط أحداث السلة بعد إعادة الرسم
+        document.querySelectorAll(".cart-inc").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const id = btn.getAttribute("data-id");
+                changeQuantity(id, 1);
             });
-            
-            // تأثير الإضاءة الديناميكية
-            const atmosphere = document.querySelector('.atmosphere');
-            const lightX = (touch.clientX / window.innerWidth) * 100;
-            const lightY = (touch.clientY / window.innerHeight) * 100;
-            atmosphere.style.background = `
-                radial-gradient(ellipse at ${lightX}% ${lightY}%, rgba(255,200,100,0.2) 0%, transparent 50%),
-                radial-gradient(ellipse at ${100-lightX}% ${100-lightY}%, rgba(255,150,50,0.1) 0%, transparent 40%)
+        });
+        document.querySelectorAll(".cart-dec").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const id = btn.getAttribute("data-id");
+                changeQuantity(id, -1);
+            });
+        });
+        document.querySelectorAll(".cart-remove").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const id = btn.getAttribute("data-id");
+                removeFromCart(id);
+            });
+        });
+        saveData();
+    }
+
+    function changeQuantity(productId, delta) {
+        const index = cart.findIndex(item => item.id === productId);
+        if(index !== -1) {
+            const newQty = cart[index].quantity + delta;
+            if(newQty <= 0) {
+                cart.splice(index,1);
+            } else {
+                cart[index].quantity = newQty;
+            }
+            updateCartUI();
+            saveData();
+        }
+    }
+
+    function removeFromCart(productId) {
+        cart = cart.filter(item => item.id !== productId);
+        updateCartUI();
+        saveData();
+    }
+
+    function addToCart(productId) {
+        const product = products.find(p => p.id === productId);
+        if(!product) return;
+        const existing = cart.find(item => item.id === productId);
+        if(existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({ id: product.id, name: product.name, price: product.price, quantity: 1 });
+        }
+        updateCartUI();
+        saveData();
+        // تأثير بسيط
+        alertifyStyle? null : null;
+        showToast("تم إضافة المنتج إلى السلة");
+    }
+
+    function showToast(msg) {
+        let toast = document.createElement("div");
+        toast.innerText = msg;
+        toast.style.position = "fixed";
+        toast.style.bottom = "20px";
+        toast.style.left = "20px";
+        toast.style.backgroundColor = "#10b981";
+        toast.style.color = "white";
+        toast.style.padding = "12px 24px";
+        toast.style.borderRadius = "40px";
+        toast.style.zIndex = "2000";
+        toast.style.fontWeight = "bold";
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+
+    // عرض المنتجات في المتجر
+    function renderProducts() {
+        if(!productsContainer) return;
+        productsContainer.innerHTML = "";
+        products.forEach(prod => {
+            const card = document.createElement("div");
+            card.className = "product-card";
+            card.innerHTML = `
+                <div class="product-img">
+                    <i class="fas ${prod.icon || 'fa-tag'}" style="font-size: 3.5rem;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-title">${prod.name}</div>
+                    <div class="product-price">${prod.price} ج.م</div>
+                    <button class="add-to-cart" data-id="${prod.id}"><i class="fas fa-cart-plus"></i> أضف للسلة</button>
+                </div>
             `;
-        }, { passive: false });
-
-        wrapper.addEventListener('touchend', () => {
-            isTouching = false;
-            
-            // العودة التدريجية للوضع الطبيعي
-            lionImg.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            lionImg.style.transform = 'scale(1) translate(0, 0)';
-            
-            const strands = document.querySelectorAll('.hair-strand');
-            strands.forEach((strand, index) => {
-                strand.style.transition = `transform ${0.5 + index * 0.05}s ease-out`;
-                strand.style.transform = 'rotate(0deg) translateX(0) translateY(0) scaleX(1)';
-            });
-            
-            setTimeout(() => {
-                lionImg.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                strands.forEach(strand => {
-                    strand.style.transition = '';
-                    strand.style.transform = '';
-                });
-            }, 800);
+            productsContainer.appendChild(card);
         });
-
-        // تفاعل الماوس (للأجهزة المكتبية)
-        wrapper.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.clientX) / 30;
-            const y = (window.innerHeight / 2 - e.clientY) / 30;
-            
-            lionImg.style.transform = `scale(1.05) translate(${x}px, ${y}px)`;
-            
-            const strands = document.querySelectorAll('.hair-strand');
-            strands.forEach((strand, index) => {
-                const intensity = (index % 2 === 0) ? 1.2 : -1.2;
-                strand.style.transform = `
-                    rotate(${x * intensity}deg) 
-                    translateX(${x * 2}px)
-                    scaleX(${1 + Math.abs(x) * 0.005})
-                `;
+        document.querySelectorAll(".add-to-cart").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute("data-id");
+                addToCart(id);
             });
         });
+    }
 
-        wrapper.addEventListener('mouseleave', () => {
-            lionImg.style.transform = 'scale(1) translate(0, 0)';
-            const strands = document.querySelectorAll('.hair-strand');
-            strands.forEach(strand => {
-                strand.style.transform = '';
+    // لوحة الأدمن: عرض قائمة المنتجات مع خاصية الحذف
+    function renderAdminProductsList() {
+        const adminListDiv = document.getElementById("adminProductsList");
+        if(!adminListDiv) return;
+        adminListDiv.innerHTML = "";
+        products.forEach(prod => {
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "admin-item";
+            itemDiv.innerHTML = `
+                <span><i class="fas ${prod.icon || 'fa-cube'}"></i> ${prod.name} - ${prod.price} ج.م</span>
+                <button class="delete-btn" data-id="${prod.id}">حذف</button>
+            `;
+            adminListDiv.appendChild(itemDiv);
+        });
+        document.querySelectorAll(".delete-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const id = btn.getAttribute("data-id");
+                products = products.filter(p => p.id !== id);
+                saveData();
+                renderProducts();
+                if(isAdminLogged) renderAdminProductsList();
+                showToast("تم حذف المنتج");
             });
         });
+    }
 
-        // تفاعل النقر المزدوج (تكبير)
-        let lastTap = 0;
-        wrapper.addEventListener('touchend', (e) => {
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-            if (tapLength < 300 && tapLength > 0) {
-                // نقر مزدوج
-                lionImg.style.transform = 'scale(1.3)';
-                setTimeout(() => {
-                    lionImg.style.transform = 'scale(1)';
-                }, 500);
-                if (navigator.vibrate) navigator.vibrate([50, 50]);
-            }
-            lastTap = currentTime;
-        });
-
-        // تفاعل الإمالة (Gyroscope) للهواتف
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', (e) => {
-                if (isTouching) return; // لا تتداخل مع اللمس
-                
-                const tiltX = e.gamma || 0; // إمالة يمين/يسار
-                const tiltY = e.beta || 0;  // إمالة أمام/خلف
-                
-                const moveX = tiltX * 0.5;
-                const moveY = tiltY * 0.3;
-                
-                lionImg.style.transform = `scale(1.02) translate(${moveX}px, ${moveY}px)`;
-                
-                // خصلات الشعر تتأثر بالإمالة
-                const strands = document.querySelectorAll('.hair-strand');
-                strands.forEach((strand, index) => {
-                    const intensity = (index % 2 === 0) ? 0.8 : -0.8;
-                    strand.style.transform = `rotate(${tiltX * intensity}deg) translateX(${tiltX * 1.5}px)`;
-                });
-            });
+    // إضافة منتج جديد من الأدمن
+    function addNewProduct() {
+        const nameInput = document.getElementById("productName");
+        const priceInput = document.getElementById("productPrice");
+        const iconInput = document.getElementById("productIcon");
+        let name = nameInput.value.trim();
+        let price = parseFloat(priceInput.value);
+        let icon = iconInput.value.trim() || "fa-tag";
+        if(name === "" || isNaN(price) || price <=0) {
+            showToast("يرجى إدخال اسم وسعر صحيح");
+            return;
         }
+        const newId = "prod_" + Date.now();
+        const newProduct = {
+            id: newId,
+            name: name,
+            price: price,
+            icon: icon.replace(/^fa-/, 'fa-') // دعم مباشر
+        };
+        products.push(newProduct);
+        saveData();
+        renderProducts();
+        if(isAdminLogged) renderAdminProductsList();
+        nameInput.value = "";
+        priceInput.value = "";
+        iconInput.value = "";
+        showToast("✅ تم إضافة المنتج بنجاح");
+    }
 
-        // تغير الإضاءة العشوائي
-        setInterval(() => {
-            const atmosphere = document.querySelector('.atmosphere');
-            const opacity = 0.8 + Math.random() * 0.2;
-            atmosphere.style.opacity = opacity;
-        }, 3000);
+    // إدارة حالة الأدمن
+    function showAdminLoginModal() {
+        const loginHtml = document.createElement("div");
+        loginHtml.id = "dynamicLoginModal";
+        loginHtml.style.position = "fixed";
+        loginHtml.style.top = "0";
+        loginHtml.style.left = "0";
+        loginHtml.style.width = "100%";
+        loginHtml.style.height = "100%";
+        loginHtml.style.backgroundColor = "rgba(0,0,0,0.7)";
+        loginHtml.style.display = "flex";
+        loginHtml.style.alignItems = "center";
+        loginHtml.style.justifyContent = "center";
+        loginHtml.style.zIndex = "2000";
+        loginHtml.innerHTML = `
+            <div style="background: white; border-radius: 48px; padding: 2rem; width: 340px; text-align: center;">
+                <i class="fas fa-shield-alt" style="font-size: 3rem; color:#8b5cf6;"></i>
+                <h3>تسجيل دخول المدير</h3>
+                <input type="text" id="adminUser" placeholder="اسم المستخدم" class="login-input" />
+                <input type="password" id="adminPass" placeholder="كلمة المرور" class="login-input" />
+                <button id="doAdminLoginBtn" style="background:#8b5cf6; color:white; border:none; padding:10px; width:100%; border-radius:40px; margin-top:10px;">دخول</button>
+                <button id="closeLoginModal" style="margin-top:10px; background:transparent; border:none;">إلغاء</button>
+            </div>
+        `;
+        document.body.appendChild(loginHtml);
+        document.getElementById("doAdminLoginBtn").addEventListener("click", () => {
+            const user = document.getElementById("adminUser").value;
+            const pass = document.getElementById("adminPass").value;
+            if(user === ADMIN_CRED.username && pass === ADMIN_CRED.password) {
+                isAdminLogged = true;
+                adminPanelSection.classList.remove("hidden");
+                adminStatusSpan.innerHTML = '<span class="admin-badge"><i class="fas fa-crown"></i> مدير نشط</span>';
+                renderAdminProductsList();
+                loginHtml.remove();
+                showToast("مرحباً أيها المدير !");
+            } else {
+                alert("بيانات دخول غير صحيحة");
+            }
+        });
+        document.getElementById("closeLoginModal").addEventListener("click", () => loginHtml.remove());
+    }
 
-        // إنشاء الجسيمات
-        createParticles();
+    function adminLogout() {
+        isAdminLogged = false;
+        adminPanelSection.classList.add("hidden");
+        adminStatusSpan.innerHTML = "";
+        showToast("تم تسجيل الخروج من وضع الإدارة");
+    }
 
-        // منع التمرير الافتراضي
-        document.body.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-        }, { passive: false });
-    </script>
+    // السلة الجانبية
+    function openCart() {
+        cartSidebar.classList.add("open");
+        cartOverlay.classList.add("active");
+        updateCartUI();
+    }
+    function closeCart() {
+        cartSidebar.classList.remove("open");
+        cartOverlay.classList.remove("active");
+    }
+    document.getElementById("cartIconBtn")?.addEventListener("click", openCart);
+    document.getElementById("closeCartBtn")?.addEventListener("click", closeCart);
+    cartOverlay?.addEventListener("click", closeCart);
+    document.getElementById("adminLoginBtn")?.addEventListener("click", () => {
+        if(isAdminLogged) {
+            adminLogout();
+        } else {
+            showAdminLoginModal();
+        }
+    });
+    document.getElementById("adminLogoutBtn")?.addEventListener("click", adminLogout);
+    document.getElementById("addProductBtn")?.addEventListener("click", addNewProduct);
+    document.getElementById("checkoutBtn")?.addEventListener("click", () => {
+        if(cart.length === 0) { showToast("السلة فارغة"); return; }
+        showToast("شكراً لتسوقك! تم استلام الطلب (تجريبي)");
+        cart = [];
+        updateCartUI();
+        saveData();
+        closeCart();
+    });
+
+    // تحميل أولي
+    loadData();
+    // إذا كان الأدمن مسجل من قبل (جلسة بسيطة) لكن بعد تحديث الصفحة نبدأ لا يوجد تسجيل, ويمكن تذكر الجلسة باستخدام sessionStorage (اختياري)
+    // نضيف فحص sessionStorage لتذكر تسجيل الدخول لمدة الجلسة
+    if(sessionStorage.getItem("adminLogged") === "true") {
+        isAdminLogged = true;
+        adminPanelSection.classList.remove("hidden");
+        adminStatusSpan.innerHTML = '<span class="admin-badge"><i class="fas fa-crown"></i> مدير نشط</span>';
+        renderAdminProductsList();
+    }
+    // حفظ حالة الدخول عند تسجيل الدخول
+    const origShowAdminLoginModal = showAdminLoginModal;
+    window.showAdminLoginModal = showAdminLoginModal;
+    // تعديل زر الدخول لتذكر الجلسة
+    const originalLogin = showAdminLoginModal;
+    document.getElementById("doAdminLoginBtn")?.addEventListener ? null : null;
+    // إعادة تعريف الدالة لاحقاً عبر overwrite آمن، لكننا سنستخدم custom event
+    // سأضيف مستمع يتم بعده حفظ الجلسة
+    const overrideLogin = () => {
+        const modalDiv = document.getElementById("dynamicLoginModal");
+        if(modalDiv) return;
+        const loginHtml2 = document.createElement("div");
+        loginHtml2.id = "dynamicLoginModal";
+        loginHtml2.style.position = "fixed";
+        loginHtml2.style.top = "0";
+        loginHtml2.style.left = "0";
+        loginHtml2.style.width = "100%";
+        loginHtml2.style.height = "100%";
+        loginHtml2.style.backgroundColor = "rgba(0,0,0,0.7)";
+        loginHtml2.style.display = "flex";
+        loginHtml2.style.alignItems = "center";
+        loginHtml2.style.justifyContent = "center";
+        loginHtml2.style.zIndex = "2000";
+        loginHtml2.innerHTML = `
+            <div style="background: white; border-radius: 48px; padding: 2rem; width: 340px; text-align: center;">
+                <i class="fas fa-shield-alt" style="font-size: 3rem; color:#8b5cf6;"></i>
+                <h3>تسجيل دخول المدير</h3>
+                <input type="text" id="adminUser" placeholder="اسم المستخدم" class="login-input" />
+                <input type="password" id="adminPass" placeholder="كلمة المرور" class="login-input" />
+                <button id="doAdminLoginBtn" style="background:#8b5cf6; color:white; border:none; padding:10px; width:100%; border-radius:40px;">دخول</button>
+                <button id="closeLoginModal" style="margin-top:10px; background:transparent; border:none;">إلغاء</button>
+            </div>
+        `;
+        document.body.appendChild(loginHtml2);
+        document.getElementById("doAdminLoginBtn").addEventListener("click", () => {
+            const user = document.getElementById("adminUser").value;
+            const pass = document.getElementById("adminPass").value;
+            if(user === ADMIN_CRED.username && pass === ADMIN_CRED.password) {
+                isAdminLogged = true;
+                sessionStorage.setItem("adminLogged", "true");
+                adminPanelSection.classList.remove("hidden");
+                adminStatusSpan.innerHTML = '<span class="admin-badge"><i class="fas fa-crown"></i> مدير نشط</span>';
+                renderAdminProductsList();
+                loginHtml2.remove();
+                showToast("مرحباً أيها المدير !");
+            } else alert("بيانات غير صحيحة");
+        });
+        document.getElementById("closeLoginModal").addEventListener("click", () => loginHtml2.remove());
+    };
+    // ربط زر الدخول بالوظيفة الجديدة
+    document.getElementById("adminLoginBtn")?.addEventListener("click", () => {
+        if(isAdminLogged) adminLogout();
+        else overrideLogin();
+    });
+    window.adminLogout = function() {
+        isAdminLogged = false;
+        sessionStorage.removeItem("adminLogged");
+        adminPanelSection.classList.add("hidden");
+        adminStatusSpan.innerHTML = "";
+        showToast("خروج الأدمن");
+    };
+    // إعادة تعريف adminLogout لدينا
+    window.adminLogout();
+    // وجوب إضافة حالة أولية
+    if(sessionStorage.getItem("adminLogged") === "true") {
+        isAdminLogged = true;
+        adminPanelSection.classList.remove("hidden");
+        adminStatusSpan.innerHTML = '<span class="admin-badge"><i class="fas fa-crown"></i> مدير نشط</span>';
+        renderAdminProductsList();
+    }
+</script>
+<footer>
+    <i class="fas fa-heart" style="color:#ec489a;"></i> متجر رونق - تجربة تسوق فاخرة
+</footer>
 </body>
 </html>
