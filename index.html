@@ -3,347 +3,838 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شات عام | باسم فقط</title>
+    <title>ClanVerse | منصة الكلانات المتكاملة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
+            background: linear-gradient(135deg, #0B0F1C 0%, #1A1F2E 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
+            padding: 20px;
         }
 
-        .container {
-            width: 100%;
-            max-width: 900px;
-            height: 90vh;
-            background: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1E2436;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #F59E0B;
+            border-radius: 10px;
         }
 
-        .chat-header {
-            background: #0f172a;
-            color: white;
-            padding: 1rem 1.5rem;
+        /* Main Container */
+        .app-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(30, 36, 54, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 16px 28px;
+            margin-bottom: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 16px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         }
 
-        h1 {
-            font-size: 1.3rem;
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .user-info {
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #F59E0B, #FBBF24);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #0B0F1C;
+            padding: 8px 20px 8px 16px;
+            border-radius: 60px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid #F59E0B;
+            object-fit: cover;
+        }
+
+        .user-info-text {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .user-clan {
+            font-size: 12px;
+            color: #F59E0B;
+        }
+
+        .edit-profile-btn {
+            background: #2A3042;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 13px;
+        }
+
+        .edit-profile-btn:hover {
+            background: #F59E0B;
+            color: #0B0F1C;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr 320px;
+            gap: 20px;
+        }
+
+        /* Sidebar Left - Rankings */
+        .rankings-card {
+            background: #131726;
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            height: fit-content;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .card-header i {
+            font-size: 24px;
+            color: #F59E0B;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+            color: white;
+        }
+
+        .clan-list {
+            list-style: none;
+        }
+
+        .clan-item {
+            background: #0B0F1C;
+            margin-bottom: 10px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .clan-item:hover {
+            border-color: rgba(245, 158, 11, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .clan-rank {
+            font-weight: 800;
+            color: #F59E0B;
+            font-size: 18px;
+            width: 40px;
+        }
+
+        .clan-info {
+            flex: 1;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .clan-name {
+            font-weight: 600;
+            color: white;
+        }
+
+        .clan-points {
+            background: #F59E0B20;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #F59E0B;
+        }
+
+        /* Main Content */
+        .main-chat-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Tabs */
+        .tabs-container {
             display: flex;
             gap: 12px;
-            align-items: center;
+            background: #131726;
+            padding: 8px;
+            border-radius: 60px;
         }
 
-        #userNameDisplay {
-            font-weight: bold;
-            background: #334155;
-            padding: 0.3rem 0.8rem;
-            border-radius: 2rem;
-            font-size: 0.85rem;
-        }
-
-        .btn-logout {
-            background: #f56565;
-            color: white;
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
             border: none;
-            padding: 0.4rem 1rem;
-            border-radius: 2rem;
+            background: transparent;
+            color: #8E95B0;
+            border-radius: 50px;
             cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .online-users {
-            background: #e2e8f0;
-            padding: 0.5rem 1.5rem;
-            font-size: 0.85rem;
+        .tab-btn i {
+            font-size: 16px;
+        }
+
+        .tab-btn.active {
+            background: #F59E0B;
+            color: #0B0F1C;
+        }
+
+        /* Chat Container */
+        .chat-wrapper {
+            background: #131726;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .chat-header-bar {
+            background: #0B0F1C;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .chat-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .chat-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #10B98120;
+            color: #10B981;
         }
 
         .messages-area {
-            flex: 1;
+            height: 380px;
             overflow-y: auto;
-            padding: 1rem 1.5rem;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            background: #f8fafc;
+            gap: 12px;
         }
 
         .message {
-            max-width: 80%;
-            padding: 0.6rem 1rem;
-            border-radius: 1rem;
-            word-wrap: break-word;
+            max-width: 75%;
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .message.own {
-            background: #3b82f6;
-            color: white;
+            background: #F59E0B;
+            color: #0B0F1C;
             align-self: flex-end;
+            border-bottom-right-radius: 4px;
         }
 
         .message.other {
-            background: white;
-            color: #1e293b;
+            background: #1E2436;
+            color: white;
             align-self: flex-start;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            border-bottom-left-radius: 4px;
         }
 
-        .message .sender {
-            font-size: 0.7rem;
-            font-weight: bold;
-            margin-bottom: 0.2rem;
+        .message-sender {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            opacity: 0.8;
         }
 
-        .message .time {
-            font-size: 0.65rem;
-            opacity: 0.7;
-            margin-top: 0.2rem;
-            text-align: left;
+        .message-text {
+            word-wrap: break-word;
         }
 
-        .message.system {
-            background: #cbd5e1;
-            color: #1e293b;
-            align-self: center;
-            font-size: 0.8rem;
-        }
-
-        .input-area {
+        .chat-input-area {
             display: flex;
-            gap: 10px;
-            padding: 1rem 1.5rem;
-            background: white;
-            border-top: 1px solid #e2e8f0;
+            gap: 12px;
+            padding: 16px 20px;
+            background: #0B0F1C;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
 
-        #messageInput {
+        .chat-input-area input {
             flex: 1;
-            padding: 0.8rem 1rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 2rem;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 40px;
+            background: #1E2436;
+            color: white;
             outline: none;
         }
 
-        #sendBtn {
-            background: #3b82f6;
-            color: white;
-            padding: 0.8rem 1.5rem;
+        .chat-input-area button {
+            background: #F59E0B;
             border: none;
-            border-radius: 2rem;
+            padding: 12px 24px;
+            border-radius: 40px;
             cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
         }
 
-        .login-overlay {
+        .chat-input-area button:hover {
+            background: #D97706;
+        }
+
+        /* Right Sidebar - Extra */
+        .right-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-card {
+            background: #131726;
+            border-radius: 24px;
+            padding: 20px;
+        }
+
+        .scrim-text-area {
+            background: #0B0F1C;
+            padding: 16px;
+            border-radius: 16px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #8E95B0;
+        }
+
+        .admin-panel {
+            background: #131726;
+            border-radius: 24px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .users-list {
+            max-height: 250px;
+            overflow-y: auto;
+            margin-top: 12px;
+        }
+
+        .user-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #0B0F1C;
+            margin-bottom: 8px;
+            border-radius: 12px;
+        }
+
+        .admin-buttons button {
+            background: #2A3042;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 8px;
+            margin: 0 3px;
+            cursor: pointer;
+            font-size: 11px;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
 
-        .login-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            text-align: center;
-            width: 300px;
+        .modal-content {
+            background: #131726;
+            border-radius: 28px;
+            padding: 28px;
+            width: 400px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
-        .login-card input {
+        .modal-content input, .modal-content textarea {
             width: 100%;
-            padding: 0.8rem;
-            margin: 1rem 0;
-            border: 1px solid #cbd5e1;
-            border-radius: 2rem;
-            text-align: center;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #2A3042;
+            border-radius: 14px;
+            background: #0B0F1C;
+            color: white;
+            outline: none;
         }
 
-        .login-card button {
-            background: #3b82f6;
-            color: white;
+        .btn-primary {
+            background: #F59E0B;
+            color: #0B0F1C;
+            padding: 12px;
             border: none;
-            padding: 0.6rem 1.5rem;
-            border-radius: 2rem;
+            border-radius: 40px;
             cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 1100px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .rankings-card, .right-sidebar {
+                order: 1;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container" id="chatContainer" style="display: none;">
-        <div class="chat-header">
-            <h1>💬 الشات العام</h1>
-            <div class="user-info">
-                <span id="userNameDisplay"></span>
-                <button id="logoutBtn" class="btn-logout">🚪 خروج</button>
+<div class="app-container">
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-area">
+            <div class="logo-icon">⚔️</div>
+            <div class="logo-text">ClanVerse</div>
+        </div>
+        <div class="user-profile" id="userProfile">
+            <div class="user-info-text">
+                <div class="user-name" id="userNameDisplay">زائر</div>
+                <div class="user-clan" id="userClanDisplay">الكلان: -</div>
+            </div>
+            <img class="user-avatar" id="userAvatarImg" src="https://ui-avatars.com/api/?background=F59E0B&color=fff" alt="avatar">
+            <button class="edit-profile-btn" id="editProfileBtn"><i class="fas fa-user-edit"></i></button>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <!-- Left Rankings -->
+        <div class="rankings-card">
+            <div class="card-header">
+                <i class="fas fa-trophy"></i>
+                <h2>أفضل 10 كلانات</h2>
+            </div>
+            <ul class="clan-list" id="clanList">
+                <li style="color:#8E95B0;">جاري التحميل...</li>
+            </ul>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="main-chat-area">
+            <div class="tabs-container">
+                <button class="tab-btn active" data-tab="general"><i class="fas fa-comments"></i> الشات العام</button>
+                <button class="tab-btn" data-tab="scrim"><i class="fas fa-skull"></i> شات الاسكرام</button>
+                <button class="tab-btn" data-tab="tickets"><i class="fas fa-headset"></i> الدعم الفني</button>
+            </div>
+
+            <!-- General Chat -->
+            <div class="chat-wrapper" id="generalChat">
+                <div class="chat-header-bar">
+                    <div class="chat-title"><i class="fas fa-globe"></i> الشات العام</div>
+                    <div class="chat-status" id="generalChatStatus"><i class="fas fa-lock-open"></i> مفتوح</div>
+                </div>
+                <div class="messages-area" id="generalMessages"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="generalInput" placeholder="اكتب رسالتك...">
+                    <button id="generalSendBtn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+            <!-- Scrim Chat (Hidden) -->
+            <div class="chat-wrapper hidden" id="scrimChat">
+                <div class="chat-header-bar">
+                    <div class="chat-title"><i class="fas fa-skull-crossbones"></i> شات الاسكرام (خاص)</div>
+                </div>
+                <div class="messages-area" id="scrimMessages"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="scrimInput" placeholder="رسالة خاصة...">
+                    <button id="scrimSendBtn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+            <!-- Tickets (Hidden) -->
+            <div class="hidden" id="ticketsSection">
+                <div class="info-card">
+                    <button id="newTicketBtn" class="btn-primary"><i class="fas fa-plus-circle"></i> فتح تذكرة جديدة</button>
+                    <div id="userTickets" class="scrim-text-area" style="margin-top: 15px;"></div>
+                </div>
             </div>
         </div>
-        <div class="online-users">🟢 متصلون: <span id="onlineCount">0</span></div>
-        <div class="messages-area" id="messagesArea">
-            <div class="message system">✨ مرحباً بك في الشات العام</div>
-        </div>
-        <div class="input-area">
-            <input type="text" id="messageInput" placeholder="اكتب رسالتك..." disabled>
-            <button id="sendBtn" disabled>📤 إرسال</button>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="info-card">
+                <div class="card-header">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h2>التسجيل للاسكرام</h2>
+                </div>
+                <div class="scrim-text-area">
+                    <p id="scrimRegistrationText">لا توجد تسجيلات حالياً</p>
+                    <button id="editScrimTextBtn" class="hidden" style="margin-top: 10px; background:#F59E0B; border:none; padding:5px 12px; border-radius:20px; cursor:pointer;">✏️ تعديل النص</button>
+                </div>
+            </div>
+
+            <div class="admin-panel hidden" id="adminPanel">
+                <div class="card-header">
+                    <i class="fas fa-crown"></i>
+                    <h2>لوحة التحكم</h2>
+                </div>
+                <div class="users-list" id="adminUsersList"></div>
+                <button id="addClanBtn" class="btn-primary" style="margin-top: 12px;"><i class="fas fa-plus"></i> إضافة كلان</button>
+                <button id="resetChatBtn" class="btn-primary" style="background:#EF4444; margin-top: 8px;"><i class="fas fa-trash"></i> مسح الشات العام</button>
+            </div>
         </div>
     </div>
+</div>
 
-    <div id="loginOverlay" class="login-overlay">
-        <div class="login-card">
-            <h2>💬 أدخل اسمك</h2>
-            <input type="text" id="usernameInput" placeholder="اسم المستخدم" maxlength="20">
-            <button id="enterBtn">دخول</button>
-        </div>
+<!-- Modals -->
+<div id="profileModal" class="modal hidden">
+    <div class="modal-content">
+        <h3 style="color:white; margin-bottom:15px;"><i class="fas fa-user-edit"></i> تعديل الملف الشخصي</h3>
+        <input type="text" id="editName" placeholder="الاسم">
+        <input type="text" id="editClan" placeholder="اسم الكلان">
+        <input type="url" id="editAvatar" placeholder="رابط الصورة">
+        <button id="saveProfileBtn" class="btn-primary">حفظ التغييرات</button>
+        <button id="closeModalBtn" class="btn-primary" style="background:#2A3042;">إلغاء</button>
     </div>
+</div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
-        import { getDatabase, ref, set, onDisconnect, onValue } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+<div id="ticketModal" class="modal hidden">
+    <div class="modal-content">
+        <h3 style="color:white;">📬 تذكرة جديدة</h3>
+        <input type="text" id="ticketTitle" placeholder="العنوان">
+        <textarea id="ticketMessage" rows="4" placeholder="وصف المشكلة..."></textarea>
+        <button id="submitTicketBtn" class="btn-primary">إرسال</button>
+        <button id="closeTicketModalBtn" class="btn-primary" style="background:#2A3042;">إلغاء</button>
+    </div>
+</div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyA74xI6RlWmOJSeE472TVMiGz2dC9rzbSU",
-            authDomain: "tryy12345678.firebaseapp.com",
-            databaseURL: "https://tryy12345678-default-rtdb.firebaseio.com",
-            projectId: "tryy12345678",
-            storageBucket: "tryy12345678.firebasestorage.app",
-            messagingSenderId: "924494362795",
-            appId: "1:924494362795:web:340d90c2e67a8e31139fee"
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, updateDoc, deleteDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    import { getDatabase, ref, set, onDisconnect, onValue, push, remove } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA74xI6RlWmOJSeE472TVMiGz2dC9rzbSU",
+        authDomain: "tryy12345678.firebaseapp.com",
+        databaseURL: "https://tryy12345678-default-rtdb.firebaseio.com",
+        projectId: "tryy12345678",
+        storageBucket: "tryy12345678.firebasestorage.app",
+        messagingSenderId: "924494362795",
+        appId: "1:924494362795:web:340d90c2e67a8e31139fee"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const rtdb = getDatabase(app);
+
+    let currentUser = null;
+    let currentUserData = null;
+    let isAdmin = false;
+
+    const ADMIN_EMAIL = "admin@system.com";
+    const ADMIN_PASSWORD = "Admin123456";
+
+    function showLoginModal() {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h3 style="color:white; text-align:center;">🔐 تسجيل الدخول</h3>
+                <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
+                <input type="password" id="loginPassword" placeholder="كلمة المرور">
+                <button id="doLoginBtn" class="btn-primary">دخول</button>
+                <button id="closeLoginModal" class="btn-primary" style="background:#2A3042;">إلغاء</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.getElementById('doLoginBtn').onclick = async () => {
+            const email = document.getElementById('loginEmail').value;
+            const pwd = document.getElementById('loginPassword').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pwd);
+                modal.remove();
+            } catch(e) { alert('خطأ: ' + e.message); }
         };
+        document.getElementById('closeLoginModal').onclick = () => modal.remove();
+    }
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const rtdb = getDatabase(app);
-
-        let currentUser = null;
-        let currentDisplayName = "";
-
-        const chatContainer = document.getElementById('chatContainer');
-        const loginOverlay = document.getElementById('loginOverlay');
-        const userNameDisplay = document.getElementById('userNameDisplay');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const messageInput = document.getElementById('messageInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const messagesArea = document.getElementById('messagesArea');
-        const onlineCountSpan = document.getElementById('onlineCount');
-        const enterBtn = document.getElementById('enterBtn');
-        const usernameInput = document.getElementById('usernameInput');
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function scrollToBottom() {
-            messagesArea.scrollTop = messagesArea.scrollHeight;
-        }
-
-        function loadMessages() {
-            const q = query(collection(db, 'messages'), orderBy('timestamp', 'asc'), limit(100));
-            onSnapshot(q, (snapshot) => {
-                const systemMsgs = messagesArea.querySelectorAll('.system');
-                messagesArea.innerHTML = '';
-                systemMsgs.forEach(msg => messagesArea.appendChild(msg));
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    const div = document.createElement('div');
-                    div.className = `message ${data.userId === currentUser?.uid ? 'own' : 'other'}`;
-                    const time = data.timestamp?.toDate() || new Date();
-                    const timeStr = `${time.getHours().toString().padStart(2,'0')}:${time.getMinutes().toString().padStart(2,'0')}`;
-                    div.innerHTML = `<div class="sender">${escapeHtml(data.userName)}</div><div>${escapeHtml(data.text)}</div><div class="time">${timeStr}</div>`;
-                    messagesArea.appendChild(div);
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUser = user;
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+                currentUserData = userDoc.data();
+                isAdmin = currentUserData.role === 'admin';
+            } else {
+                const role = user.email === ADMIN_EMAIL ? 'admin' : 'member';
+                await setDoc(doc(db, 'users', user.uid), {
+                    name: user.displayName || 'مستخدم',
+                    clan: 'بدون كلان',
+                    avatar: 'https://ui-avatars.com/api/?background=F59E0B&color=fff',
+                    email: user.email,
+                    role: role,
+                    uid: user.uid
                 });
-                scrollToBottom();
-            });
-        }
-
-        async function sendMessage() {
-            if (!currentUser || !messageInput.value.trim()) return;
-            try {
-                await addDoc(collection(db, 'messages'), {
-                    text: messageInput.value.trim(),
-                    userId: currentUser.uid,
-                    userName: currentDisplayName,
-                    timestamp: serverTimestamp()
-                });
-                messageInput.value = '';
-            } catch(e) { console.error(e); }
-        }
-
-        function updateOnlineStatus(user, displayName) {
-            if (!user) return;
-            const userStatusRef = ref(rtdb, `users/${user.uid}`);
-            const connectedRef = ref(rtdb, '.info/connected');
-            onValue(connectedRef, (snap) => {
-                if (snap.val() === true) {
-                    set(userStatusRef, { displayName: displayName, online: true, lastSeen: Date.now() });
-                    onDisconnect(userStatusRef).set({ displayName: displayName, online: false, lastSeen: Date.now() });
-                }
-            });
-            const usersRef = ref(rtdb, 'users');
-            onValue(usersRef, (snapshot) => {
-                let online = 0;
-                snapshot.forEach(child => { if (child.val().online === true) online++; });
-                onlineCountSpan.textContent = online;
-            });
-        }
-
-        enterBtn.addEventListener('click', async () => {
-            const name = usernameInput.value.trim();
-            if (!name) return alert("يرجى إدخال اسمك");
-            try {
-                const userCred = await signInAnonymously(auth);
-                currentUser = userCred.user;
-                currentDisplayName = name;
-                userNameDisplay.textContent = name;
-                chatContainer.style.display = 'flex';
-                loginOverlay.style.display = 'none';
-                messageInput.disabled = false;
-                sendBtn.disabled = false;
-                loadMessages();
-                updateOnlineStatus(currentUser, name);
-            } catch(e) { alert("خطأ: " + e.message); }
-        });
-
-        logoutBtn.addEventListener('click', async () => {
-            if (currentUser) {
-                const userStatusRef = ref(rtdb, `users/${currentUser.uid}`);
-                await set(userStatusRef, { displayName: currentDisplayName, online: false, lastSeen: Date.now() });
+                currentUserData = { name: user.displayName || 'مستخدم', clan: 'بدون كلان', role: role };
+                isAdmin = role === 'admin';
             }
-            await signOut(auth);
-            chatContainer.style.display = 'none';
-            loginOverlay.style.display = 'flex';
-            messageInput.disabled = true;
-            sendBtn.disabled = true;
-        });
+            document.getElementById('userNameDisplay').innerHTML = currentUserData.name;
+            document.getElementById('userClanDisplay').innerHTML = `الكلان: ${currentUserData.clan}`;
+            document.getElementById('userAvatarImg').src = currentUserData.avatar || 'https://ui-avatars.com/api/?background=F59E0B&color=fff';
+            if (isAdmin) {
+                document.getElementById('adminPanel').classList.remove('hidden');
+                document.getElementById('editScrimTextBtn').classList.remove('hidden');
+                loadAdminUsers();
+            }
+            loadClans();
+            loadGeneralChat();
+            loadScrimChat();
+        } else {
+            showLoginModal();
+        }
+    });
 
-        messageInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
-        sendBtn.addEventListener('click', sendMessage);
-    </script>
+    async function loadClans() {
+        const q = query(collection(db, 'clans'), orderBy('points', 'desc'));
+        onSnapshot(q, (snap) => {
+            const clans = [];
+            snap.forEach(doc => clans.push({ id: doc.id, ...doc.data() }));
+            const top10 = clans.slice(0,10);
+            const container = document.getElementById('clanList');
+            if (top10.length === 0) { container.innerHTML = '<li style="color:#8E95B0;">لا توجد كلانات</li>'; return; }
+            container.innerHTML = top10.map((c,i) => `
+                <li class="clan-item">
+                    <span class="clan-rank">${i+1}</span>
+                    <div class="clan-info">
+                        <span class="clan-name">${escapeHtml(c.name)}</span>
+                        <span class="clan-points">${c.points || 0} نقطة</span>
+                    </div>
+                </li>
+            `).join('');
+        });
+    }
+
+    function loadGeneralChat() {
+        const messagesRef = ref(rtdb, 'generalChat');
+        onValue(messagesRef, (snap) => {
+            const msgs = snap.val() || {};
+            const container = document.getElementById('generalMessages');
+            const msgsArray = Object.values(msgs);
+            container.innerHTML = msgsArray.map(m => `
+                <div class="message ${m.uid === currentUser?.uid ? 'own' : 'other'}">
+                    <div class="message-sender">${escapeHtml(m.name)}</div>
+                    <div class="message-text">${escapeHtml(m.text)}</div>
+                </div>
+            `).join('');
+            container.scrollTop = container.scrollHeight;
+        });
+    }
+
+    document.getElementById('generalSendBtn').onclick = () => {
+        const input = document.getElementById('generalInput');
+        if (!input.value.trim() || !currentUser) return;
+        push(ref(rtdb, 'generalChat'), {
+            text: input.value,
+            name: currentUserData.name,
+            uid: currentUser.uid,
+            timestamp: Date.now()
+        });
+        input.value = '';
+    };
+
+    function loadScrimChat() {
+        const scrimRef = ref(rtdb, 'scrimChat');
+        onValue(scrimRef, (snap) => {
+            const msgs = snap.val() || {};
+            const container = document.getElementById('scrimMessages');
+            const msgsArray = Object.values(msgs);
+            container.innerHTML = msgsArray.map(m => `
+                <div class="message ${m.uid === currentUser?.uid ? 'own' : 'other'}">
+                    <div class="message-sender">${escapeHtml(m.name)}</div>
+                    <div class="message-text">${escapeHtml(m.text)}</div>
+                </div>
+            `).join('');
+        });
+    }
+
+    document.getElementById('scrimSendBtn').onclick = () => {
+        const input = document.getElementById('scrimInput');
+        if (!input.value.trim() || !currentUser) return;
+        push(ref(rtdb, 'scrimChat'), {
+            text: input.value,
+            name: currentUserData.name,
+            uid: currentUser.uid,
+            timestamp: Date.now()
+        });
+        input.value = '';
+    };
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.onclick = () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const tab = btn.dataset.tab;
+            document.getElementById('generalChat').classList.add('hidden');
+            document.getElementById('scrimChat').classList.add('hidden');
+            document.getElementById('ticketsSection').classList.add('hidden');
+            if (tab === 'general') document.getElementById('generalChat').classList.remove('hidden');
+            if (tab === 'scrim') document.getElementById('scrimChat').classList.remove('hidden');
+            if (tab === 'tickets') document.getElementById('ticketsSection').classList.remove('hidden');
+        };
+    });
+
+    async function loadAdminUsers() {
+        const q = query(collection(db, 'users'));
+        onSnapshot(q, (snap) => {
+            const container = document.getElementById('adminUsersList');
+            const users = [];
+            snap.forEach(doc => users.push({ id: doc.id, ...doc.data() }));
+            container.innerHTML = users.map(u => `
+                <div class="user-row">
+                    <span>${escapeHtml(u.name)} (${u.role})</span>
+                    <div class="admin-buttons">
+                        <button onclick='window.makeAdmin("${u.id}")'>👑 ادمن</button>
+                        <button onclick='window.banUser("${u.id}")'>🚫 حظر</button>
+                    </div>
+                </div>
+            `).join('');
+        });
+    }
+
+    window.makeAdmin = async (userId) => await updateDoc(doc(db, 'users', userId), { role: 'admin' });
+    window.banUser = async (userId) => await updateDoc(doc(db, 'users', userId), { banned: true });
+
+    document.getElementById('editProfileBtn').onclick = () => {
+        document.getElementById('profileModal').classList.remove('hidden');
+        document.getElementById('editName').value = currentUserData.name;
+        document.getElementById('editClan').value = currentUserData.clan;
+        document.getElementById('editAvatar').value = currentUserData.avatar || '';
+    };
+    document.getElementById('saveProfileBtn').onclick = async () => {
+        await updateDoc(doc(db, 'users', currentUser.uid), {
+            name: document.getElementById('editName').value,
+            clan: document.getElementById('editClan').value,
+            avatar: document.getElementById('editAvatar').value
+        });
+        if (currentUser.displayName !== document.getElementById('editName').value) await updateProfile(currentUser, { displayName: document.getElementById('editName').value });
+        document.getElementById('profileModal').classList.add('hidden');
+        location.reload();
+    };
+    document.getElementById('closeModalBtn').onclick = () => document.getElementById('profileModal').classList.add('hidden');
+
+    document.getElementById('addClanBtn').onclick = async () => {
+        const name = prompt('اسم الكلان:');
+        if (name) await addDoc(collection(db, 'clans'), { name, points: 0 });
+    };
+    document.getElementById('resetChatBtn').onclick = async () => {
+        if (confirm('مسح كل رسائل الشات العام؟')) await set(ref(rtdb, 'generalChat'), {});
+    };
+
+    const scrimTextRef = ref(rtdb, 'settings/scrimText');
+    onValue(scrimTextRef, (snap) => document.getElementById('scrimRegistrationText').innerText = snap.val() || 'لا توجد تسجيلات');
+    document.getElementById('editScrimTextBtn').onclick = () => {
+        const newText = prompt('نص التسجيل للاسكرام:', document.getElementById('scrimRegistrationText').innerText);
+        if (newText) set(scrimTextRef, newText);
+    };
+
+    function escapeHtml(str) { return str?.replace(/[&<>]/g, function(m){ if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m; }) || ''; }
+</script>
 </body>
 </html>
