@@ -98,9 +98,9 @@
         .user-profile {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             background: #F9FAFB;
-            padding: 8px 20px 8px 16px;
+            padding: 6px 16px 6px 12px;
             border-radius: 50px;
             border: 1px solid #E5E7EB;
         }
@@ -113,6 +113,10 @@
             object-fit: cover;
         }
 
+        .user-info-text {
+            text-align: right;
+        }
+
         .user-name {
             font-weight: 700;
             color: #000000;
@@ -120,11 +124,16 @@
         }
 
         .user-clan {
-            font-size: 12px;
+            font-size: 11px;
             color: #6B7280;
         }
 
-        .edit-profile-btn {
+        .user-role {
+            font-size: 10px;
+            color: #F59E0B;
+        }
+
+        .edit-profile-btn, .logout-btn {
             background: #F3F4F6;
             border: 1px solid #E5E7EB;
             padding: 8px 14px;
@@ -143,10 +152,10 @@
             background: #EF4444;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #DC2626;
         }
 
         /* Dashboard Grid */
@@ -210,14 +219,14 @@
         .clan-rank {
             font-weight: 800;
             color: #000000;
-            font-size: 18px;
+            font-size: 16px;
+            width: 35px;
         }
 
         .clan-name {
             font-weight: 600;
             color: #000000;
             flex: 1;
-            margin-right: 12px;
         }
 
         .clan-points {
@@ -226,6 +235,14 @@
             border-radius: 20px;
             font-size: 12px;
             color: #000000;
+        }
+
+        .clan-edit-btn {
+            background: transparent;
+            border: none;
+            margin-right: 8px;
+            cursor: pointer;
+            color: #6B7280;
         }
 
         /* Tabs */
@@ -277,6 +294,19 @@
             color: #000000;
         }
 
+        .chat-status {
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: #10B98120;
+            color: #10B981;
+        }
+
+        .chat-status.closed {
+            background: #EF444420;
+            color: #EF4444;
+        }
+
         .messages-area {
             height: 350px;
             overflow-y: auto;
@@ -287,11 +317,12 @@
         }
 
         .message {
-            max-width: 70%;
+            max-width: 75%;
             padding: 10px 16px;
             border-radius: 18px;
             font-size: 14px;
             animation: fadeIn 0.2s ease;
+            position: relative;
         }
 
         @keyframes fadeIn {
@@ -318,6 +349,34 @@
             opacity: 0.8;
         }
 
+        .message-time {
+            font-size: 9px;
+            opacity: 0.5;
+            margin-top: 4px;
+        }
+
+        .message-delete {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #EF4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
+        .message:hover .message-delete {
+            opacity: 1;
+        }
+
         .chat-input-area {
             display: flex;
             gap: 12px;
@@ -335,6 +394,11 @@
             outline: none;
         }
 
+        .chat-input-area input:disabled {
+            background: #F3F4F6;
+            cursor: not-allowed;
+        }
+
         .chat-input-area button {
             background: #000000;
             color: white;
@@ -345,15 +409,22 @@
             transition: 0.2s;
         }
 
-        /* Admin */
+        .chat-input-area button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Admin Panel */
         .admin-panel {
             margin-top: 24px;
         }
-        .users-list {
+
+        .users-list, .scrim-users-list {
             max-height: 250px;
             overflow-y: auto;
             margin-top: 12px;
         }
+
         .user-row {
             display: flex;
             justify-content: space-between;
@@ -363,6 +434,15 @@
             margin-bottom: 8px;
             border-radius: 12px;
         }
+
+        .user-role-select {
+            background: #F3F4F6;
+            border: 1px solid #E5E7EB;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+
         .admin-buttons button {
             background: #F3F4F6;
             border: 1px solid #E5E7EB;
@@ -370,6 +450,7 @@
             border-radius: 8px;
             margin: 0 3px;
             cursor: pointer;
+            font-size: 11px;
         }
 
         /* Buttons */
@@ -394,6 +475,16 @@
             width: 100%;
             margin-top: 10px;
         }
+
+        .badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        .badge-leader { background: #F59E0B20; color: #F59E0B; }
+        .badge-coleader { background: #3B82F620; color: #3B82F6; }
+        .badge-member { background: #6B728020; color: #6B7280; }
 
         .hidden {
             display: none;
@@ -450,6 +541,35 @@
             color: #9CA3AF;
         }
 
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            width: 400px;
+        }
+
+        .modal-content input, .modal-content select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+        }
+
         @media (max-width: 1000px) {
             .dashboard-grid { grid-template-columns: 1fr; }
         }
@@ -466,9 +586,10 @@
             <div class="logo-text">ClanVerse</div>
         </div>
         <div class="user-profile" id="userProfile">
-            <div>
+            <div class="user-info-text">
                 <div class="user-name" id="userNameDisplay">زائر</div>
                 <div class="user-clan" id="userClanDisplay">الكلان: -</div>
+                <div class="user-role" id="userRoleDisplay"></div>
             </div>
             <img class="user-avatar" id="userAvatarImg" src="https://ui-avatars.com/api/?background=000&color=fff" alt="avatar">
             <button class="edit-profile-btn" id="editProfileBtn"><i class="fas fa-user-edit"></i></button>
@@ -477,28 +598,89 @@
     </div>
 
     <div class="dashboard-grid">
+        <!-- Left Side - Rankings -->
         <div class="card">
-            <div class="card-header"><i class="fas fa-trophy"></i><h2>أفضل 10 كلانات</h2></div>
-            <ul class="clan-list" id="clanList"><li>جاري التحميل...</li></ul>
+            <div class="card-header">
+                <i class="fas fa-trophy"></i>
+                <h2>أفضل 10 كلانات</h2>
+                <button id="addClanBtn" class="hidden" style="margin-right:auto; background:#000; color:white; border:none; padding:4px 12px; border-radius:20px; font-size:11px;">+ إضافة</button>
+            </div>
+            <ul class="clan-list" id="clanList">
+                <li style="color:#9CA3AF;">جاري التحميل...</li>
+            </ul>
         </div>
 
+        <!-- Main Content -->
         <div>
             <div class="tabs-container">
-                <button class="tab-btn active" data-tab="general"><i class="fas fa-comments"></i> عام</button>
-                <button class="tab-btn" data-tab="scrim"><i class="fas fa-skull"></i> اسكرام</button>
-                <button class="tab-btn" data-tab="tickets"><i class="fas fa-headset"></i> دعم</button>
+                <button class="tab-btn active" data-tab="general"><i class="fas fa-comments"></i> الشات العام</button>
+                <button class="tab-btn" data-tab="scrim"><i class="fas fa-skull"></i> شات الاسكرام</button>
+                <button class="tab-btn" data-tab="tickets"><i class="fas fa-headset"></i> الدعم الفني</button>
             </div>
-            <div class="chat-wrapper" id="generalChat"><div class="chat-header-bar"><div class="chat-title">💬 الشات العام</div></div><div class="messages-area" id="generalMessages"></div><div class="chat-input-area"><input id="generalInput" placeholder="اكتب رسالتك..."><button id="generalSendBtn"><i class="fas fa-paper-plane"></i></button></div></div>
-            <div class="chat-wrapper hidden" id="scrimChat"><div class="chat-header-bar"><div class="chat-title">🎙️ شات الاسكرام (خاص)</div></div><div class="messages-area" id="scrimMessages"></div><div class="chat-input-area"><input id="scrimInput" placeholder="رسالة خاصة..."><button id="scrimSendBtn"><i class="fas fa-paper-plane"></i></button></div></div>
-            <div class="hidden" id="ticketsSection"><div class="card"><button id="newTicketBtn" class="btn-primary">➕ فتح تذكرة جديدة</button><div id="userTickets" class="users-list" style="margin-top:15px;"></div></div></div>
+
+            <!-- General Chat -->
+            <div class="chat-wrapper" id="generalChat">
+                <div class="chat-header-bar">
+                    <div class="chat-title"><i class="fas fa-globe"></i> الشات العام</div>
+                    <div class="chat-status" id="generalChatStatus"><i class="fas fa-lock-open"></i> مفتوح</div>
+                </div>
+                <div class="messages-area" id="generalMessages"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="generalInput" placeholder="اكتب رسالتك...">
+                    <button id="generalSendBtn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+            <!-- Scrim Chat (Private) -->
+            <div class="chat-wrapper hidden" id="scrimChat">
+                <div class="chat-header-bar">
+                    <div class="chat-title"><i class="fas fa-skull-crossbones"></i> شات الاسكرام (خاص)</div>
+                    <button id="addToScrimBtn" class="hidden" style="background:#000; color:white; border:none; padding:4px 12px; border-radius:20px; font-size:11px;">+ إضافة أعضاء</button>
+                </div>
+                <div class="messages-area" id="scrimMessages"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="scrimInput" placeholder="رسالة خاصة...">
+                    <button id="scrimSendBtn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <div class="scrim-users-list" id="scrimUsersList" style="padding:12px; border-top:1px solid #E5E7EB;"></div>
+            </div>
+
+            <!-- Tickets -->
+            <div class="hidden" id="ticketsSection">
+                <div class="card">
+                    <button id="newTicketBtn" class="btn-primary"><i class="fas fa-plus-circle"></i> فتح تذكرة جديدة</button>
+                    <div id="userTickets" class="users-list" style="margin-top:15px;"></div>
+                </div>
+            </div>
         </div>
 
+        <!-- Right Sidebar -->
         <div>
             <div class="card">
-                <div class="card-header"><i class="fas fa-clipboard-list"></i><h2>التسجيل للاسكرام</h2></div>
-                <div style="background:#F9FAFB; padding:15px; border-radius:12px;"><p id="scrimRegistrationText">لا توجد تسجيلات حالياً</p><button id="editScrimTextBtn" class="hidden btn-outline" style="margin-top:10px;">✏️ تعديل النص</button></div>
+                <div class="card-header">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h2>التسجيل للاسكرام</h2>
+                    <button id="editScrimTextBtn" class="hidden" style="margin-right:auto; background:#000; color:white; border:none; padding:4px 12px; border-radius:20px; font-size:11px;">✏️</button>
+                </div>
+                <div style="background:#F9FAFB; padding:15px; border-radius:12px; min-height:80px;">
+                    <p id="scrimRegistrationText">لا توجد تسجيلات حالياً</p>
+                </div>
             </div>
-            <div class="card admin-panel hidden" id="adminPanel"><div class="card-header"><i class="fas fa-crown"></i><h2>لوحة التحكم - Admin</h2></div><div class="users-list" id="adminUsersList"></div><button id="addClanBtn" class="btn-primary">➕ إضافة كلان جديد</button><button id="resetChatBtn" class="btn-outline" style="color:#EF4444;">🗑️ مسح الشات العام</button></div>
+
+            <!-- Admin Panel -->
+            <div class="card admin-panel hidden" id="adminPanel">
+                <div class="card-header">
+                    <i class="fas fa-crown"></i>
+                    <h2>لوحة التحكم</h2>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="font-size:13px;">🔒 حالة القناة:</label>
+                    <button id="toggleChannelBtn" class="btn-outline" style="margin-top:5px;">قفل القناة</button>
+                </div>
+                <h4 style="font-size:14px; margin-bottom:10px;">👥 إدارة المستخدمين</h4>
+                <div class="users-list" id="adminUsersList"></div>
+                <button id="showAllUsersBtn" class="btn-outline" style="margin-top:10px;">📋 عرض جميع المستخدمين</button>
+            </div>
         </div>
     </div>
 </div>
@@ -523,13 +705,50 @@
     </div>
 </div>
 
+<!-- Profile Modal -->
+<div id="profileModal" class="modal hidden">
+    <div class="modal-content">
+        <h3 style="margin-bottom:15px;">✏️ تعديل الملف الشخصي</h3>
+        <input type="text" id="editName" placeholder="الاسم">
+        <input type="text" id="editClan" placeholder="اسم الكلان">
+        <input type="url" id="editAvatar" placeholder="رابط الصورة">
+        <select id="editRole">
+            <option value="member">عضو</option>
+            <option value="co-leader">مساعد قائد</option>
+            <option value="leader">قائد الكلان</option>
+        </select>
+        <button id="saveProfileBtn" class="btn-primary">حفظ التغييرات</button>
+        <button id="closeModalBtn" class="btn-outline">إلغاء</button>
+    </div>
+</div>
+
+<!-- Ticket Modal -->
+<div id="ticketModal" class="modal hidden">
+    <div class="modal-content">
+        <h3 style="margin-bottom:15px;">📬 تذكرة جديدة</h3>
+        <input type="text" id="ticketTitle" placeholder="العنوان">
+        <textarea id="ticketMessage" rows="4" placeholder="وصف المشكلة..." style="width:100%; padding:12px; border:1px solid #E5E7EB; border-radius:12px;"></textarea>
+        <button id="submitTicketBtn" class="btn-primary">إرسال</button>
+        <button id="closeTicketModalBtn" class="btn-outline">إلغاء</button>
+    </div>
+</div>
+
+<!-- Add to Scrim Modal -->
+<div id="addToScrimModal" class="modal hidden">
+    <div class="modal-content">
+        <h3 style="margin-bottom:15px;">➕ إضافة أعضاء لشات الاسكرام</h3>
+        <div id="allUsersList" style="max-height:300px; overflow-y:auto;"></div>
+        <button id="closeScrimModalBtn" class="btn-outline">إغلاق</button>
+    </div>
+</div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
-    import { getDatabase, ref, set, onValue, push, remove } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, updateDoc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    import { getDatabase, ref, set, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
-    // Firebase Config
+    // Firebase Config - استبدل هذه البيانات ببياناتك من Firebase Console
     const firebaseConfig = {
         apiKey: "AIzaSyA74xI6RlWmOJSeE472TVMiGz2dC9rzbSU",
         authDomain: "tryy12345678.firebaseapp.com",
@@ -540,7 +759,6 @@
         appId: "1:924494362795:web:340d90c2e67a8e31139fee"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -550,6 +768,8 @@
     let currentUser = null;
     let currentUserData = null;
     let isAdmin = false;
+    let isChannelOpen = true;
+    let scrimUsers = []; // قائمة المستخدمين المسموح لهم بشات الاسكرام
 
     function escapeHtml(str) {
         if (!str) return '';
@@ -561,7 +781,15 @@
         });
     }
 
-    // Load Clans Ranking
+    function showMessage(msg, isError = true) {
+        const div = document.createElement('div');
+        div.style.cssText = `position:fixed; bottom:20px; right:20px; background:${isError ? '#EF4444' : '#10B981'}; color:white; padding:12px 24px; border-radius:40px; z-index:2000; animation:fadeIn 0.3s ease;`;
+        div.innerText = msg;
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 3000);
+    }
+
+    // Load Clans
     function loadClans() {
         const clansRef = collection(db, 'clans');
         const q = query(clansRef, orderBy('points', 'desc'));
@@ -571,7 +799,7 @@
             const topClans = clans.slice(0, 10);
             const container = document.getElementById('clanList');
             if (topClans.length === 0) {
-                container.innerHTML = '<li style="color:#6B7280;">لا توجد كلانات بعد</li>';
+                container.innerHTML = '<li style="color:#9CA3AF;">لا توجد كلانات بعد</li>';
                 return;
             }
             container.innerHTML = topClans.map((clan, index) => `
@@ -579,10 +807,18 @@
                     <span class="clan-rank">${index + 1}</span>
                     <span class="clan-name">${escapeHtml(clan.name)}</span>
                     <span class="clan-points">${clan.points || 0} نقطة</span>
+                    ${isAdmin ? `<button class="clan-edit-btn" onclick="editClan('${clan.id}', '${escapeHtml(clan.name)}', ${clan.points || 0})"><i class="fas fa-edit"></i></button>` : ''}
                 </li>
             `).join('');
         });
     }
+
+    window.editClan = async (id, name, points) => {
+        if (!isAdmin) return;
+        const newName = prompt('اسم الكلان الجديد:', name);
+        const newPoints = prompt('عدد النقاط الجديد:', points);
+        if (newName) await updateDoc(doc(db, 'clans', id), { name: newName, points: parseInt(newPoints) || 0 });
+    };
 
     // Load General Chat
     function loadGeneralChat() {
@@ -592,14 +828,42 @@
             const messagesArray = Object.values(messages);
             const container = document.getElementById('generalMessages');
             container.innerHTML = messagesArray.map(msg => `
-                <div class="message ${msg.uid === currentUser?.uid ? 'own' : 'other'}">
-                    <div class="message-sender">${escapeHtml(msg.name)}</div>
+                <div class="message ${msg.uid === currentUser?.uid ? 'own' : 'other'}" data-id="${msg.id}">
+                    <div class="message-sender">${escapeHtml(msg.name)} ${msg.role ? `(${msg.role})` : ''}</div>
                     <div>${escapeHtml(msg.text)}</div>
+                    <div class="message-time">${new Date(msg.timestamp).toLocaleTimeString('ar')}</div>
+                    ${isAdmin || msg.uid === currentUser?.uid ? `<div class="message-delete" onclick="deleteMessage('generalChat', '${msg.id}')"><i class="fas fa-trash"></i></div>` : ''}
                 </div>
             `).join('');
             container.scrollTop = container.scrollHeight;
         });
     }
+
+    window.deleteMessage = async (channel, msgId) => {
+        if (!isAdmin) return;
+        await remove(ref(rtdb, `${channel}/${msgId}`));
+        showMessage('تم حذف الرسالة', false);
+    };
+
+    // Send Message
+    document.getElementById('generalSendBtn')?.addEventListener('click', () => {
+        const input = document.getElementById('generalInput');
+        if (!input.value.trim() || !currentUser) return;
+        if (!isChannelOpen && !isAdmin) {
+            showMessage('القناة مغلقة حالياً من قبل الادمن');
+            return;
+        }
+        const msgRef = push(ref(rtdb, 'generalChat'));
+        set(msgRef, {
+            text: input.value,
+            name: currentUserData?.name,
+            uid: currentUser.uid,
+            role: currentUserData?.role,
+            timestamp: Date.now(),
+            id: msgRef.key
+        });
+        input.value = '';
+    });
 
     // Load Scrim Chat
     function loadScrimChat() {
@@ -617,72 +881,246 @@
         });
     }
 
-    // Load Admin Users List
+    document.getElementById('scrimSendBtn')?.addEventListener('click', () => {
+        const input = document.getElementById('scrimInput');
+        if (!input.value.trim() || !currentUser) return;
+        if (!scrimUsers.includes(currentUser.uid) && !isAdmin) {
+            showMessage('ليس لديك صلاحية للدخول إلى شات الاسكرام');
+            return;
+        }
+        push(ref(rtdb, 'scrimChat'), {
+            text: input.value,
+            name: currentUserData?.name,
+            uid: currentUser.uid,
+            timestamp: Date.now()
+        });
+        input.value = '';
+    });
+
+    // Load Scrim Users
+    function loadScrimUsers() {
+        const scrimUsersRef = ref(rtdb, 'scrimUsers');
+        onValue(scrimUsersRef, (snapshot) => {
+            const users = snapshot.val() || {};
+            scrimUsers = Object.keys(users);
+            const container = document.getElementById('scrimUsersList');
+            if (container && (isAdmin || scrimUsers.includes(currentUser?.uid))) {
+                container.innerHTML = `<div style="font-size:12px; color:#6B7280;">👥 أعضاء شات الاسكرام: ${scrimUsers.length}</div>`;
+            }
+        });
+    }
+
+    // Load Admin Users
     function loadAdminUsers() {
         const usersRef = collection(db, 'users');
         onSnapshot(usersRef, (snapshot) => {
             const users = [];
             snapshot.forEach(doc => users.push({ id: doc.id, ...doc.data() }));
             const container = document.getElementById('adminUsersList');
+            if (!container) return;
             container.innerHTML = users.map(user => `
                 <div class="user-row">
-                    <span>${escapeHtml(user.name)} (${user.role || 'member'})</span>
+                    <div>
+                        <div style="font-weight:600;">${escapeHtml(user.name)}</div>
+                        <div style="font-size:11px; color:#6B7280;">${user.email} | ${user.role || 'member'}</div>
+                        <div style="font-size:10px;">🏰 ${user.clan || 'بدون كلان'} | كود: ${user.uid.slice(0,8)}</div>
+                    </div>
                     <div class="admin-buttons">
-                        <button onclick="window.makeAdmin('${user.id}')">👑 ادمن</button>
-                        <button onclick="window.banUser('${user.id}')">🚫 حظر</button>
+                        <select onchange="updateUserRole('${user.id}', this.value)" class="user-role-select">
+                            <option value="member" ${user.role === 'member' ? 'selected' : ''}>عضو</option>
+                            <option value="co-leader" ${user.role === 'co-leader' ? 'selected' : ''}>مساعد قائد</option>
+                            <option value="leader" ${user.role === 'leader' ? 'selected' : ''}>قائد</option>
+                            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>ادمن</option>
+                        </select>
+                        <button onclick="toggleBanUser('${user.id}', ${user.banned || false})">${user.banned ? 'الغاء الحظر' : 'حظر'}</button>
+                        <button onclick="kickFromScrim('${user.id}')">⛔ طرد من الاسكرام</button>
                     </div>
                 </div>
             `).join('');
         });
     }
 
-    // Make Admin
-    window.makeAdmin = async (userId) => {
-        await updateDoc(doc(db, 'users', userId), { role: 'admin' });
-        alert('تم ترقية المستخدم إلى مدير');
+    window.updateUserRole = async (userId, role) => {
+        await updateDoc(doc(db, 'users', userId), { role: role });
+        showMessage('تم تحديث الرتبة', false);
     };
 
-    // Ban User
-    window.banUser = async (userId) => {
-        await updateDoc(doc(db, 'users', userId), { banned: true });
-        alert('تم حظر المستخدم');
+    window.toggleBanUser = async (userId, isBanned) => {
+        await updateDoc(doc(db, 'users', userId), { banned: !isBanned });
+        showMessage(isBanned ? 'تم الغاء الحظر' : 'تم حظر المستخدم', false);
     };
 
-    // Send General Message
-    document.getElementById('generalSendBtn')?.addEventListener('click', () => {
-        const input = document.getElementById('generalInput');
-        if (!input.value.trim() || !currentUser) return;
-        push(ref(rtdb, 'generalChat'), {
-            text: input.value,
-            name: currentUserData?.name || 'مستخدم',
-            uid: currentUser.uid,
-            timestamp: Date.now()
+    window.kickFromScrim = async (userId) => {
+        await remove(ref(rtdb, `scrimUsers/${userId}`));
+        showMessage('تم طرد المستخدم من شات الاسكرام', false);
+    };
+
+    // Channel Controls
+    function loadChannelStatus() {
+        const statusRef = ref(rtdb, 'settings/channelOpen');
+        onValue(statusRef, (snapshot) => {
+            isChannelOpen = snapshot.val() !== false;
+            const statusDiv = document.getElementById('generalChatStatus');
+            if (statusDiv) {
+                statusDiv.innerHTML = isChannelOpen ? '<i class="fas fa-lock-open"></i> مفتوح' : '<i class="fas fa-lock"></i> مغلق';
+                statusDiv.className = isChannelOpen ? 'chat-status' : 'chat-status closed';
+            }
+            const input = document.getElementById('generalInput');
+            if (input) input.disabled = !isChannelOpen && !isAdmin;
         });
-        input.value = '';
+    }
+
+    document.getElementById('toggleChannelBtn')?.addEventListener('click', async () => {
+        if (!isAdmin) return;
+        await set(ref(rtdb, 'settings/channelOpen'), !isChannelOpen);
+        showMessage(isChannelOpen ? 'تم قفل القناة' : 'تم فتح القناة', false);
     });
 
-    // Send Scrim Message
-    document.getElementById('scrimSendBtn')?.addEventListener('click', () => {
-        const input = document.getElementById('scrimInput');
-        if (!input.value.trim() || !currentUser) return;
-        push(ref(rtdb, 'scrimChat'), {
-            text: input.value,
-            name: currentUserData?.name || 'مستخدم',
-            uid: currentUser.uid,
-            timestamp: Date.now()
+    // Scrim Registration Text
+    const scrimTextRef = ref(rtdb, 'settings/scrimText');
+    onValue(scrimTextRef, (snapshot) => {
+        const text = snapshot.val() || 'لا توجد تسجيلات للاسكرام حالياً';
+        document.getElementById('scrimRegistrationText').innerText = text;
+    });
+
+    document.getElementById('editScrimTextBtn')?.addEventListener('click', () => {
+        if (!isAdmin) return;
+        const newText = prompt('نص التسجيل للاسكرام:', document.getElementById('scrimRegistrationText').innerText);
+        if (newText) set(scrimTextRef, newText);
+    });
+
+    // Add to Scrim
+    document.getElementById('addToScrimBtn')?.addEventListener('click', async () => {
+        if (!isAdmin) return;
+        const usersSnapshot = await getDocs(collection(db, 'users'));
+        const users = [];
+        usersSnapshot.forEach(doc => users.push({ id: doc.id, ...doc.data() }));
+        const modal = document.getElementById('addToScrimModal');
+        const listDiv = document.getElementById('allUsersList');
+        listDiv.innerHTML = users.map(user => `
+            <div class="user-row">
+                <span>${escapeHtml(user.name)} (${user.email})</span>
+                <button onclick="addUserToScrim('${user.id}')" style="background:#000; color:white; border:none; padding:5px 12px; border-radius:20px;">+ إضافة</button>
+            </div>
+        `).join('');
+        modal.classList.remove('hidden');
+    });
+
+    window.addUserToScrim = async (userId) => {
+        await set(ref(rtdb, `scrimUsers/${userId}`), true);
+        showMessage('تمت إضافة المستخدم إلى شات الاسكرام', false);
+        document.getElementById('addToScrimModal').classList.add('hidden');
+    };
+
+    document.getElementById('closeScrimModalBtn')?.addEventListener('click', () => {
+        document.getElementById('addToScrimModal').classList.add('hidden');
+    });
+
+    // Add Clan
+    document.getElementById('addClanBtn')?.addEventListener('click', async () => {
+        if (!isAdmin) return;
+        const name = prompt('اسم الكلان الجديد:');
+        if (name) {
+            await addDoc(collection(db, 'clans'), { name, points: 0 });
+            showMessage('تم إضافة الكلان', false);
+        }
+    });
+
+    // Edit Profile
+    document.getElementById('editProfileBtn')?.addEventListener('click', () => {
+        document.getElementById('profileModal').classList.remove('hidden');
+        document.getElementById('editName').value = currentUserData?.name || '';
+        document.getElementById('editClan').value = currentUserData?.clan || '';
+        document.getElementById('editAvatar').value = currentUserData?.avatar || '';
+        document.getElementById('editRole').value = currentUserData?.role || 'member';
+    });
+
+    document.getElementById('saveProfileBtn')?.addEventListener('click', async () => {
+        const newName = document.getElementById('editName').value;
+        const newClan = document.getElementById('editClan').value;
+        const newAvatar = document.getElementById('editAvatar').value;
+        const newRole = document.getElementById('editRole').value;
+        if (!newName || !newClan) return showMessage('الاسم والكلان مطلوبان');
+        await updateDoc(doc(db, 'users', currentUser.uid), {
+            name: newName,
+            clan: newClan,
+            avatar: newAvatar,
+            role: newRole
         });
-        input.value = '';
+        if (currentUser.displayName !== newName) await updateProfile(currentUser, { displayName: newName });
+        document.getElementById('profileModal').classList.add('hidden');
+        showMessage('تم تحديث الملف الشخصي', false);
+        location.reload();
     });
 
-    // Enter key to send
-    document.getElementById('generalInput')?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') document.getElementById('generalSendBtn').click();
-    });
-    document.getElementById('scrimInput')?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') document.getElementById('scrimSendBtn').click();
+    document.getElementById('closeModalBtn')?.addEventListener('click', () => {
+        document.getElementById('profileModal').classList.add('hidden');
     });
 
-    // Tab switching
+    // Logout
+    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+        await signOut(auth);
+        location.reload();
+    });
+
+    // Auth Functions
+    document.getElementById('loginBtn')?.addEventListener('click', async () => {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        if (!email || !password) return showMessage('املأ البريد وكلمة المرور');
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            showMessage('خطأ: ' + error.message);
+        }
+    });
+
+    document.getElementById('googleLoginBtn')?.addEventListener('click', async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (!userDoc.exists()) {
+                const role = user.email === 'admin@clanverse.com' ? 'admin' : 'member';
+                await setDoc(doc(db, 'users', user.uid), {
+                    name: user.displayName || 'مستخدم',
+                    clan: 'بدون كلان',
+                    avatar: user.photoURL || 'https://ui-avatars.com/api/?background=000&color=fff',
+                    email: user.email,
+                    role: role,
+                    uid: user.uid
+                });
+            }
+        } catch (error) {
+            showMessage('خطأ جوجل: ' + error.message);
+        }
+    });
+
+    document.getElementById('registerBtn')?.addEventListener('click', async () => {
+        const name = document.getElementById('regName').value;
+        const clan = document.getElementById('regClan').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        if (!name || !clan || !email || !password) return showMessage('املأ جميع الحقول');
+        try {
+            const userCred = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCred.user, { displayName: name });
+            const role = email === 'admin@clanverse.com' ? 'admin' : 'member';
+            await setDoc(doc(db, 'users', userCred.user.uid), {
+                name: name,
+                clan: clan,
+                avatar: 'https://ui-avatars.com/api/?background=000&color=fff',
+                email: email,
+                role: role,
+                uid: userCred.user.uid
+            });
+            showMessage('تم إنشاء الحساب بنجاح', false);
+        } catch (error) {
+            showMessage('خطأ: ' + error.message);
+        }
+    });
+
+    // Tab Switching
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -697,117 +1135,6 @@
         });
     });
 
-    // Edit Profile
-    document.getElementById('editProfileBtn')?.addEventListener('click', () => {
-        const newName = prompt('الاسم الجديد:', currentUserData?.name);
-        const newClan = prompt('الكلان الجديد:', currentUserData?.clan);
-        if (newName && newClan && currentUser) {
-            updateDoc(doc(db, 'users', currentUser.uid), {
-                name: newName,
-                clan: newClan
-            }).then(() => {
-                updateProfile(currentUser, { displayName: newName });
-                location.reload();
-            });
-        }
-    });
-
-    // Add Clan (Admin only)
-    document.getElementById('addClanBtn')?.addEventListener('click', async () => {
-        if (!isAdmin) return alert('غير مسموح - فقط للادمن');
-        const name = prompt('اسم الكلان الجديد:');
-        if (name) {
-            await addDoc(collection(db, 'clans'), { name, points: 0 });
-            alert('تم إضافة الكلان');
-        }
-    });
-
-    // Reset General Chat (Admin only)
-    document.getElementById('resetChatBtn')?.addEventListener('click', async () => {
-        if (!isAdmin) return alert('غير مسموح - فقط للادمن');
-        if (confirm('هل أنت متأكد من مسح جميع رسائل الشات العام؟')) {
-            await set(ref(rtdb, 'generalChat'), {});
-            alert('تم مسح الشات');
-        }
-    });
-
-    // Scrim Registration Text
-    const scrimTextRef = ref(rtdb, 'settings/scrimText');
-    onValue(scrimTextRef, (snapshot) => {
-        const text = snapshot.val() || 'لا توجد تسجيلات للاسكرام حالياً';
-        document.getElementById('scrimRegistrationText').innerText = text;
-    });
-    document.getElementById('editScrimTextBtn')?.addEventListener('click', () => {
-        if (!isAdmin) return alert('غير مسموح - فقط للادمن');
-        const newText = prompt('نص التسجيل للاسكرام:', document.getElementById('scrimRegistrationText').innerText);
-        if (newText) set(scrimTextRef, newText);
-    });
-
-    // Logout
-    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
-        await signOut(auth);
-        location.reload();
-    });
-
-    // Login with Email/Password
-    document.getElementById('loginBtn')?.addEventListener('click', async () => {
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        if (!email || !password) return alert('املأ البريد وكلمة المرور');
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-        } catch (error) {
-            alert('خطأ في تسجيل الدخول: ' + error.message);
-        }
-    });
-
-    // Login with Google
-    document.getElementById('googleLoginBtn')?.addEventListener('click', async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
-            const userDoc = await getDoc(doc(db, 'users', user.uid));
-            if (!userDoc.exists()) {
-                const role = user.email === 'admin@system.com' ? 'admin' : 'member';
-                await setDoc(doc(db, 'users', user.uid), {
-                    name: user.displayName || 'مستخدم',
-                    clan: 'بدون كلان',
-                    avatar: user.photoURL || 'https://ui-avatars.com/api/?background=000&color=fff',
-                    email: user.email,
-                    role: role,
-                    uid: user.uid
-                });
-            }
-        } catch (error) {
-            alert('خطأ في تسجيل الدخول بجوجل: ' + error.message);
-        }
-    });
-
-    // Register new account
-    document.getElementById('registerBtn')?.addEventListener('click', async () => {
-        const name = document.getElementById('regName').value;
-        const clan = document.getElementById('regClan').value;
-        const email = document.getElementById('regEmail').value;
-        const password = document.getElementById('regPassword').value;
-        if (!name || !clan || !email || !password) return alert('املأ جميع الحقول');
-        try {
-            const userCred = await createUserWithEmailAndPassword(auth, email, password);
-            await updateProfile(userCred.user, { displayName: name });
-            const role = email === 'admin@system.com' ? 'admin' : 'member';
-            await setDoc(doc(db, 'users', userCred.user.uid), {
-                name: name,
-                clan: clan,
-                avatar: 'https://ui-avatars.com/api/?background=000&color=fff',
-                email: email,
-                role: role,
-                uid: userCred.user.uid
-            });
-            alert('تم إنشاء الحساب بنجاح');
-        } catch (error) {
-            alert('خطأ في إنشاء الحساب: ' + error.message);
-        }
-    });
-
     // Auth State Listener
     onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -817,7 +1144,7 @@
                 currentUserData = userDoc.data();
                 isAdmin = currentUserData.role === 'admin';
             } else {
-                const role = user.email === 'admin@system.com' ? 'admin' : 'member';
+                const role = user.email === 'admin@clanverse.com' ? 'admin' : 'member';
                 currentUserData = { name: user.displayName || 'مستخدم', clan: 'بدون كلان', role: role };
                 isAdmin = role === 'admin';
                 await setDoc(doc(db, 'users', user.uid), {
@@ -829,22 +1156,39 @@
                     uid: user.uid
                 });
             }
-            
+
+            if (currentUserData.banned) {
+                await signOut(auth);
+                showMessage('تم حظرك من الموقع');
+                return;
+            }
+
             document.getElementById('app').classList.remove('hidden');
             document.getElementById('loginPage').classList.add('hidden');
             document.getElementById('userNameDisplay').innerText = currentUserData.name;
             document.getElementById('userClanDisplay').innerHTML = `الكلان: ${currentUserData.clan}`;
             document.getElementById('userAvatarImg').src = currentUserData.avatar || 'https://ui-avatars.com/api/?background=000&color=fff';
             
+            let roleText = '';
+            if (currentUserData.role === 'admin') roleText = '👑 مدير';
+            else if (currentUserData.role === 'leader') roleText = '⭐ قائد كلان';
+            else if (currentUserData.role === 'co-leader') roleText = '🌟 مساعد قائد';
+            else roleText = '🔰 عضو';
+            document.getElementById('userRoleDisplay').innerText = roleText;
+
             if (isAdmin) {
                 document.getElementById('adminPanel').classList.remove('hidden');
+                document.getElementById('addClanBtn').classList.remove('hidden');
                 document.getElementById('editScrimTextBtn').classList.remove('hidden');
+                document.getElementById('addToScrimBtn').classList.remove('hidden');
                 loadAdminUsers();
             }
-            
+
             loadClans();
             loadGeneralChat();
             loadScrimChat();
+            loadScrimUsers();
+            loadChannelStatus();
         } else {
             document.getElementById('app').classList.add('hidden');
             document.getElementById('loginPage').classList.remove('hidden');
