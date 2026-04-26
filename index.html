@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClanVerse | منصة الكلانات</title>
+    <title>ClanVerse | منصة الكلانات المتكاملة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style>
@@ -21,29 +21,32 @@
             overflow-x: hidden;
         }
 
-        /* Animated Background Waves */
-        .wave-bg {
+        /* Animated Background */
+        .bg-animation {
             position: fixed;
-            bottom: 0;
+            top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            opacity: 0.4;
+            overflow: hidden;
         }
 
-        .wave-bg svg {
+        .bg-animation::before {
+            content: '';
             position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 60%;
-            animation: waveAnimation 20s ease-in-out infinite;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: moveDots 20s linear infinite;
         }
 
-        @keyframes waveAnimation {
-            0% { transform: translateX(0) translateY(0); }
-            50% { transform: translateX(-20px) translateY(10px); }
-            100% { transform: translateX(0) translateY(0); }
+        @keyframes moveDots {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
         }
 
         /* Container */
@@ -65,6 +68,7 @@
             flex-wrap: wrap;
             gap: 16px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 16px;
         }
 
         .logo-area {
@@ -135,6 +139,16 @@
             color: white;
         }
 
+        .logout-btn {
+            background: #EF4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
         /* Dashboard Grid */
         .dashboard-grid {
             display: grid;
@@ -202,6 +216,8 @@
         .clan-name {
             font-weight: 600;
             color: #000000;
+            flex: 1;
+            margin-right: 12px;
         }
 
         .clan-points {
@@ -275,6 +291,12 @@
             padding: 10px 16px;
             border-radius: 18px;
             font-size: 14px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .message.own {
@@ -396,7 +418,7 @@
             border: 1px solid #E5E7EB;
             border-radius: 32px;
             padding: 40px;
-            width: 400px;
+            width: 420px;
             text-align: center;
             box-shadow: 0 20px 35px rgba(0,0,0,0.05);
         }
@@ -435,11 +457,7 @@
 </head>
 <body>
 
-<div class="wave-bg">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style="opacity:0.3;">
-        <path fill="#000000" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-    </svg>
-</div>
+<div class="bg-animation"></div>
 
 <div id="app" class="app-container hidden">
     <div class="header">
@@ -454,6 +472,7 @@
             </div>
             <img class="user-avatar" id="userAvatarImg" src="https://ui-avatars.com/api/?background=000&color=fff" alt="avatar">
             <button class="edit-profile-btn" id="editProfileBtn"><i class="fas fa-user-edit"></i></button>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> خروج</button>
         </div>
     </div>
 
@@ -469,17 +488,17 @@
                 <button class="tab-btn" data-tab="scrim"><i class="fas fa-skull"></i> اسكرام</button>
                 <button class="tab-btn" data-tab="tickets"><i class="fas fa-headset"></i> دعم</button>
             </div>
-            <div class="chat-wrapper" id="generalChat"><div class="chat-header-bar"><div class="chat-title">💬 الشات العام</div></div><div class="messages-area" id="generalMessages"></div><div class="chat-input-area"><input id="generalInput" placeholder="رسالة..."><button id="generalSendBtn"><i class="fas fa-paper-plane"></i></button></div></div>
-            <div class="chat-wrapper hidden" id="scrimChat"><div class="chat-header-bar"><div class="chat-title">🎙️ شات الاسكرام</div></div><div class="messages-area" id="scrimMessages"></div><div class="chat-input-area"><input id="scrimInput" placeholder="رسالة..."><button id="scrimSendBtn"><i class="fas fa-paper-plane"></i></button></div></div>
-            <div class="hidden" id="ticketsSection"><div class="card"><button id="newTicketBtn" class="btn-primary">➕ تذكرة جديدة</button><div id="userTickets" class="users-list" style="margin-top:15px;"></div></div></div>
+            <div class="chat-wrapper" id="generalChat"><div class="chat-header-bar"><div class="chat-title">💬 الشات العام</div></div><div class="messages-area" id="generalMessages"></div><div class="chat-input-area"><input id="generalInput" placeholder="اكتب رسالتك..."><button id="generalSendBtn"><i class="fas fa-paper-plane"></i></button></div></div>
+            <div class="chat-wrapper hidden" id="scrimChat"><div class="chat-header-bar"><div class="chat-title">🎙️ شات الاسكرام (خاص)</div></div><div class="messages-area" id="scrimMessages"></div><div class="chat-input-area"><input id="scrimInput" placeholder="رسالة خاصة..."><button id="scrimSendBtn"><i class="fas fa-paper-plane"></i></button></div></div>
+            <div class="hidden" id="ticketsSection"><div class="card"><button id="newTicketBtn" class="btn-primary">➕ فتح تذكرة جديدة</button><div id="userTickets" class="users-list" style="margin-top:15px;"></div></div></div>
         </div>
 
         <div>
             <div class="card">
                 <div class="card-header"><i class="fas fa-clipboard-list"></i><h2>التسجيل للاسكرام</h2></div>
-                <div style="background:#F9FAFB; padding:15px; border-radius:12px;"><p id="scrimRegistrationText">لا توجد تسجيلات</p><button id="editScrimTextBtn" class="hidden btn-outline" style="margin-top:10px;">✏️ تعديل</button></div>
+                <div style="background:#F9FAFB; padding:15px; border-radius:12px;"><p id="scrimRegistrationText">لا توجد تسجيلات حالياً</p><button id="editScrimTextBtn" class="hidden btn-outline" style="margin-top:10px;">✏️ تعديل النص</button></div>
             </div>
-            <div class="card admin-panel hidden" id="adminPanel"><div class="card-header"><i class="fas fa-crown"></i><h2>لوحة الادمن</h2></div><div class="users-list" id="adminUsersList"></div><button id="addClanBtn" class="btn-primary">➕ إضافة كلان</button><button id="resetChatBtn" class="btn-outline" style="color:red;">🗑️ مسح الشات</button></div>
+            <div class="card admin-panel hidden" id="adminPanel"><div class="card-header"><i class="fas fa-crown"></i><h2>لوحة التحكم - Admin</h2></div><div class="users-list" id="adminUsersList"></div><button id="addClanBtn" class="btn-primary">➕ إضافة كلان جديد</button><button id="resetChatBtn" class="btn-outline" style="color:#EF4444;">🗑️ مسح الشات العام</button></div>
         </div>
     </div>
 </div>
@@ -488,7 +507,7 @@
 <div id="loginPage" class="login-page">
     <div class="login-card">
         <div class="logo-icon" style="margin:0 auto 20px;">⚔️</div>
-        <h2 style="margin-bottom:20px;">مرحباً بك</h2>
+        <h2 style="margin-bottom:20px;">مرحباً بك في ClanVerse</h2>
         <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
         <input type="password" id="loginPassword" placeholder="كلمة المرور">
         <button id="loginBtn" class="btn-primary">تسجيل الدخول</button>
@@ -506,10 +525,11 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
     import { getDatabase, ref, set, onValue, push, remove } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
+    // Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyA74xI6RlWmOJSeE472TVMiGz2dC9rzbSU",
         authDomain: "tryy12345678.firebaseapp.com",
@@ -520,25 +540,234 @@
         appId: "1:924494362795:web:340d90c2e67a8e31139fee"
     };
 
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const rtdb = getDatabase(app);
-    const provider = new GoogleAuthProvider();
+    const googleProvider = new GoogleAuthProvider();
 
     let currentUser = null;
     let currentUserData = null;
     let isAdmin = false;
 
-    function escapeHtml(str) { return str?.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m; }) || ''; }
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
 
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
+    // Load Clans Ranking
+    function loadClans() {
+        const clansRef = collection(db, 'clans');
+        const q = query(clansRef, orderBy('points', 'desc'));
+        onSnapshot(q, (snapshot) => {
+            const clans = [];
+            snapshot.forEach(doc => clans.push({ id: doc.id, ...doc.data() }));
+            const topClans = clans.slice(0, 10);
+            const container = document.getElementById('clanList');
+            if (topClans.length === 0) {
+                container.innerHTML = '<li style="color:#6B7280;">لا توجد كلانات بعد</li>';
+                return;
+            }
+            container.innerHTML = topClans.map((clan, index) => `
+                <li class="clan-item">
+                    <span class="clan-rank">${index + 1}</span>
+                    <span class="clan-name">${escapeHtml(clan.name)}</span>
+                    <span class="clan-points">${clan.points || 0} نقطة</span>
+                </li>
+            `).join('');
+        });
+    }
+
+    // Load General Chat
+    function loadGeneralChat() {
+        const messagesRef = ref(rtdb, 'generalChat');
+        onValue(messagesRef, (snapshot) => {
+            const messages = snapshot.val() || {};
+            const messagesArray = Object.values(messages);
+            const container = document.getElementById('generalMessages');
+            container.innerHTML = messagesArray.map(msg => `
+                <div class="message ${msg.uid === currentUser?.uid ? 'own' : 'other'}">
+                    <div class="message-sender">${escapeHtml(msg.name)}</div>
+                    <div>${escapeHtml(msg.text)}</div>
+                </div>
+            `).join('');
+            container.scrollTop = container.scrollHeight;
+        });
+    }
+
+    // Load Scrim Chat
+    function loadScrimChat() {
+        const scrimRef = ref(rtdb, 'scrimChat');
+        onValue(scrimRef, (snapshot) => {
+            const messages = snapshot.val() || {};
+            const messagesArray = Object.values(messages);
+            const container = document.getElementById('scrimMessages');
+            container.innerHTML = messagesArray.map(msg => `
+                <div class="message ${msg.uid === currentUser?.uid ? 'own' : 'other'}">
+                    <div class="message-sender">${escapeHtml(msg.name)}</div>
+                    <div>${escapeHtml(msg.text)}</div>
+                </div>
+            `).join('');
+        });
+    }
+
+    // Load Admin Users List
+    function loadAdminUsers() {
+        const usersRef = collection(db, 'users');
+        onSnapshot(usersRef, (snapshot) => {
+            const users = [];
+            snapshot.forEach(doc => users.push({ id: doc.id, ...doc.data() }));
+            const container = document.getElementById('adminUsersList');
+            container.innerHTML = users.map(user => `
+                <div class="user-row">
+                    <span>${escapeHtml(user.name)} (${user.role || 'member'})</span>
+                    <div class="admin-buttons">
+                        <button onclick="window.makeAdmin('${user.id}')">👑 ادمن</button>
+                        <button onclick="window.banUser('${user.id}')">🚫 حظر</button>
+                    </div>
+                </div>
+            `).join('');
+        });
+    }
+
+    // Make Admin
+    window.makeAdmin = async (userId) => {
+        await updateDoc(doc(db, 'users', userId), { role: 'admin' });
+        alert('تم ترقية المستخدم إلى مدير');
+    };
+
+    // Ban User
+    window.banUser = async (userId) => {
+        await updateDoc(doc(db, 'users', userId), { banned: true });
+        alert('تم حظر المستخدم');
+    };
+
+    // Send General Message
+    document.getElementById('generalSendBtn')?.addEventListener('click', () => {
+        const input = document.getElementById('generalInput');
+        if (!input.value.trim() || !currentUser) return;
+        push(ref(rtdb, 'generalChat'), {
+            text: input.value,
+            name: currentUserData?.name || 'مستخدم',
+            uid: currentUser.uid,
+            timestamp: Date.now()
+        });
+        input.value = '';
+    });
+
+    // Send Scrim Message
+    document.getElementById('scrimSendBtn')?.addEventListener('click', () => {
+        const input = document.getElementById('scrimInput');
+        if (!input.value.trim() || !currentUser) return;
+        push(ref(rtdb, 'scrimChat'), {
+            text: input.value,
+            name: currentUserData?.name || 'مستخدم',
+            uid: currentUser.uid,
+            timestamp: Date.now()
+        });
+        input.value = '';
+    });
+
+    // Enter key to send
+    document.getElementById('generalInput')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') document.getElementById('generalSendBtn').click();
+    });
+    document.getElementById('scrimInput')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') document.getElementById('scrimSendBtn').click();
+    });
+
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const tab = btn.dataset.tab;
+            document.getElementById('generalChat').classList.add('hidden');
+            document.getElementById('scrimChat').classList.add('hidden');
+            document.getElementById('ticketsSection').classList.add('hidden');
+            if (tab === 'general') document.getElementById('generalChat').classList.remove('hidden');
+            if (tab === 'scrim') document.getElementById('scrimChat').classList.remove('hidden');
+            if (tab === 'tickets') document.getElementById('ticketsSection').classList.remove('hidden');
+        });
+    });
+
+    // Edit Profile
+    document.getElementById('editProfileBtn')?.addEventListener('click', () => {
+        const newName = prompt('الاسم الجديد:', currentUserData?.name);
+        const newClan = prompt('الكلان الجديد:', currentUserData?.clan);
+        if (newName && newClan && currentUser) {
+            updateDoc(doc(db, 'users', currentUser.uid), {
+                name: newName,
+                clan: newClan
+            }).then(() => {
+                updateProfile(currentUser, { displayName: newName });
+                location.reload();
+            });
+        }
+    });
+
+    // Add Clan (Admin only)
+    document.getElementById('addClanBtn')?.addEventListener('click', async () => {
+        if (!isAdmin) return alert('غير مسموح - فقط للادمن');
+        const name = prompt('اسم الكلان الجديد:');
+        if (name) {
+            await addDoc(collection(db, 'clans'), { name, points: 0 });
+            alert('تم إضافة الكلان');
+        }
+    });
+
+    // Reset General Chat (Admin only)
+    document.getElementById('resetChatBtn')?.addEventListener('click', async () => {
+        if (!isAdmin) return alert('غير مسموح - فقط للادمن');
+        if (confirm('هل أنت متأكد من مسح جميع رسائل الشات العام؟')) {
+            await set(ref(rtdb, 'generalChat'), {});
+            alert('تم مسح الشات');
+        }
+    });
+
+    // Scrim Registration Text
+    const scrimTextRef = ref(rtdb, 'settings/scrimText');
+    onValue(scrimTextRef, (snapshot) => {
+        const text = snapshot.val() || 'لا توجد تسجيلات للاسكرام حالياً';
+        document.getElementById('scrimRegistrationText').innerText = text;
+    });
+    document.getElementById('editScrimTextBtn')?.addEventListener('click', () => {
+        if (!isAdmin) return alert('غير مسموح - فقط للادمن');
+        const newText = prompt('نص التسجيل للاسكرام:', document.getElementById('scrimRegistrationText').innerText);
+        if (newText) set(scrimTextRef, newText);
+    });
+
+    // Logout
+    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+        await signOut(auth);
+        location.reload();
+    });
+
+    // Login with Email/Password
+    document.getElementById('loginBtn')?.addEventListener('click', async () => {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        if (!email || !password) return alert('املأ البريد وكلمة المرور');
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            alert('خطأ في تسجيل الدخول: ' + error.message);
+        }
+    });
+
+    // Login with Google
+    document.getElementById('googleLoginBtn')?.addEventListener('click', async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
             const userDoc = await getDoc(doc(db, 'users', user.uid));
-            if (userDoc.exists()) {
-                currentUserData = userDoc.data();
-                isAdmin = currentUserData.role === 'admin';
-            } else {
+            if (!userDoc.exists()) {
                 const role = user.email === 'admin@system.com' ? 'admin' : 'member';
                 await setDoc(doc(db, 'users', user.uid), {
                     name: user.displayName || 'مستخدم',
@@ -548,76 +777,79 @@
                     role: role,
                     uid: user.uid
                 });
+            }
+        } catch (error) {
+            alert('خطأ في تسجيل الدخول بجوجل: ' + error.message);
+        }
+    });
+
+    // Register new account
+    document.getElementById('registerBtn')?.addEventListener('click', async () => {
+        const name = document.getElementById('regName').value;
+        const clan = document.getElementById('regClan').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        if (!name || !clan || !email || !password) return alert('املأ جميع الحقول');
+        try {
+            const userCred = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCred.user, { displayName: name });
+            const role = email === 'admin@system.com' ? 'admin' : 'member';
+            await setDoc(doc(db, 'users', userCred.user.uid), {
+                name: name,
+                clan: clan,
+                avatar: 'https://ui-avatars.com/api/?background=000&color=fff',
+                email: email,
+                role: role,
+                uid: userCred.user.uid
+            });
+            alert('تم إنشاء الحساب بنجاح');
+        } catch (error) {
+            alert('خطأ في إنشاء الحساب: ' + error.message);
+        }
+    });
+
+    // Auth State Listener
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUser = user;
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+                currentUserData = userDoc.data();
+                isAdmin = currentUserData.role === 'admin';
+            } else {
+                const role = user.email === 'admin@system.com' ? 'admin' : 'member';
                 currentUserData = { name: user.displayName || 'مستخدم', clan: 'بدون كلان', role: role };
                 isAdmin = role === 'admin';
+                await setDoc(doc(db, 'users', user.uid), {
+                    name: user.displayName || 'مستخدم',
+                    clan: 'بدون كلان',
+                    avatar: user.photoURL || 'https://ui-avatars.com/api/?background=000&color=fff',
+                    email: user.email,
+                    role: role,
+                    uid: user.uid
+                });
             }
+            
             document.getElementById('app').classList.remove('hidden');
             document.getElementById('loginPage').classList.add('hidden');
             document.getElementById('userNameDisplay').innerText = currentUserData.name;
             document.getElementById('userClanDisplay').innerHTML = `الكلان: ${currentUserData.clan}`;
             document.getElementById('userAvatarImg').src = currentUserData.avatar || 'https://ui-avatars.com/api/?background=000&color=fff';
+            
             if (isAdmin) {
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('editScrimTextBtn').classList.remove('hidden');
                 loadAdminUsers();
             }
+            
             loadClans();
             loadGeneralChat();
             loadScrimChat();
-            currentUser = user;
         } else {
             document.getElementById('app').classList.add('hidden');
             document.getElementById('loginPage').classList.remove('hidden');
         }
     });
-
-    document.getElementById('loginBtn').onclick = async () => {
-        const email = document.getElementById('loginEmail').value;
-        const pwd = document.getElementById('loginPassword').value;
-        try { await signInWithEmailAndPassword(auth, email, pwd); } catch(e) { alert('خطأ: '+e.message); }
-    };
-    document.getElementById('googleLoginBtn').onclick = async () => {
-        try { await signInWithPopup(auth, provider); } catch(e) { alert('خطأ جوجل: '+e.message); }
-    };
-    document.getElementById('registerBtn').onclick = async () => {
-        const name = document.getElementById('regName').value;
-        const clan = document.getElementById('regClan').value;
-        const email = document.getElementById('regEmail').value;
-        const pwd = document.getElementById('regPassword').value;
-        if (!name || !clan || !email || !pwd) return alert('املأ كل الحقول');
-        try {
-            const userCred = await createUserWithEmailAndPassword(auth, email, pwd);
-            await updateProfile(userCred.user, { displayName: name });
-            const role = email === 'admin@system.com' ? 'admin' : 'member';
-            await setDoc(doc(db, 'users', userCred.user.uid), { name, clan, avatar: 'https://ui-avatars.com/api/?background=000&color=fff', email, role, uid: userCred.user.uid });
-        } catch(e) { alert('خطأ: '+e.message); }
-    };
-
-    async function loadClans() {
-        const q = query(collection(db, 'clans'), orderBy('points', 'desc'));
-        onSnapshot(q, (snap) => {
-            const clans = snap.docs.map(d => ({ id:d.id, ...d.data() })).slice(0,10);
-            const container = document.getElementById('clanList');
-            if(clans.length===0) { container.innerHTML='<li>لا توجد كلانات</li>'; return; }
-            container.innerHTML = clans.map((c,i) => `<li class="clan-item"><span class="clan-rank">${i+1}</span><span class="clan-name">${escapeHtml(c.name)}</span><span class="clan-points">${c.points||0}</span></li>`).join('');
-        });
-    }
-
-    function loadGeneralChat() { onValue(ref(rtdb, 'generalChat'), snap => { const msgs = Object.values(snap.val()||{}); document.getElementById('generalMessages').innerHTML = msgs.map(m => `<div class="message ${m.uid===currentUser?.uid?'own':'other'}"><div class="message-sender">${escapeHtml(m.name)}</div><div>${escapeHtml(m.text)}</div></div>`).join(''); }); }
-    document.getElementById('generalSendBtn').onclick = () => { const input=document.getElementById('generalInput'); if(!input.value.trim()||!currentUser) return; push(ref(rtdb, 'generalChat'), { text:input.value, name:currentUserData.name, uid:currentUser.uid, timestamp:Date.now() }); input.value=''; };
-    function loadScrimChat() { onValue(ref(rtdb, 'scrimChat'), snap => { const msgs = Object.values(snap.val()||{}); document.getElementById('scrimMessages').innerHTML = msgs.map(m => `<div class="message ${m.uid===currentUser?.uid?'own':'other'}"><div class="message-sender">${escapeHtml(m.name)}</div><div>${escapeHtml(m.text)}</div></div>`).join(''); }); }
-    document.getElementById('scrimSendBtn').onclick = () => { const input=document.getElementById('scrimInput'); if(!input.value.trim()||!currentUser) return; push(ref(rtdb, 'scrimChat'), { text:input.value, name:currentUserData.name, uid:currentUser.uid, timestamp:Date.now() }); input.value=''; };
-
-    document.querySelectorAll('.tab-btn').forEach(btn=>{ btn.onclick=()=>{ document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const tab=btn.dataset.tab; document.getElementById('generalChat').classList.add('hidden'); document.getElementById('scrimChat').classList.add('hidden'); document.getElementById('ticketsSection').classList.add('hidden'); if(tab==='general') document.getElementById('generalChat').classList.remove('hidden'); if(tab==='scrim') document.getElementById('scrimChat').classList.remove('hidden'); if(tab==='tickets') document.getElementById('ticketsSection').classList.remove('hidden'); }; });
-
-    async function loadAdminUsers() { onSnapshot(collection(db,'users'), snap => { document.getElementById('adminUsersList').innerHTML = snap.docs.map(d => ({ id:d.id, ...d.data() })).map(u => `<div class="user-row"><span>${escapeHtml(u.name)} (${u.role})</span><div class="admin-buttons"><button onclick='window.makeAdmin("${u.id}")'>👑 ادمن</button><button onclick='window.banUser("${u.id}")'>🚫 حظر</button></div></div>`).join(''); }); }
-    window.makeAdmin = async (id) => await updateDoc(doc(db,'users',id), { role:'admin' });
-    window.banUser = async (id) => await updateDoc(doc(db,'users',id), { banned:true });
-    document.getElementById('addClanBtn').onclick = async () => { const name=prompt('اسم الكلان'); if(name) await addDoc(collection(db,'clans'), { name, points:0 }); };
-    document.getElementById('resetChatBtn').onclick = async () => { if(confirm('مسح الشات العام؟')) await set(ref(rtdb,'generalChat'), {}); };
-    document.getElementById('editProfileBtn').onclick = () => { const newName=prompt('الاسم الجديد', currentUserData.name); const newClan=prompt('الكلان الجديد', currentUserData.clan); if(newName && newClan) updateDoc(doc(db,'users',currentUser.uid), { name:newName, clan:newClan }).then(()=>location.reload()); };
-    onValue(ref(rtdb, 'settings/scrimText'), snap => document.getElementById('scrimRegistrationText').innerText = snap.val() || 'لا توجد تسجيلات');
-    document.getElementById('editScrimTextBtn').onclick = () => { const newText=prompt('نص جديد', document.getElementById('scrimRegistrationText').innerText); if(newText) set(ref(rtdb,'settings/scrimText'), newText); };
 </script>
 </body>
 </html>
