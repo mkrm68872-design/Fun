@@ -2,18 +2,18 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>رواية - منصة القصص التفاعلية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
-        .container { max-width: 1400px; margin: 0 auto; }
+        body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 15px; }
+        .container { max-width: 1600px; margin: 0 auto; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 30px; padding: 30px; margin-bottom: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); animation: fadeInUp 0.5s ease-out; }
-        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 25px; margin: -30px -30px 25px -30px; padding: 30px; }
-        .header h1 { font-size: 2em; font-weight: 800; }
+        .card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 25px; padding: 20px; margin-bottom: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); animation: fadeInUp 0.5s ease-out; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 25px; margin: -20px -20px 20px -20px; padding: 25px; }
+        .header h1 { font-size: 1.8em; font-weight: 800; }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 15px; font-size: 16px; font-family: 'Cairo', sans-serif; transition: all 0.3s; }
@@ -23,42 +23,65 @@
         .btn-danger { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
         .btn-success { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
         .btn-warning { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: #333; }
-        .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-        @media (max-width: 992px) { .two-columns { grid-template-columns: 1fr; } }
-        .story-card { background: #f8f9fa; padding: 20px; border-radius: 20px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s; border-right: 4px solid #667eea; }
+        
+        /* تنسيق العمودين - الشات بياخد مساحة أكبر */
+        .two-columns { 
+            display: grid; 
+            grid-template-columns: 1fr 1.5fr; 
+            gap: 20px; 
+        }
+        @media (max-width: 992px) { 
+            .two-columns { 
+                grid-template-columns: 1fr; 
+            }
+            .chat-container { 
+                min-height: 550px; 
+            }
+        }
+        
+        /* القصص */
+        .story-card { background: #f8f9fa; padding: 18px; border-radius: 18px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s; border-right: 4px solid #667eea; }
         .story-card:hover { transform: translateX(-5px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         .story-title { font-size: 1.2em; font-weight: 700; color: #333; }
         .story-topic { color: #667eea; font-size: 0.9em; }
         .progress-bar { background: #e0e0e0; border-radius: 20px; height: 6px; margin-top: 10px; }
         .progress-fill { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100%; border-radius: 20px; }
-        .chat-container { background: white; border-radius: 20px; overflow: hidden; border: 1px solid #eee; display: flex; flex-direction: column; height: 500px; }
+        
+        /* الشات - حجم أكبر */
+        .chat-container { background: white; border-radius: 20px; overflow: hidden; border: 1px solid #eee; display: flex; flex-direction: column; height: 600px; }
+        @media (max-width: 768px) { .chat-container { height: 550px; } }
         .chat-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
         .chat-status { font-size: 12px; padding: 5px 10px; border-radius: 20px; background: rgba(255,255,255,0.2); }
         .chat-status.open { background: #4caf50; }
         .chat-status.closed { background: #f44336; }
         .chat-messages { flex: 1; overflow-y: auto; padding: 15px; background: #fafafa; }
-        .message { margin-bottom: 15px; display: flex; flex-direction: column; animation: fadeInUp 0.2s ease-out; cursor: pointer; transition: all 0.2s; }
+        
+        /* الرسائل - اسم أكبر ولون الأدمن أحمر */
+        .message { margin-bottom: 18px; display: flex; flex-direction: column; animation: fadeInUp 0.2s ease-out; cursor: pointer; transition: all 0.2s; }
         .message:hover { background: rgba(102,126,234,0.05); border-radius: 10px; }
-        .message-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 12px; align-items: center; }
-        .message-sender { font-weight: 600; color: #667eea; display: flex; align-items: center; gap: 8px; }
-        .profile-pic { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold; object-fit: cover; }
-        .profile-pic-img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
-        .message-time { color: #999; font-size: 10px; }
-        .message-text { background: white; padding: 10px 15px; border-radius: 15px; border-top-right-radius: 5px; display: inline-block; max-width: 80%; word-wrap: break-word; }
+        .message-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; align-items: center; }
+        .message-sender { font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        .admin-name { color: #dc3545 !important; }
+        .admin-badge { background: #dc3545; color: white; font-size: 11px; padding: 2px 8px; border-radius: 20px; margin-right: 8px; }
+        .message-time { color: #999; font-size: 11px; }
+        .message-text { background: white; padding: 12px 18px; border-radius: 18px; border-top-right-radius: 6px; display: inline-block; max-width: 85%; word-wrap: break-word; font-size: 15px; }
         .message-actions { display: flex; gap: 10px; margin-top: 5px; }
         .like-btn { background: none; border: none; color: #999; cursor: pointer; font-size: 12px; padding: 2px 8px; border-radius: 15px; transition: all 0.2s; }
         .like-btn:hover { background: rgba(102,126,234,0.1); }
         .like-btn.liked { color: #e91e63; }
         .message.deleted .message-text { background: #eee; color: #999; font-style: italic; }
+        
         .chat-input-area { padding: 15px; background: white; border-top: 1px solid #eee; display: flex; gap: 10px; }
-        .chat-input-area input { flex: 1; padding: 12px; border: 2px solid #e0e0e0; border-radius: 25px; font-family: 'Cairo', sans-serif; }
+        .chat-input-area input { flex: 1; padding: 12px; border: 2px solid #e0e0e0; border-radius: 25px; font-family: 'Cairo', sans-serif; font-size: 15px; }
         .chat-input-area input:disabled { background: #f0f0f0; }
+        
         .popup-menu { position: fixed; background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; z-index: 1000; animation: fadeInUp 0.2s ease-out; }
         .popup-menu div { padding: 12px 20px; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 10px; }
         .popup-menu div:hover { background: #f0f0f0; }
         .popup-menu div.danger { color: #f5576c; }
+        
         .reading-content { line-height: 1.8; font-size: 18px; color: #444; max-height: 60vh; overflow-y: auto; padding: 20px; background: #fafafa; border-radius: 20px; }
-        .admin-section { background: white; border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .admin-section { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .admin-section h3 { color: #667eea; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         .user-item { background: white; padding: 12px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e0e0e0; }
         .hidden { display: none; }
@@ -71,18 +94,15 @@
         .alert-success { background: #e8f5e9; color: #2e7d32; border-right: 4px solid #2e7d32; }
         .user-info { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
-        .profile-upload { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .current-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; object-fit: cover; }
-        .story-editor { background: white; border-radius: 20px; padding: 25px; }
-        .story-editor textarea { min-height: 200px; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .notification-toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 12px 20px; border-radius: 15px; z-index: 1100; animation: fadeInUp 0.3s ease-out; }
         .appeal-box { background: #f0f0f0; padding: 15px; border-radius: 15px; margin: 10px; }
+        .story-editor { background: white; border-radius: 20px; padding: 20px; }
+        .story-editor textarea { min-height: 180px; }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
     <div class="container" id="app">
@@ -118,12 +138,7 @@
                 <div class="header" style="margin:0; border-radius:25px;">
                     <div class="user-info">
                         <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-                            <div class="profile-upload">
-                                <img id="profilePicImg" class="current-avatar" src="">
-                                <label for="profileUpload" style="background:rgba(255,255,255,0.2);padding:5px 12px;border-radius:20px;cursor:pointer;"><i class="fas fa-camera"></i> تغيير الصورة</label>
-                                <input type="file" id="profileUpload" accept="image/*" style="display:none" onchange="uploadProfilePicture(this)">
-                            </div>
-                            <div><i class="fas fa-user-circle"></i> <strong id="userName"></strong> <span class="badge">كود: <span id="userCode"></span></span></div>
+                            <div><i class="fas fa-user-circle"></i> <strong id="userName" style="font-size: 18px;"></strong> <span class="badge" id="userRoleBadge"></span> <span class="badge">كود: <span id="userCode"></span></span></div>
                         </div>
                         <div><button onclick="logout()" style="background:rgba(255,255,255,0.2);"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</button></div>
                     </div>
@@ -188,7 +203,7 @@
                         <div id="editStoryArea" class="hidden story-editor">
                             <div class="form-group"><label><i class="fas fa-heading"></i> عنوان القصة</label><input type="text" id="editStoryTitle"></div>
                             <div class="form-group"><label><i class="fas fa-tag"></i> الموضوع/التصنيف</label><input type="text" id="editStoryTopic"></div>
-                            <div class="form-group"><label><i class="fas fa-file-alt"></i> محتوى القصة</label><textarea id="editStoryContent" rows="8"></textarea></div>
+                            <div class="form-group"><label><i class="fas fa-file-alt"></i> محتوى القصة</label><textarea id="editStoryContent" rows="6"></textarea></div>
                             <div class="flex-between">
                                 <button onclick="updateStory()" class="btn-success"><i class="fas fa-save"></i> حفظ التعديلات</button>
                                 <button onclick="deleteStory()" class="btn-danger"><i class="fas fa-trash"></i> حذف القصة</button>
@@ -220,7 +235,6 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const database = firebase.database();
-        const storage = firebase.storage();
 
         let currentUser = null, currentUserRole = 'user', currentStory = null, saveTimeout = null;
         let groupSettings = { isOpen: true, mutedUsers: {}, kickedUsers: {} };
@@ -243,7 +257,6 @@
                     loadMutedUsersList();
                 }
                 updateChatInputStatus();
-                updateProfileDisplay();
                 checkIfKicked();
             } else {
                 document.getElementById('authScreen').classList.remove('hidden');
@@ -261,8 +274,7 @@
                     name: currentUser.displayName || currentUser.email.split('@')[0], 
                     personalCode: Math.random().toString(36).substring(2,8).toUpperCase(), 
                     role: 'user', 
-                    createdAt: Date.now(),
-                    profilePic: null
+                    createdAt: Date.now()
                 };
                 await userRef.set(userData);
             }
@@ -272,40 +284,14 @@
             if (currentUserRole !== userData.role) await userRef.update({ role: currentUserRole });
             document.getElementById('userName').innerText = userData.name;
             document.getElementById('userCode').innerText = userData.personalCode;
-            if (userData.profilePic) {
-                document.getElementById('profilePicImg').src = userData.profilePic;
+            
+            // إضافة شارة الأدمن للمستخدم نفسه
+            const roleBadge = document.getElementById('userRoleBadge');
+            if (currentUserRole === 'admin') {
+                roleBadge.innerHTML = '<span style="background:#dc3545;padding:2px 8px;border-radius:20px;font-size:11px;">👑 أدمن</span>';
             } else {
-                document.getElementById('profilePicImg').src = '';
-                updateProfileDisplay();
+                roleBadge.innerHTML = '';
             }
-        }
-
-        function updateProfileDisplay() {
-            const img = document.getElementById('profilePicImg');
-            if (!img.src || img.src === '') {
-                const name = document.getElementById('userName').innerText;
-                const initial = name ? name.charAt(0) : '?';
-                img.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-                img.style.display = 'flex';
-                img.style.alignItems = 'center';
-                img.style.justifyContent = 'center';
-                img.style.fontSize = '20px';
-                img.style.color = 'white';
-                img.src = '';
-                img.setAttribute('data-initial', initial);
-                img.innerText = initial;
-            }
-        }
-
-        async function uploadProfilePicture(input) {
-            if (!input.files || !input.files[0]) return;
-            const file = input.files[0];
-            const storageRef = storage.ref(`profilePics/${currentUser.uid}`);
-            await storageRef.put(file);
-            const url = await storageRef.getDownloadURL();
-            await database.ref('users/' + currentUser.uid).update({ profilePic: url });
-            document.getElementById('profilePicImg').src = url;
-            showNotification('تم تحديث الصورة الشخصية بنجاح', 'success');
         }
 
         async function loadGroupSettings() {
@@ -429,7 +415,7 @@
         function switchAuthTab(tab) { const tabs = document.querySelectorAll('#authTabs .tab'); tabs.forEach(t=>t.classList.remove('active')); if(tab==='login'){ tabs[0].classList.add('active'); document.getElementById('loginForm').classList.remove('hidden'); document.getElementById('signupForm').classList.add('hidden'); }else{ tabs[1].classList.add('active'); document.getElementById('loginForm').classList.add('hidden'); document.getElementById('signupForm').classList.remove('hidden'); } }
         function switchMainTab(tab) { if(tab==='stories'){ document.getElementById('storiesPanel').classList.remove('hidden'); document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('readingPanel').classList.add('hidden'); loadStories(); }else if(tab==='admin'){ document.getElementById('storiesPanel').classList.add('hidden'); document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('readingPanel').classList.add('hidden'); loadAdminsList(); loadStoriesForEdit(); loadMutedUsersList(); loadAppealsList(); } }
         
-        function loadStories() { database.ref('stories').on('value',async(snapshot)=>{ const stories=snapshot.val(); const container=document.getElementById('storiesList'); container.innerHTML=''; if(!stories){container.innerHTML='لا توجد قصص';return;} for(const[id,story] of Object.entries(stories)){ const progress=await database.ref(`readingProgress/${currentUser.uid}/${id}`).once('value'); const percent=progress.val()?.percentage||0; const div=document.createElement('div'); div.className='story-card'; div.onclick=()=>openStory(id,story); div.innerHTML=`<div class="story-title">${story.title}</div><div class="story-topic">${story.topic||''}</div><div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div><div style="font-size:12px">${percent}% مكتمل</div>`; container.appendChild(div); } }); }
+        function loadStories() { database.ref('stories').on('value',async(snapshot)=>{ const stories=snapshot.val(); const container=document.getElementById('storiesList'); container.innerHTML=''; if(!stories){container.innerHTML='لا توجد قصص';return;} for(const[id,story] of Object.entries(stories)){ const progress=await database.ref(`readingProgress/${currentUser.uid}/${id}`).once('value'); const percent=progress.val()?.percentage||0; const div=document.createElement('div'); div.className='story-card'; div.onclick=()=>openStory(id,story); div.innerHTML=`<div class="story-title">📖 ${story.title}</div><div class="story-topic">${story.topic||''}</div><div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div><div style="font-size:12px">${percent}% مكتمل</div>`; container.appendChild(div); } }); }
         
         async function openStory(id,story){ currentStory={id,...story}; document.getElementById('storiesPanel').classList.add('hidden'); document.getElementById('readingPanel').classList.remove('hidden'); document.getElementById('readingTitle').innerHTML=story.title; const paragraphs=(story.content||'').split('\n').filter(p=>p.trim()); document.getElementById('readingContent').innerHTML=paragraphs.map(p=>`<p>${p}</p>`).join(''); const progress=await database.ref(`readingProgress/${currentUser.uid}/${id}`).once('value'); if(progress.val()?.scrollPosition){ setTimeout(()=>{ const div=document.getElementById('readingContent'); div.scrollTop=progress.val().scrollPosition; document.getElementById('readingProgress').style.width=(progress.val().percentage||0)+'%'; },100); } }
         function saveScrollPosition(){ if(!currentStory) return; if(saveTimeout) clearTimeout(saveTimeout); saveTimeout=setTimeout(async()=>{ const div=document.getElementById('readingContent'); const pos=div.scrollTop; const height=div.scrollHeight-div.clientHeight; const percent=height>0?Math.round((pos/height)*100):0; await database.ref(`readingProgress/${currentUser.uid}/${currentStory.id}`).set({scrollPosition:pos,percentage:percent,lastRead:Date.now()}); document.getElementById('readingProgress').style.width=percent+'%'; },1000); }
@@ -452,10 +438,18 @@
                 timestamp:Date.now(), 
                 deleted:false,
                 likes:0,
-                likedBy:{},
-                profilePic: userData.profilePic || null
+                likedBy:{}
             }); 
             input.value=''; 
+        }
+        
+        async function isUserAdmin(userId) {
+            const userSnap = await database.ref('users/' + userId).once('value');
+            const userData = userSnap.val();
+            if (!userData) return false;
+            const adminEmail = userData.email.replace(/\./g, ',');
+            const adminCheck = await database.ref('admins/' + adminEmail).once('value');
+            return adminCheck.val() === true;
         }
         
         function loadMessages(){ 
@@ -471,18 +465,16 @@
                 for(const[id,msg] of sorted){ 
                     const isMutedUser=groupSettings.mutedUsers && groupSettings.mutedUsers[msg.senderId];
                     const isLiked = msg.likedBy && msg.likedBy[currentUser?.uid];
+                    const isSenderAdmin = await isUserAdmin(msg.senderId);
                     const div=document.createElement('div'); 
                     div.className=`message ${isMutedUser?'muted':''} ${msg.deleted?'deleted':''}`; 
                     div.setAttribute('data-message-id',id); 
                     div.setAttribute('data-sender-id',msg.senderId); 
-                    let profileHtml = '';
-                    if (msg.profilePic) {
-                        profileHtml = `<img src="${msg.profilePic}" class="profile-pic-img" style="width:25px;height:25px;border-radius:50%;object-fit:cover;">`;
-                    } else {
-                        const initial = msg.senderName ? msg.senderName.charAt(0) : '?';
-                        profileHtml = `<span class="profile-pic" style="width:25px;height:25px;font-size:12px;">${initial}</span>`;
+                    let adminHtml = '';
+                    if (isSenderAdmin) {
+                        adminHtml = '<span class="admin-badge">👑 أدمن</span>';
                     }
-                    div.innerHTML=`<div class="message-header"><span class="message-sender">${profileHtml} ${msg.senderName} (${msg.senderCode})</span><span class="message-time">${new Date(msg.timestamp).toLocaleTimeString('ar-EG')}</span></div><div class="message-text">${msg.deleted?'🗑️ تم حذف هذه الرسالة':msg.text}</div><div class="message-actions"><button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${id}', event)"><i class="fas fa-heart"></i> ${msg.likes || 0}</button></div>`; 
+                    div.innerHTML=`<div class="message-header"><span class="message-sender ${isSenderAdmin ? 'admin-name' : ''}">${msg.senderName} ${adminHtml} (${msg.senderCode})</span><span class="message-time">${new Date(msg.timestamp).toLocaleTimeString('ar-EG')}</span></div><div class="message-text">${msg.deleted?'🗑️ تم حذف هذه الرسالة':msg.text}</div><div class="message-actions"><button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${id}', event)"><i class="fas fa-heart"></i> ${msg.likes || 0}</button></div>`; 
                     div.onclick=(e)=>{ if(!e.target.closest('.like-btn')) showMessageOptions(id,msg,e); };
                     container.appendChild(div); 
                 } 
