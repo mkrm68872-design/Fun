@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شات عام | مباشر</title>
+    <title>شات عام | باسم فقط</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e293b, #0f172a);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -34,71 +34,46 @@
         }
 
         .chat-header {
-            background: #2d3748;
+            background: #0f172a;
             color: white;
             padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
         }
 
         h1 {
             font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .user-info {
             display: flex;
             gap: 12px;
             align-items: center;
-            flex-wrap: wrap;
         }
 
-        #userName {
+        #userNameDisplay {
             font-weight: bold;
-            background: #4a5568;
+            background: #334155;
             padding: 0.3rem 0.8rem;
             border-radius: 2rem;
             font-size: 0.85rem;
         }
 
-        button {
-            padding: 0.4rem 1rem;
-            border: none;
-            border-radius: 2rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-
-        .btn-login {
-            background: #48bb78;
-            color: white;
-        }
-
-        .btn-login:hover {
-            background: #38a169;
-        }
-
         .btn-logout {
             background: #f56565;
             color: white;
-        }
-
-        .btn-logout:hover {
-            background: #e53e3e;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
         }
 
         .online-users {
-            background: #edf2f7;
+            background: #e2e8f0;
             padding: 0.5rem 1.5rem;
             font-size: 0.85rem;
-            color: #2d3748;
-            border-bottom: 1px solid #e2e8f0;
         }
 
         .messages-area {
@@ -108,7 +83,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            background: #f7fafc;
+            background: #f8fafc;
         }
 
         .message {
@@ -119,17 +94,15 @@
         }
 
         .message.own {
-            background: #4299e1;
+            background: #3b82f6;
             color: white;
             align-self: flex-end;
-            border-bottom-left-radius: 0.2rem;
         }
 
         .message.other {
             background: white;
-            color: #2d3748;
+            color: #1e293b;
             align-self: flex-start;
-            border-bottom-right-radius: 0.2rem;
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
@@ -137,15 +110,6 @@
             font-size: 0.7rem;
             font-weight: bold;
             margin-bottom: 0.2rem;
-            opacity: 0.8;
-        }
-
-        .message.own .sender {
-            color: #bee3f8;
-        }
-
-        .message.other .sender {
-            color: #4299e1;
         }
 
         .message .time {
@@ -156,12 +120,10 @@
         }
 
         .message.system {
-            background: #e2e8f0;
-            color: #4a5568;
+            background: #cbd5e1;
+            color: #1e293b;
             align-self: center;
             font-size: 0.8rem;
-            max-width: 90%;
-            text-align: center;
         }
 
         .input-area {
@@ -175,38 +137,27 @@
         #messageInput {
             flex: 1;
             padding: 0.8rem 1rem;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #cbd5e1;
             border-radius: 2rem;
             outline: none;
-            font-size: 1rem;
-        }
-
-        #messageInput:focus {
-            border-color: #4299e1;
         }
 
         #sendBtn {
-            background: #4299e1;
+            background: #3b82f6;
             color: white;
             padding: 0.8rem 1.5rem;
-        }
-
-        #sendBtn:hover:not(:disabled) {
-            background: #3182ce;
-        }
-
-        button:disabled, input:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
         }
 
         .login-overlay {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -218,41 +169,41 @@
             padding: 2rem;
             border-radius: 1rem;
             text-align: center;
-            max-width: 300px;
+            width: 300px;
         }
 
-        .login-card h2 {
-            margin-bottom: 1rem;
+        .login-card input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            border: 1px solid #cbd5e1;
+            border-radius: 2rem;
+            text-align: center;
         }
 
-        @media (max-width: 600px) {
-            .message {
-                max-width: 95%;
-            }
-            h1 {
-                font-size: 1rem;
-            }
+        .login-card button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="container" style="display: none;" id="chatContainer">
+    <div class="container" id="chatContainer" style="display: none;">
         <div class="chat-header">
             <h1>💬 الشات العام</h1>
             <div class="user-info">
-                <span id="userName"></span>
+                <span id="userNameDisplay"></span>
                 <button id="logoutBtn" class="btn-logout">🚪 خروج</button>
             </div>
         </div>
-
-        <div class="online-users">
-            🟢 متصلون الآن: <span id="onlineCount">0</span>
-        </div>
-
+        <div class="online-users">🟢 متصلون: <span id="onlineCount">0</span></div>
         <div class="messages-area" id="messagesArea">
             <div class="message system">✨ مرحباً بك في الشات العام</div>
         </div>
-
         <div class="input-area">
             <input type="text" id="messageInput" placeholder="اكتب رسالتك..." disabled>
             <button id="sendBtn" disabled>📤 إرسال</button>
@@ -261,21 +212,18 @@
 
     <div id="loginOverlay" class="login-overlay">
         <div class="login-card">
-            <h2>💬 الشات العام</h2>
-            <p>سجل دخولك للمشاركة</p>
-            <button id="googleLoginBtn" class="btn-login" style="margin-top: 1rem;">🔐 تسجيل دخول بجوجل</button>
+            <h2>💬 أدخل اسمك</h2>
+            <input type="text" id="usernameInput" placeholder="اسم المستخدم" maxlength="20">
+            <button id="enterBtn">دخول</button>
         </div>
     </div>
 
     <script type="module">
-        // Import Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
-        import { getDatabase, ref, set, onDisconnect, onValue, update, push } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+        import { getDatabase, ref, set, onDisconnect, onValue } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyA74xI6RlWmOJSeE472TVMiGz2dC9rzbSU",
             authDomain: "tryy12345678.firebaseapp.com",
@@ -283,186 +231,118 @@
             projectId: "tryy12345678",
             storageBucket: "tryy12345678.firebasestorage.app",
             messagingSenderId: "924494362795",
-            appId: "1:924494362795:web:340d90c2e67a8e31139fee",
-            measurementId: "G-C56N59JFK1"
+            appId: "1:924494362795:web:340d90c2e67a8e31139fee"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const rtdb = getDatabase(app);
 
-        // DOM Elements
+        let currentUser = null;
+        let currentDisplayName = "";
+
         const chatContainer = document.getElementById('chatContainer');
         const loginOverlay = document.getElementById('loginOverlay');
-        const userNameSpan = document.getElementById('userName');
+        const userNameDisplay = document.getElementById('userNameDisplay');
         const logoutBtn = document.getElementById('logoutBtn');
-        const googleLoginBtn = document.getElementById('googleLoginBtn');
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
         const messagesArea = document.getElementById('messagesArea');
         const onlineCountSpan = document.getElementById('onlineCount');
+        const enterBtn = document.getElementById('enterBtn');
+        const usernameInput = document.getElementById('usernameInput');
 
-        let currentUser = null;
-
-        // Function to scroll to bottom
-        function scrollToBottom() {
-            messagesArea.scrollTop = messagesArea.scrollHeight;
-        }
-
-        // Function to load messages from Firestore
-        function loadMessages() {
-            const messagesRef = collection(db, 'messages');
-            const q = query(messagesRef, orderBy('timestamp', 'asc'), limit(100));
-            
-            onSnapshot(q, (snapshot) => {
-                // Clear messages except system message
-                const systemMessages = messagesArea.querySelectorAll('.system');
-                messagesArea.innerHTML = '';
-                systemMessages.forEach(msg => messagesArea.appendChild(msg));
-                
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = `message ${data.userId === currentUser?.uid ? 'own' : 'other'}`;
-                    
-                    const time = data.timestamp?.toDate() || new Date();
-                    const timeStr = `${time.getHours().toString().padStart(2,'0')}:${time.getMinutes().toString().padStart(2,'0')}`;
-                    
-                    messageDiv.innerHTML = `
-                        <div class="sender">${data.userName}</div>
-                        <div class="text">${escapeHtml(data.text)}</div>
-                        <div class="time">${timeStr}</div>
-                    `;
-                    messagesArea.appendChild(messageDiv);
-                });
-                scrollToBottom();
-            });
-        }
-
-        // Function to send message
-        async function sendMessage() {
-            if (!currentUser || !messageInput.value.trim()) return;
-            
-            try {
-                await addDoc(collection(db, 'messages'), {
-                    text: messageInput.value.trim(),
-                    userId: currentUser.uid,
-                    userName: currentUser.displayName,
-                    userPhoto: currentUser.photoURL,
-                    timestamp: serverTimestamp()
-                });
-                messageInput.value = '';
-                messageInput.focus();
-            } catch (error) {
-                console.error('Error sending message:', error);
-            }
-        }
-
-        // Function to update online users count
-        function updateOnlineStatus(user) {
-            if (!user) return;
-            
-            const userStatusRef = ref(rtdb, `users/${user.uid}`);
-            const connectedRef = ref(rtdb, '.info/connected');
-            
-            onValue(connectedRef, (snap) => {
-                if (snap.val() === true) {
-                    // User is connected
-                    set(userStatusRef, {
-                        displayName: user.displayName,
-                        photoURL: user.photoURL,
-                        online: true,
-                        lastSeen: Date.now()
-                    });
-                    
-                    // When user disconnects
-                    onDisconnect(userStatusRef).set({
-                        displayName: user.displayName,
-                        photoURL: user.photoURL,
-                        online: false,
-                        lastSeen: Date.now()
-                    });
-                }
-            });
-            
-            // Count online users
-            const usersRef = ref(rtdb, 'users');
-            onValue(usersRef, (snapshot) => {
-                let online = 0;
-                snapshot.forEach((childSnapshot) => {
-                    const userData = childSnapshot.val();
-                    if (userData.online === true) online++;
-                });
-                onlineCountSpan.textContent = online;
-            });
-        }
-
-        // Helper function to escape HTML
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
 
-        // Auth State Listener
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
+        function scrollToBottom() {
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+
+        function loadMessages() {
+            const q = query(collection(db, 'messages'), orderBy('timestamp', 'asc'), limit(100));
+            onSnapshot(q, (snapshot) => {
+                const systemMsgs = messagesArea.querySelectorAll('.system');
+                messagesArea.innerHTML = '';
+                systemMsgs.forEach(msg => messagesArea.appendChild(msg));
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const div = document.createElement('div');
+                    div.className = `message ${data.userId === currentUser?.uid ? 'own' : 'other'}`;
+                    const time = data.timestamp?.toDate() || new Date();
+                    const timeStr = `${time.getHours().toString().padStart(2,'0')}:${time.getMinutes().toString().padStart(2,'0')}`;
+                    div.innerHTML = `<div class="sender">${escapeHtml(data.userName)}</div><div>${escapeHtml(data.text)}</div><div class="time">${timeStr}</div>`;
+                    messagesArea.appendChild(div);
+                });
+                scrollToBottom();
+            });
+        }
+
+        async function sendMessage() {
+            if (!currentUser || !messageInput.value.trim()) return;
+            try {
+                await addDoc(collection(db, 'messages'), {
+                    text: messageInput.value.trim(),
+                    userId: currentUser.uid,
+                    userName: currentDisplayName,
+                    timestamp: serverTimestamp()
+                });
+                messageInput.value = '';
+            } catch(e) { console.error(e); }
+        }
+
+        function updateOnlineStatus(user, displayName) {
+            if (!user) return;
+            const userStatusRef = ref(rtdb, `users/${user.uid}`);
+            const connectedRef = ref(rtdb, '.info/connected');
+            onValue(connectedRef, (snap) => {
+                if (snap.val() === true) {
+                    set(userStatusRef, { displayName: displayName, online: true, lastSeen: Date.now() });
+                    onDisconnect(userStatusRef).set({ displayName: displayName, online: false, lastSeen: Date.now() });
+                }
+            });
+            const usersRef = ref(rtdb, 'users');
+            onValue(usersRef, (snapshot) => {
+                let online = 0;
+                snapshot.forEach(child => { if (child.val().online === true) online++; });
+                onlineCountSpan.textContent = online;
+            });
+        }
+
+        enterBtn.addEventListener('click', async () => {
+            const name = usernameInput.value.trim();
+            if (!name) return alert("يرجى إدخال اسمك");
+            try {
+                const userCred = await signInAnonymously(auth);
+                currentUser = userCred.user;
+                currentDisplayName = name;
+                userNameDisplay.textContent = name;
                 chatContainer.style.display = 'flex';
                 loginOverlay.style.display = 'none';
-                userNameSpan.textContent = user.displayName;
                 messageInput.disabled = false;
                 sendBtn.disabled = false;
-                
                 loadMessages();
-                updateOnlineStatus(user);
-            } else {
-                currentUser = null;
-                chatContainer.style.display = 'none';
-                loginOverlay.style.display = 'flex';
-                messageInput.disabled = true;
-                sendBtn.disabled = true;
-            }
+                updateOnlineStatus(currentUser, name);
+            } catch(e) { alert("خطأ: " + e.message); }
         });
 
-        // Login with Google
-        googleLoginBtn.addEventListener('click', async () => {
-            const provider = new GoogleAuthProvider();
-            try {
-                const result = await signInWithPopup(auth, provider);
-                console.log('Logged in:', result.user.displayName);
-            } catch (error) {
-                console.error('Login error:', error);
-                alert('حدث خطأ في تسجيل الدخول: ' + error.message);
-            }
-        });
-
-        // Logout
         logoutBtn.addEventListener('click', async () => {
-            try {
-                if (currentUser) {
-                    const userStatusRef = ref(rtdb, `users/${currentUser.uid}`);
-                    await set(userStatusRef, {
-                        displayName: currentUser.displayName,
-                        photoURL: currentUser.photoURL,
-                        online: false,
-                        lastSeen: Date.now()
-                    });
-                }
-                await signOut(auth);
-            } catch (error) {
-                console.error('Logout error:', error);
+            if (currentUser) {
+                const userStatusRef = ref(rtdb, `users/${currentUser.uid}`);
+                await set(userStatusRef, { displayName: currentDisplayName, online: false, lastSeen: Date.now() });
             }
+            await signOut(auth);
+            chatContainer.style.display = 'none';
+            loginOverlay.style.display = 'flex';
+            messageInput.disabled = true;
+            sendBtn.disabled = true;
         });
 
-        // Send message on Enter key
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
-
+        messageInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
         sendBtn.addEventListener('click', sendMessage);
     </script>
 </body>
