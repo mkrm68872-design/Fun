@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شات حقيقي - أدمن وعادي | Firebase</title>
+    <title>ظِلال - منصة القصص التفاعلية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -12,224 +16,490 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e1e2f, #2d2d44);
+            font-family: 'Cairo', sans-serif;
+            background: #000;
+            color: #fff;
             height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Login Overlay */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #fff;
+            z-index: 2000;
         }
 
-        .chat-container {
-            width: 500px;
-            max-width: 95%;
-            height: 90vh;
-            background: rgba(30, 30, 46, 0.95);
-            border-radius: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            backdrop-filter: blur(5px);
-        }
-
-        .chat-header {
-            background: #0f0f1a;
-            padding: 20px;
+        .login-card {
+            background: rgba(20, 20, 40, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 50px;
             text-align: center;
-            border-bottom: 2px solid #ff6b6b;
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .chat-header h2 {
-            font-size: 1.3rem;
-            color: #ffd93d;
+        .login-card h1 {
+            font-family: 'Amiri', serif;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: gold;
         }
 
-        .chat-header p {
-            font-size: 0.8rem;
-            color: #aaa;
-            margin-top: 5px;
-        }
-
-        .login-area, .admin-panel {
-            padding: 15px;
-            background: #252538;
-            margin: 10px;
-            border-radius: 20px;
+        .google-btn {
+            background: #fff;
+            color: #333;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            font-weight: 600;
+            margin-bottom: 20px;
         }
 
-        .login-area input, .admin-panel input {
-            flex: 1;
+        .admin-toggle {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .admin-login-panel {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+
+        .admin-login-panel input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .admin-login-panel button {
+            background: gold;
+            color: #000;
             padding: 12px;
             border: none;
-            border-radius: 50px;
-            background: #3a3a55;
-            color: white;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .login-area button, .admin-panel button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 50px;
-            background: #ff6b6b;
-            color: white;
-            font-weight: bold;
+            border-radius: 10px;
+            width: 100%;
             cursor: pointer;
-            transition: 0.2s;
+            font-weight: bold;
         }
 
-        .login-area button:hover, .admin-panel button:hover {
-            background: #ff4757;
-            transform: scale(1.02);
+        /* Main App */
+        .main-app {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
         }
 
-        .admin-panel {
-            background: #2a2a3c;
-            border: 1px solid #ffb347;
+        .header {
+            background: #111;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #222;
         }
 
-        .group-status {
-            background: #1e1e2a;
-            margin: 5px 10px;
-            padding: 8px;
-            text-align: center;
-            border-radius: 15px;
+        .logo {
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            color: gold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .admin-badge {
+            background: gold;
+            color: #000;
+            padding: 5px 12px;
+            border-radius: 20px;
             font-size: 0.8rem;
             font-weight: bold;
         }
 
-        .messages-area {
+        .logout-btn {
+            background: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 320px;
+            background: #0a0a0a;
+            border-left: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .stories-list {
+            flex: 1;
+            padding: 15px;
+        }
+
+        .story-item {
+            padding: 15px;
+            margin-bottom: 8px;
+            background: #111;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .story-item:hover, .story-item.active {
+            background: #1a1a1a;
+            border-right: 3px solid gold;
+        }
+
+        .admin-panel-btn {
+            background: #222;
+            color: gold;
+            border: 1px solid gold;
+            padding: 12px;
+            margin: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .content-area {
             flex: 1;
             overflow-y: auto;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            padding: 30px;
         }
 
-        .message {
-            background: #3a3a55;
-            padding: 10px 15px;
-            border-radius: 20px;
-            max-width: 80%;
-            word-wrap: break-word;
-            animation: fadeIn 0.3s ease;
+        .reader-view {
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        .message.own {
-            align-self: flex-end;
-            background: #ff6b6b;
+        .story-title-main {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            margin-bottom: 20px;
         }
 
-        .message .name {
-            font-weight: bold;
-            font-size: 0.8rem;
-            color: #ffd93d;
-            margin-bottom: 5px;
+        .story-content {
+            font-family: 'Amiri', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin: 30px 0;
         }
 
-        .message .text {
-            font-size: 1rem;
-        }
-
-        .message .time {
-            font-size: 0.65rem;
-            color: #ccc;
-            text-align: left;
-            margin-top: 5px;
-        }
-
-        .message-input-area {
-            padding: 15px;
-            background: #1a1a2a;
-            display: flex;
-            gap: 10px;
-            border-top: 1px solid #444;
-        }
-
-        .message-input-area input {
-            flex: 1;
-            padding: 12px;
+        .edit-story-btn, .save-story-btn {
+            background: gold;
+            color: #000;
             border: none;
-            border-radius: 50px;
-            background: #3a3a55;
-            color: white;
-            outline: none;
-        }
-
-        .message-input-area button {
-            padding: 12px 20px;
-            background: #ff6b6b;
-            border: none;
-            border-radius: 50px;
-            color: white;
-            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-left: 10px;
             cursor: pointer;
         }
 
-        .muted-warning {
-            text-align: center;
-            color: #ffaa66;
-            font-size: 0.8rem;
-            margin: 5px;
+        .story-textarea {
+            width: 100%;
+            min-height: 400px;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 15px;
+            font-family: 'Amiri', serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            border-radius: 12px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px);}
-            to { opacity: 1; transform: translateY(0);}
+        /* Feedback Section */
+        .feedback-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #333;
+        }
+
+        .feedback-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: gold;
+        }
+
+        .feedback-input-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .feedback-input {
+            flex: 1;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 12px;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .send-feedback-btn {
+            background: gold;
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .feedback-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-right: 3px solid gold;
+        }
+
+        .feedback-user {
+            font-weight: bold;
+            color: gold;
+            margin-bottom: 8px;
+        }
+
+        .feedback-text {
+            color: #ddd;
+            line-height: 1.5;
+        }
+
+        .feedback-time {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .delete-feedback-btn {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            float: left;
+        }
+
+        /* Admin Dashboard */
+        .admin-dashboard {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 1500;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .close-dashboard {
+            background: #ff4444;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .users-table, .feedback-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .users-table th, .feedback-table th {
+            text-align: right;
+            padding: 12px;
+            background: #111;
+            border-bottom: 1px solid #333;
+        }
+
+        .users-table td, .feedback-table td {
+            padding: 12px;
+            border-bottom: 1px solid #222;
+        }
+
+        .ban-btn, .delete-feedback-admin {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .unban-btn {
+            background: #44ff44;
+            color: #000;
+        }
+
+        .add-story-dashboard {
+            background: #222;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .add-story-dashboard input, .add-story-dashboard textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 8px;
+        }
+
+        .add-story-dashboard textarea {
+            min-height: 150px;
         }
     </style>
 </head>
 <body>
-<div class="chat-container">
-    <div class="chat-header">
-        <h2>💬 شات مباشر | أدمن + عادي</h2>
-        <p>🚀 ريال تايم | 🔑 اكتب كود: <strong style="color:#ffd93d">#Admin123</strong> لتصبح أدمن</p>
-    </div>
 
-    <!-- منطقة تسجيل الدخول بالاسم -->
-    <div class="login-area" id="loginArea">
-        <input type="text" id="usernameInput" placeholder="أدخل اسمك... (مثلاً: أحمد)" maxlength="20">
-        <button id="loginBtn">دخول للمحادثة 🚪</button>
-    </div>
-
-    <!-- لوحة تحكم الأدمن (تظهر فقط للمدير) -->
-    <div class="admin-panel" id="adminPanel" style="display: none;">
-        <input type="text" id="kickUserInput" placeholder="اسم العضو للطرد">
-        <button id="kickBtn">👢 طرد العضو</button>
-        <input type="text" id="muteUserInput" placeholder="اسم العضو للكتم">
-        <button id="muteBtn">🔇 كتم العضو</button>
-        <button id="unmuteAllBtn">🔊 فك الكتم عن الجميع</button>
-        <button id="closeGroupBtn" style="background:#b33939;">🚫 قفل الجروب</button>
-        <button id="openGroupBtn" style="background:#2ed573;">🔓 فتح الجروب</button>
-    </div>
-
-    <!-- حالة الجروب (مقفل/مفتوح) -->
-    <div class="group-status" id="groupStatus">📡 جاري تحميل حالة الجروب...</div>
-
-    <!-- مساحة الرسائل -->
-    <div class="messages-area" id="messagesArea">
-        <div style="text-align:center;color:#aaa;">✨ قم بتسجيل الدخول للمشاركة</div>
-    </div>
-
-    <!-- إرسال رسالة -->
-    <div class="message-input-area" id="messageInputArea" style="display: none;">
-        <input type="text" id="messageInput" placeholder="اكتب رسالتك...">
-        <button id="sendBtn">إرسال 📨</button>
+<!-- Login Screen -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+        <h1>ظِلال</h1>
+        <p>عالم القصص الغامضة</p>
+        <button class="google-btn" onclick="loginWithGoogle()">
+            🚀 تسجيل الدخول بحساب Google
+        </button>
+        <div class="admin-toggle" onclick="toggleAdminLogin()">
+            🔐 دخول الأدمن
+        </div>
+        <div class="admin-login-panel" id="adminLoginPanel">
+            <input type="text" id="adminCode" placeholder="الكود السري">
+            <input type="password" id="adminPass" placeholder="الرقم السري">
+            <button onclick="verifyAdmin()">تأكيد دخول الأدمن</button>
+        </div>
     </div>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, set, update, remove, get, onValue, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+<!-- Main App -->
+<div class="main-app" id="mainApp">
+    <div class="header">
+        <div class="logo">ظِلال</div>
+        <div class="user-info">
+            <span id="userNameDisplay"></span>
+            <span class="admin-badge" id="adminBadge" style="display:none;">👑 أدمن</span>
+            <button class="logout-btn" onclick="logout()">خروج</button>
+        </div>
+    </div>
+    
+    <div class="main-layout">
+        <div class="sidebar">
+            <div class="stories-list" id="storiesList"></div>
+            <button class="admin-panel-btn" id="adminPanelBtn" onclick="openAdminDashboard()" style="display:none;">⚙ لوحة التحكم</button>
+        </div>
+        
+        <div class="content-area" id="contentArea">
+            <div class="reader-view" id="readerView">
+                <div style="text-align:center;padding:50px;">📖 اختر قصة من القائمة</div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    // إعداد Firebase - البيانات التي أعطيتها
+<!-- Admin Dashboard -->
+<div class="admin-dashboard" id="adminDashboard">
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h2>⚙ لوحة تحكم الأدمن</h2>
+            <button class="close-dashboard" onclick="closeAdminDashboard()">✖ إغلاق</button>
+        </div>
+        
+        <h3>👥 المستخدمين المسجلين</h3>
+        <table class="users-table" id="usersTable">
+            <thead>
+                <tr><th>البريد الإلكتروني</th><th>الاسم</th><th>الحالة</th><th>إجراء</th></tr>
+            </thead>
+            <tbody id="usersTableBody"></tbody>
+        </table>
+        
+        <h3>💬 آراء المستخدمين</h3>
+        <table class="feedback-table" id="feedbackTableAdmin">
+            <thead><tr><th>المستخدم</th><th>الرأي</th><th>التاريخ</th><th>حذف</th></tr></thead>
+            <tbody id="feedbackTableBody"></tbody>
+        </table>
+        
+        <h3>📝 إضافة قصة جديدة</h3>
+        <div class="add-story-dashboard">
+            <input type="text" id="newStoryTitle" placeholder="عنوان القصة">
+            <textarea id="newStoryContent" placeholder="محتوى القصة..."></textarea>
+            <textarea id="newStoryPreview" placeholder="مقدمة قصيرة..."></textarea>
+            <button onclick="addNewStory()" style="background:gold;color:#000;padding:12px;border:none;border-radius:8px;cursor:pointer;">+ إضافة قصة</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Firebase Config (ضع إعداداتك هنا)
     const firebaseConfig = {
         apiKey: "AIzaSyA74xI6RlWmOJSeE472TVMiGz2dC9rzbSU",
         authDomain: "tryy12345678.firebaseapp.com",
@@ -237,332 +507,373 @@
         projectId: "tryy12345678",
         storageBucket: "tryy12345678.firebasestorage.app",
         messagingSenderId: "924494362795",
-        appId: "1:924494362795:web:340d90c2e67a8e31139fee",
-        measurementId: "G-C56N59JFK1"
+        appId: "1:924494362795:web:340d90c2e67a8e31139fee"
     };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    // المتغيرات العامة
-    let currentUser = null;       // { name: "أحمد", isAdmin: false }
-    let isGroupClosed = false;
-    let mutedUsers = [];           // قائمة أسماء المكتمين
-
-    // مراجع Firebase
-    const messagesRef = ref(db, 'messages');
-    const groupRef = ref(db, 'group/status');
-    const mutedRef = ref(db, 'group/mutedUsers');
-
-    // ======================== تحميل البيانات من فايربيز =======================
-    // تحميل حالة الجروب (مقفل/مفتوح)
-    onValue(groupRef, (snapshot) => {
-        if (snapshot.exists()) {
-            isGroupClosed = snapshot.val().closed === true;
-        } else {
-            isGroupClosed = false;
+    
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+    
+    // بيانات الأدمن
+    const ADMIN_CODE = "mmkk#";
+    const ADMIN_PASS = "6677#";
+    
+    let currentUser = null;
+    let isAdmin = false;
+    let currentStoryId = null;
+    let isEditing = false;
+    
+    // القصص الافتراضية
+    const defaultStories = {
+        "story_1": {
+            id: "story_1",
+            title: "المرآة التي لا تعكس",
+            content: "<p>في قديم الزمان... قصة المرآة</p>",
+            preview: "قصة غامضة عن مرآة عجيبة"
+        },
+        "story_2": {
+            id: "story_2",
+            title: "الساعة الثالثة والثلث",
+            content: "<p>كل ليلة تستيقظ...</p>",
+            preview: "لغز الساعة الثالثة"
         }
-        updateGroupStatusUI();
-    });
-
-    // تحميل قائمة المكتمين
-    onValue(mutedRef, (snapshot) => {
-        if (snapshot.exists()) {
-            mutedUsers = snapshot.val().list || [];
-        } else {
-            mutedUsers = [];
-        }
-        updateMutedUI();
-    });
-
-    // تحديث واجهة حالة الجروب
-    function updateGroupStatusUI() {
-        const statusDiv = document.getElementById('groupStatus');
-        if (isGroupClosed) {
-            statusDiv.innerHTML = "🔴 الجروب مغلق ❌ | الأدمن فقط يمكنه الكتابة";
-            statusDiv.style.background = "#4a1a2c";
-        } else {
-            statusDiv.innerHTML = "🟢 الجروب مفتوح ✅ | الجميع يكتبون (ما عدا المكتمين)";
-            statusDiv.style.background = "#1e3a2e";
-        }
-    }
-
-    function updateMutedUI() {
-        if (currentUser && mutedUsers.includes(currentUser.name) && !currentUser.isAdmin) {
-            document.getElementById('messageInputArea').style.display = "none";
-            showSystemMessage("⚠️ لقد تم كتمك من قبل الأدمن لا يمكنك الكتابة.");
-        } else if (currentUser) {
-            if (!isGroupClosed || currentUser.isAdmin) {
-                document.getElementById('messageInputArea').style.display = "flex";
-            } else {
-                document.getElementById('messageInputArea').style.display = "none";
+    };
+    
+    // تهيئة قاعدة البيانات
+    function initDatabase() {
+        db.ref('stories').once('value', (snapshot) => {
+            if (!snapshot.exists()) {
+                db.ref('stories').set(defaultStories);
             }
-        }
-    }
-
-    // عرض رسائل النظام في منطقة الشات
-    function showSystemMessage(text) {
-        const messagesDiv = document.getElementById('messagesArea');
-        const sysMsg = document.createElement('div');
-        sysMsg.style.background = "#4a4a6a";
-        sysMsg.style.textAlign = "center";
-        sysMsg.style.fontSize = "12px";
-        sysMsg.style.padding = "5px";
-        sysMsg.style.borderRadius = "15px";
-        sysMsg.style.margin = "5px";
-        sysMsg.style.color = "#ffcc88";
-        sysMsg.innerText = `🔔 ${text}`;
-        messagesDiv.appendChild(sysMsg);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        setTimeout(() => sysMsg.remove(), 4000);
-    }
-
-    // عرض رسائل الشات من Firebase في الوقت الحقيقي
-    onChildAdded(messagesRef, (snapshot) => {
-        const msg = snapshot.val();
-        if (!msg) return;
-
-        const messagesDiv = document.getElementById('messagesArea');
-        // إزالة رسالة الترحيب الوهمية إذا وجدت
-        if (messagesDiv.children.length === 1 && messagesDiv.children[0].innerText.includes("قم بتسجيل الدخول")) {
-            messagesDiv.innerHTML = '';
-        }
-
-        const messageElement = document.createElement('div');
-        messageElement.className = 'message';
-        // إذا كان المرسل هو المستخدم الحالي
-        if (currentUser && msg.sender === currentUser.name) {
-            messageElement.classList.add('own');
-        }
-
-        const nameSpan = document.createElement('div');
-        nameSpan.className = 'name';
-        nameSpan.innerText = msg.sender + (msg.isAdmin ? " 👑 أدمن" : "");
-
-        const textSpan = document.createElement('div');
-        textSpan.className = 'text';
-        textSpan.innerText = msg.text;
-
-        const timeSpan = document.createElement('div');
-        timeSpan.className = 'time';
-        const date = new Date(msg.timestamp);
-        timeSpan.innerText = date.toLocaleTimeString('ar-EG');
-
-        messageElement.appendChild(nameSpan);
-        messageElement.appendChild(textSpan);
-        messageElement.appendChild(timeSpan);
-        messagesDiv.appendChild(messageElement);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    });
-
-    // إرسال رسالة إلى Firebase
-    async function sendMessage(text) {
-        if (!currentUser) {
-            alert("يجب تسجيل الدخول أولاً!");
-            return false;
-        }
-        // التحقق من الكتم
-        if (!currentUser.isAdmin && mutedUsers.includes(currentUser.name)) {
-            showSystemMessage("🚫 لا تستطيع الكتابة لأنك مكتوم!");
-            return false;
-        }
-        // التحقق من قفل الجروب
-        if (isGroupClosed && !currentUser.isAdmin) {
-            showSystemMessage("🔒 الجروب مغلق حاليًا، الأدمن فقط يمكنه الكتابة.");
-            return false;
-        }
-        if (text.trim() === "") return false;
-
-        const newMessage = {
-            sender: currentUser.name,
-            text: text,
-            timestamp: Date.now(),
-            isAdmin: currentUser.isAdmin
-        };
-        await push(messagesRef, newMessage);
-        return true;
-    }
-
-    // وظائف الأدمن
-    async function kickUser(username) {
-        if (!currentUser || !currentUser.isAdmin) {
-            alert("أنت لست أدمن!");
-            return;
-        }
-        if (username === currentUser.name) {
-            showSystemMessage("⚠️ لا يمكنك طرد نفسك!");
-            return;
-        }
-        // إضافة رسالة طرد كنظام
-        await push(messagesRef, {
-            sender: "⚙️ النظام",
-            text: `🚷 العضو "${username}" تم طرده من المجموعة بواسطة ${currentUser.name}`,
-            timestamp: Date.now(),
-            isAdmin: false
         });
-        showSystemMessage(`تم طرد ${username}`);
-        // لا يمكننا حذف المستخدم فعلياً من الداتا بيز (لأنه بدون حساب)، نضيفه في قائمة سوداء محلية عبر كتم تلقائي
-        if (!mutedUsers.includes(username)) {
-            mutedUsers.push(username);
-            await set(mutedRef, { list: mutedUsers });
-        }
-    }
-
-    async function muteUser(username) {
-        if (!currentUser || !currentUser.isAdmin) {
-            alert("أنت لست أدمن!");
-            return;
-        }
-        if (mutedUsers.includes(username)) {
-            showSystemMessage(`⚠️ ${username} مكتوم بالفعل`);
-            return;
-        }
-        mutedUsers.push(username);
-        await set(mutedRef, { list: mutedUsers });
-        await push(messagesRef, {
-            sender: "⚙️ النظام",
-            text: `🔇 العضو "${username}" تم كتمه بواسطة ${currentUser.name}`,
-            timestamp: Date.now(),
-            isAdmin: false
-        });
-        showSystemMessage(`🔇 تم كتم ${username}`);
-    }
-
-    async function unmuteAll() {
-        if (!currentUser || !currentUser.isAdmin) return;
-        mutedUsers = [];
-        await set(mutedRef, { list: [] });
-        await push(messagesRef, {
-            sender: "⚙️ النظام",
-            text: `🔊 الأدمن ${currentUser.name} قام بفك الكتم عن الجميع`,
-            timestamp: Date.now(),
-            isAdmin: false
-        });
-        showSystemMessage("🔊 تم فك الكتم عن جميع الأعضاء");
-    }
-
-    async function closeGroup() {
-        if (!currentUser || !currentUser.isAdmin) return;
-        await set(groupRef, { closed: true });
-        await push(messagesRef, {
-            sender: "⚙️ النظام",
-            text: `🔒 الأدمن ${currentUser.name} أغلق الجروب. لا يمكن لأي شخص عادي الكتابة.`,
-            timestamp: Date.now(),
-            isAdmin: false
-        });
-        showSystemMessage("🔒 الجروب مغلق الآن");
-    }
-
-    async function openGroup() {
-        if (!currentUser || !currentUser.isAdmin) return;
-        await set(groupRef, { closed: false });
-        await push(messagesRef, {
-            sender: "⚙️ النظام",
-            text: `🔓 الأدمن ${currentUser.name} فتح الجروب. يمكن للجميع الكتابة الآن.`,
-            timestamp: Date.now(),
-            isAdmin: false
-        });
-        showSystemMessage("🔓 الجروب مفتوح الآن");
-    }
-
-    // التحول لأدمن عن طريق كود معين
-    function checkForAdminCode(inputName) {
-        // الكود السري هو #Admin123 (يمكن تغييره)
-        if (inputName.includes("#Admin123")) {
-            let cleanName = inputName.replace("#Admin123", "").trim();
-            if (cleanName === "") cleanName = "أدمن";
-            return { name: cleanName, isAdmin: true };
-        }
-        return { name: inputName.trim(), isAdmin: false };
-    }
-
-    // تسجيل الدخول
-    function login() {
-        const inputField = document.getElementById('usernameInput');
-        let rawName = inputField.value;
-        if (rawName.trim() === "") {
-            alert("الرجاء إدخال اسم صالح");
-            return;
-        }
-        const userData = checkForAdminCode(rawName);
-        currentUser = userData;
-
-        // إظهار/إخفاء لوحة الأدمن
-        const adminPanel = document.getElementById('adminPanel');
-        if (currentUser.isAdmin) {
-            adminPanel.style.display = "flex";
-            showSystemMessage(`👑 مرحباً الأدمن ${currentUser.name} ، يمكنك إدارة المجموعة!`);
-        } else {
-            adminPanel.style.display = "none";
-            showSystemMessage(`👋 مرحباً ${currentUser.name} ، أنت مستخدم عادي.`);
-        }
-
-        // إخفاء منطقة تسجيل الدخول وإظهار الإرسال
-        document.getElementById('loginArea').style.display = "none";
-        document.getElementById('messageInputArea').style.display = "flex";
-
-        // إضافة رسالة ترحيب في الشات
-        push(messagesRef, {
-            sender: "⚙️ النظام",
-            text: `${currentUser.name} (${currentUser.isAdmin ? "أدمن" : "عادي"}) انضم إلى الدردشة 🎉`,
-            timestamp: Date.now(),
-            isAdmin: false
-        });
-
-        // تحديث واجهة الكتم
-        updateMutedUI();
-    }
-
-    // تسجيل أحداث الأزرار
-    document.getElementById('loginBtn').addEventListener('click', login);
-    document.getElementById('sendBtn').addEventListener('click', async () => {
-        const inputMsg = document.getElementById('messageInput');
-        if (await sendMessage(inputMsg.value)) {
-            inputMsg.value = "";
-        } else {
-            if (currentUser && (mutedUsers.includes(currentUser.name) && !currentUser.isAdmin)) {
-                alert("أنت مكتوم ❌ لا يمكنك الإرسال");
-            } else if (isGroupClosed && !currentUser?.isAdmin) {
-                alert("الجروب مغلق مؤقتاً، فقط الأدمن يكتب.");
+        db.ref('bannedUsers').once('value', (snapshot) => {
+            if (!snapshot.exists()) {
+                db.ref('bannedUsers').set([]);
             }
-        }
-    });
-    document.getElementById('messageInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') document.getElementById('sendBtn').click();
-    });
-
-    // أزرار الأدمن
-    document.getElementById('kickBtn').addEventListener('click', () => {
-        const name = document.getElementById('kickUserInput').value.trim();
-        if (name) kickUser(name);
-        else alert("أدخل اسم العضو للطرد");
-        document.getElementById('kickUserInput').value = '';
-    });
-    document.getElementById('muteBtn').addEventListener('click', () => {
-        const name = document.getElementById('muteUserInput').value.trim();
-        if (name) muteUser(name);
-        else alert("أدخل اسم العضو للكتم");
-        document.getElementById('muteUserInput').value = '';
-    });
-    document.getElementById('unmuteAllBtn').addEventListener('click', unmuteAll);
-    document.getElementById('closeGroupBtn').addEventListener('click', closeGroup);
-    document.getElementById('openGroupBtn').addEventListener('click', openGroup);
-
-    // ضبط أولي للجروب إذا كانت القيم غير موجودة
-    async function initializeData() {
-        const groupSnap = await get(groupRef);
-        if (!groupSnap.exists()) {
-            await set(groupRef, { closed: false });
-        }
-        const mutedSnap = await get(mutedRef);
-        if (!mutedSnap.exists()) {
-            await set(mutedRef, { list: [] });
+        });
+    }
+    
+    // تسجيل دخول جوجل
+    async function loginWithGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        try {
+            const result = await auth.signInWithPopup(provider);
+            const user = result.user;
+            
+            // التحقق من الحظر
+            const bannedSnap = await db.ref('bannedUsers').once('value');
+            const bannedList = bannedSnap.val() || [];
+            if (bannedList.includes(user.email)) {
+                alert("⚠️ لقد تم حظرك من الموقع!");
+                await auth.signOut();
+                return;
+            }
+            
+            // حفظ المستخدم
+            await db.ref('users/' + user.uid).set({
+                email: user.email,
+                name: user.displayName,
+                photo: user.photoURL,
+                lastLogin: Date.now()
+            });
+            
+            currentUser = user;
+            isAdmin = false;
+            document.getElementById('adminBadge').style.display = 'none';
+            document.getElementById('adminPanelBtn').style.display = 'none';
+            document.getElementById('userNameDisplay').innerText = user.displayName;
+            
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'flex';
+            
+            loadStories();
+            loadFeedbackForUser();
+            
+            // فتح أول قصة تلقائياً
+            setTimeout(() => {
+                const firstStoryId = localStorage.getItem('lastStory') || 'story_1';
+                openStory(firstStoryId);
+            }, 500);
+            
+        } catch(error) {
+            console.error(error);
+            alert("خطأ في تسجيل الدخول: " + error.message);
         }
     }
-    initializeData();
-
-    // إذا حاول المستخدم إرسال قبل تسجيل الدخول
-    console.log("✅ شات فايربيز جاهز | الأدمن يظهر بالكود #Admin123");
+    
+    // التحقق من الأدمن
+    function verifyAdmin() {
+        const code = document.getElementById('adminCode').value;
+        const pass = document.getElementById('adminPass').value;
+        
+        if (code === ADMIN_CODE && pass === ADMIN_PASS) {
+            isAdmin = true;
+            document.getElementById('adminBadge').style.display = 'inline-block';
+            document.getElementById('adminPanelBtn').style.display = 'block';
+            alert("تم التحول إلى وضع الأدمن");
+            closeAdminDashboard();
+        } else {
+            alert("الكود أو الرقم السري غير صحيح");
+        }
+    }
+    
+    // تحميل القصص
+    function loadStories() {
+        db.ref('stories').on('value', (snapshot) => {
+            const stories = snapshot.val();
+            const storiesList = document.getElementById('storiesList');
+            if (stories) {
+                storiesList.innerHTML = Object.values(stories).map(story => `
+                    <div class="story-item ${currentStoryId === story.id ? 'active' : ''}" onclick="openStory('${story.id}')">
+                        <div class="story-title-side">${story.title}</div>
+                        <div class="story-preview-side">${story.preview.substring(0, 50)}...</div>
+                    </div>
+                `).join('');
+            }
+        });
+    }
+    
+    // فتح قصة
+    function openStory(storyId) {
+        currentStoryId = storyId;
+        localStorage.setItem('lastStory', storyId);
+        
+        db.ref('stories/' + storyId).once('value', (snapshot) => {
+            const story = snapshot.val();
+            if (story) {
+                document.getElementById('readerView').innerHTML = `
+                    <div class="story-title-main">${story.title}</div>
+                    ${isAdmin ? `<button class="edit-story-btn" onclick="toggleEditMode()">✏️ تعديل القصة</button>` : ''}
+                    <div id="storyContentDisplay" class="story-content">${story.content}</div>
+                    <div id="editModeArea" style="display:none;">
+                        <textarea id="editStoryTextarea" class="story-textarea">${story.content.replace(/<p>/g, '').replace(/<\/p>/g, '\n')}</textarea>
+                        <button class="save-story-btn" onclick="saveStoryEdit()">💾 حفظ التعديلات</button>
+                    </div>
+                    
+                    <!-- قسم الآراء -->
+                    <div class="feedback-section">
+                        <div class="feedback-title">💬 آراء القراء</div>
+                        ${!isAdmin ? `
+                        <div class="feedback-input-area">
+                            <input type="text" id="feedbackInput" class="feedback-input" placeholder="اكتب رأيك في هذه القصة...">
+                            <button class="send-feedback-btn" onclick="sendFeedback()">إرسال الرأي</button>
+                        </div>
+                        ` : ''}
+                        <div class="feedback-list" id="feedbackList"></div>
+                    </div>
+                `;
+                loadFeedbackForStory(storyId);
+            }
+        });
+    }
+    
+    // تبديل وضع التعديل
+    function toggleEditMode() {
+        if (!isAdmin) return;
+        const display = document.getElementById('storyContentDisplay');
+        const editArea = document.getElementById('editModeArea');
+        if (display.style.display !== 'none') {
+            display.style.display = 'none';
+            editArea.style.display = 'block';
+        } else {
+            display.style.display = 'block';
+            editArea.style.display = 'none';
+        }
+    }
+    
+    // حفظ تعديل القصة
+    async function saveStoryEdit() {
+        const newContent = document.getElementById('editStoryTextarea').value;
+        const formattedContent = newContent.split('\n').map(p => `<p>${p}</p>`).join('');
+        await db.ref('stories/' + currentStoryId).update({
+            content: formattedContent
+        });
+        alert("✅ تم حفظ التعديلات");
+        openStory(currentStoryId);
+    }
+    
+    // إرسال رأي
+    async function sendFeedback() {
+        const feedbackText = document.getElementById('feedbackInput').value;
+        if (!feedbackText.trim()) {
+            alert("الرجاء كتابة رأيك");
+            return;
+        }
+        
+        await db.ref('feedback').push({
+            storyId: currentStoryId,
+            storyTitle: (await db.ref('stories/' + currentStoryId).once('value')).val().title,
+            userId: currentUser.uid,
+            userName: currentUser.displayName,
+            userEmail: currentUser.email,
+            text: feedbackText,
+            timestamp: Date.now(),
+            isRead: false
+        });
+        
+        document.getElementById('feedbackInput').value = '';
+        alert("تم إرسال رأيك إلى الأدمن 📨");
+    }
+    
+    // تحميل الآراء للقصة الحالية
+    function loadFeedbackForStory(storyId) {
+        db.ref('feedback').orderByChild('timestamp').on('value', (snapshot) => {
+            const feedbacks = snapshot.val();
+            const list = document.getElementById('feedbackList');
+            if (feedbacks) {
+                const storyFeedbacks = Object.entries(feedbacks)
+                    .filter(([id, fb]) => fb.storyId === storyId)
+                    .sort((a,b) => b[1].timestamp - a[1].timestamp);
+                
+                if (storyFeedbacks.length === 0) {
+                    list.innerHTML = '<div style="text-align:center;color:#666;">لا توجد آراء بعد. كن أول من يكتب رأيه!</div>';
+                } else {
+                    list.innerHTML = storyFeedbacks.map(([id, fb]) => `
+                        <div class="feedback-item">
+                            <div class="feedback-user">${fb.userName}</div>
+                            <div class="feedback-text">${fb.text}</div>
+                            <div class="feedback-time">${new Date(fb.timestamp).toLocaleString('ar-EG')}</div>
+                        </div>
+                    `).join('');
+                }
+            }
+        });
+    }
+    
+    // تحميل الآراء للمستخدم العادي
+    function loadFeedbackForUser() {
+        // لا يحتاج المستخدم العادي لتحميل كل الآراء
+    }
+    
+    // لوحة تحكم الأدمن
+    async function openAdminDashboard() {
+        if (!isAdmin) return;
+        
+        // تحميل المستخدمين
+        const usersSnap = await db.ref('users').once('value');
+        const users = usersSnap.val() || {};
+        const bannedSnap = await db.ref('bannedUsers').once('value');
+        const banned = bannedSnap.val() || [];
+        
+        const usersHtml = Object.entries(users).map(([id, user]) => `
+            <tr>
+                <td>${user.email}</td>
+                <td>${user.name}</td>
+                <td>${banned.includes(user.email) ? '🚫 محظور' : '✅ نشط'}</td>
+                <td>
+                    ${banned.includes(user.email) ? 
+                        `<button class="ban-btn unban-btn" onclick="toggleBan('${user.email}', false)">رفع الحظر</button>` :
+                        `<button class="ban-btn" onclick="toggleBan('${user.email}', true)">حظر</button>`
+                    }
+                </td>
+            </tr>
+        `).join('');
+        
+        document.getElementById('usersTableBody').innerHTML = usersHtml || '<tr><td colspan="4">لا يوجد مستخدمين</td></tr>';
+        
+        // تحميل الآراء
+        const feedbackSnap = await db.ref('feedback').once('value');
+        const feedbacks = feedbackSnap.val() || {};
+        const feedbackHtml = Object.entries(feedbacks).map(([id, fb]) => `
+            <tr>
+                <td>${fb.userName}</td>
+                <td>${fb.text}</td>
+                <td>${new Date(fb.timestamp).toLocaleString('ar-EG')}</td>
+                <td><button class="delete-feedback-admin" onclick="deleteFeedback('${id}')">🗑 حذف</button></td>
+            </tr>
+        `).join('');
+        
+        document.getElementById('feedbackTableBody').innerHTML = feedbackHtml || '<tr><td colspan="4">لا توجد آراء</td></tr>';
+        
+        document.getElementById('adminDashboard').style.display = 'block';
+    }
+    
+    // حظر أو فك الحظر
+    async function toggleBan(email, shouldBan) {
+        const bannedSnap = await db.ref('bannedUsers').once('value');
+        let banned = bannedSnap.val() || [];
+        
+        if (shouldBan && !banned.includes(email)) {
+            banned.push(email);
+        } else if (!shouldBan) {
+            banned = banned.filter(e => e !== email);
+        }
+        
+        await db.ref('bannedUsers').set(banned);
+        openAdminDashboard(); // تحديث
+    }
+    
+    // حذف رأي
+    async function deleteFeedback(feedbackId) {
+        await db.ref('feedback/' + feedbackId).remove();
+        openAdminDashboard();
+        if (currentStoryId) loadFeedbackForStory(currentStoryId);
+    }
+    
+    // إضافة قصة جديدة
+    async function addNewStory() {
+        const title = document.getElementById('newStoryTitle').value;
+        const content = document.getElementById('newStoryContent').value;
+        const preview = document.getElementById('newStoryPreview').value;
+        
+        if (!title || !content) {
+            alert("الرجاء ملء العنوان والمحتوى");
+            return;
+        }
+        
+        const newId = 'story_' + Date.now();
+        await db.ref('stories/' + newId).set({
+            id: newId,
+            title: title,
+            content: content.split('\n').map(p => `<p>${p}</p>`).join(''),
+            preview: preview || title
+        });
+        
+        alert("✅ تم إضافة القصة بنجاح");
+        document.getElementById('newStoryTitle').value = '';
+        document.getElementById('newStoryContent').value = '';
+        document.getElementById('newStoryPreview').value = '';
+        openAdminDashboard();
+    }
+    
+    function closeAdminDashboard() {
+        document.getElementById('adminDashboard').style.display = 'none';
+    }
+    
+    function toggleAdminLogin() {
+        const panel = document.getElementById('adminLoginPanel');
+        panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    }
+    
+    async function logout() {
+        await auth.signOut();
+        currentUser = null;
+        isAdmin = false;
+        document.getElementById('loginOverlay').style.display = 'flex';
+        document.getElementById('mainApp').style.display = 'none';
+    }
+    
+    // بدء التشغيل
+    initDatabase();
+    
+    // التحقق من حالة تسجيل الدخول
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            const bannedSnap = await db.ref('bannedUsers').once('value');
+            const banned = bannedSnap.val() || [];
+            if (banned.includes(user.email)) {
+                await auth.signOut();
+                alert("⚠️ لقد تم حظرك من الموقع!");
+                return;
+            }
+            currentUser = user;
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'flex';
+            document.getElementById('userNameDisplay').innerText = user.displayName;
+            loadStories();
+            setTimeout(() => openStory(localStorage.getItem('lastStory') || 'story_1'), 500);
+        }
+    });
 </script>
 </body>
 </html>
