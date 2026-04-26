@@ -13,7 +13,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: #f5f5f5;
             min-height: 100vh;
             padding: 20px;
         }
@@ -23,22 +23,25 @@
             margin: 0 auto;
         }
 
-        /* بطاقات وبطاقات */
         .card {
             background: white;
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: black;
             color: white;
             border-radius: 20px 20px 0 0;
+            margin: -30px -30px 20px -30px;
+            padding: 30px;
         }
 
-        h1, h2 {
+        h1, h2, h3 {
+            color: black;
             margin-bottom: 20px;
         }
 
@@ -53,12 +56,14 @@
             color: #333;
         }
 
-        .form-group input, .form-group textarea {
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 12px;
             border: 2px solid #ddd;
             border-radius: 10px;
             font-size: 16px;
+            background: white;
+            color: black;
         }
 
         .form-group textarea {
@@ -67,26 +72,35 @@
         }
 
         button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: black;
             color: white;
             border: none;
             padding: 12px 30px;
             border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s;
         }
 
         button:hover {
+            background: #333;
             transform: scale(1.02);
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
         }
 
         .story-card {
@@ -96,7 +110,7 @@
             margin-bottom: 15px;
             cursor: pointer;
             transition: all 0.3s;
-            border-right: 5px solid #667eea;
+            border-right: 5px solid black;
         }
 
         .story-card:hover {
@@ -107,7 +121,7 @@
         .story-title {
             font-size: 1.3em;
             font-weight: bold;
-            color: #333;
+            color: black;
         }
 
         .story-topic {
@@ -124,7 +138,7 @@
         }
 
         .progress-fill {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: black;
             height: 100%;
             border-radius: 10px;
             transition: width 0.3s;
@@ -141,9 +155,11 @@
         }
 
         .admin-panel {
-            background: #fff3e0;
-            border: 2px solid #ff9800;
+            background: #f8f9fa;
+            border: 2px solid black;
             margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
         }
 
         .user-list {
@@ -159,6 +175,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid #ddd;
         }
 
         .hidden {
@@ -177,10 +194,11 @@
             padding: 10px 20px;
             border-radius: 10px;
             cursor: pointer;
+            color: black;
         }
 
         .tab.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: black;
             color: white;
         }
 
@@ -202,13 +220,25 @@
             border: 1px solid #a5d6a7;
         }
 
+        .user-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
         @media (max-width: 768px) {
             .content {
                 padding: 15px;
             }
         }
     </style>
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs (النسخة المتوافقة مع الكود) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -218,8 +248,8 @@
         <!-- شاشة تسجيل الدخول -->
         <div id="authScreen" class="card">
             <div class="header" style="margin: -30px -30px 20px -30px; padding: 30px;">
-                <h1>📚 منصة القصص</h1>
-                <p>سجل دخولك وابدأ رحلة القراءة</p>
+                <h1 style="color: white;">📚 منصة القصص</h1>
+                <p style="color: #ccc;">سجل دخولك وابدأ رحلة القراءة</p>
             </div>
             
             <div id="authTabs">
@@ -267,13 +297,15 @@
 
         <!-- الشاشة الرئيسية بعد الدخول -->
         <div id="mainScreen" class="hidden">
-            <div class="card header">
-                <div class="user-info" style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <strong id="userName"></strong> - كودك: <span id="userCode"></span>
-                    </div>
-                    <div>
-                        <button onclick="logout()" class="btn-danger" style="padding: 8px 20px;">تسجيل خروج</button>
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <div class="header" style="margin: 0; border-radius: 0;">
+                    <div class="user-info">
+                        <div>
+                            <strong id="userName"></strong> - كودك: <span id="userCode"></span>
+                        </div>
+                        <div>
+                            <button onclick="logout()" style="background: #dc3545; padding: 8px 20px;">تسجيل خروج</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -281,7 +313,7 @@
             <div class="card">
                 <div class="tabs">
                     <div class="tab active" onclick="switchMainTab('stories')">📖 القصص</div>
-                    <div class="tab" onclick="switchMainTab('admin')" id="adminTab" class="hidden">⚙️ لوحة الأدمن</div>
+                    <div class="tab hidden" onclick="switchMainTab('admin')" id="adminTab">⚙️ لوحة الأدمن</div>
                 </div>
 
                 <!-- قائمة القصص -->
@@ -294,7 +326,7 @@
                 <div id="adminPanel" class="hidden">
                     <h2>⚙️ لوحة تحكم الأدمن</h2>
                     
-                    <div class="admin-panel card">
+                    <div class="admin-panel">
                         <h3>➕ إضافة قصة جديدة</h3>
                         <div class="form-group">
                             <label>عنوان القصة</label>
@@ -311,11 +343,13 @@
                         <button onclick="addNewStory()">➕ إضافة قصة</button>
                     </div>
 
-                    <div class="admin-panel card">
+                    <div class="admin-panel">
                         <h3>📝 تعديل القصص</h3>
-                        <select id="editStorySelect" onchange="loadStoryForEdit()" style="width: 100%; padding: 10px; margin-bottom: 15px;">
-                            <option value="">اختر قصة لتعديلها...</option>
-                        </select>
+                        <div class="form-group">
+                            <select id="editStorySelect" onchange="loadStoryForEdit()">
+                                <option value="">اختر قصة لتعديلها...</option>
+                            </select>
+                        </div>
                         <div id="editStoryArea" class="hidden">
                             <div class="form-group">
                                 <label>عنوان القصة</label>
@@ -334,7 +368,7 @@
                         </div>
                     </div>
 
-                    <div class="admin-panel card">
+                    <div class="admin-panel">
                         <h3>👑 إدارة المشرفين (الأدمن)</h3>
                         <div class="form-group">
                             <label>البريد الإلكتروني للمستخدم</label>
@@ -361,16 +395,16 @@
     </div>
 
     <script>
-        // إعدادات Firebase
+        // إعدادات Firebase (الكونفج الجديد)
         const firebaseConfig = {
-            apiKey: "AIzaSyA74xI6RlWmOJSeE472TVMiGz2dC9rzbSU",
-            authDomain: "tryy12345678.firebaseapp.com",
-            databaseURL: "https://tryy12345678-default-rtdb.firebaseio.com",
-            projectId: "tryy12345678",
-            storageBucket: "tryy12345678.firebasestorage.app",
-            messagingSenderId: "924494362795",
-            appId: "1:924494362795:web:340d90c2e67a8e31139fee",
-            measurementId: "G-C56N59JFK1"
+            apiKey: "AIzaSyDtQfLsSxTEtuIYwrqvkIkne_fdpIEEavM",
+            authDomain: "read123-b23d1.firebaseapp.com",
+            databaseURL: "https://read123-b23d1-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "read123-b23d1",
+            storageBucket: "read123-b23d1.firebasestorage.app",
+            messagingSenderId: "926218832304",
+            appId: "1:926218832304:web:02f3559410665cbd756e75",
+            measurementId: "G-BTRJ6C3NYE"
         };
 
         // تهيئة Firebase
@@ -398,6 +432,8 @@
                     document.getElementById('adminTab').classList.remove('hidden');
                     loadAdminsList();
                     loadStoriesForEdit();
+                } else {
+                    document.getElementById('adminTab').classList.add('hidden');
                 }
             } else {
                 currentUser = null;
@@ -412,7 +448,6 @@
             let userData = snapshot.val();
             
             if (!userData) {
-                // إنشاء بيانات لمستخدم جديد
                 const personalCode = generateCode();
                 userData = {
                     email: currentUser.email,
@@ -424,7 +459,16 @@
                 await userRef.set(userData);
             }
             
-            currentUserRole = userData.role || 'user';
+            // التحقق إذا كان المستخدم أدمن من قاعدة البيانات
+            const adminEmail = currentUser.email.replace(/\./g, ',');
+            const adminCheck = await database.ref('admins/' + adminEmail).once('value');
+            currentUserRole = adminCheck.val() === true ? 'admin' : (userData.role || 'user');
+            
+            // تحديث الدور في users
+            if (currentUserRole !== userData.role) {
+                await userRef.update({ role: currentUserRole });
+            }
+            
             document.getElementById('userName').innerText = userData.name;
             document.getElementById('userCode').innerText = userData.personalCode;
         }
@@ -438,6 +482,11 @@
         function login() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showAlert('الرجاء إدخال البريد وكلمة المرور', 'error');
+                return;
+            }
             
             auth.signInWithEmailAndPassword(email, password)
                 .catch(error => showAlert('خطأ: ' + error.message, 'error'));
@@ -518,15 +567,17 @@
 
         // تبديل التبويبات الرئيسية
         function switchMainTab(tab) {
-            document.querySelectorAll('#mainScreen .tabs .tab').forEach(t => t.classList.remove('active'));
+            const tabs = document.querySelectorAll('#mainScreen .tabs .tab');
+            tabs.forEach(t => t.classList.remove('active'));
             if (tab === 'stories') {
-                document.querySelector('#mainScreen .tabs .tab:first-child').classList.add('active');
+                tabs[0].classList.add('active');
                 document.getElementById('storiesPanel').classList.remove('hidden');
                 document.getElementById('adminPanel').classList.add('hidden');
                 document.getElementById('readingPanel').classList.add('hidden');
                 loadStories();
             } else if (tab === 'admin' && currentUserRole === 'admin') {
-                document.querySelector('#mainScreen .tabs .tab:last-child').classList.add('active');
+                const adminTab = document.querySelector('#mainScreen .tabs .tab:last-child');
+                if (adminTab) adminTab.classList.add('active');
                 document.getElementById('storiesPanel').classList.add('hidden');
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('readingPanel').classList.add('hidden');
@@ -549,7 +600,6 @@
                 }
                 
                 for (const [id, story] of Object.entries(stories)) {
-                    // تحميل تقدم القراءة
                     const progressRef = await database.ref(`readingProgress/${currentUser.uid}/${id}`).once('value');
                     const progress = progressRef.val();
                     const percentage = progress ? (progress.percentage || 0) : 0;
@@ -578,12 +628,10 @@
             document.getElementById('readingTitle').innerText = story.title;
             document.getElementById('readingTopic').innerText = story.topic || '';
             
-            // تحويل النص إلى HTML مع فقرات
             const paragraphs = story.content.split('\n').filter(p => p.trim());
             const html = paragraphs.map(p => `<p>${p}</p>`).join('');
             document.getElementById('readingContent').innerHTML = html;
             
-            // استعادة آخر موضع قراءة
             const progressRef = await database.ref(`readingProgress/${currentUser.uid}/${storyId}`).once('value');
             const progress = progressRef.val();
             if (progress && progress.scrollPosition) {
@@ -624,7 +672,7 @@
             loadStories();
         }
 
-        // إضافة قصة جديدة (للأدمن)
+        // إضافة قصة جديدة
         async function addNewStory() {
             if (currentUserRole !== 'admin') {
                 showAlert('غير مسموح - أنت لست أدمن', 'error');
@@ -732,7 +780,7 @@
                 
                 if (admins) {
                     for (const [email, value] of Object.entries(admins)) {
-                        adminsList.innerHTML += `<div class="user-item">📧 ${email}</div>`;
+                        adminsList.innerHTML += `<div class="user-item">📧 ${email.replace(/,/g, '.')}</div>`;
                     }
                 } else {
                     adminsList.innerHTML += '<p>لا يوجد مشرفين</p>';
@@ -775,11 +823,11 @@
             setTimeout(() => alertDiv.remove(), 3000);
         }
 
-        // إضافة قصة افتراضية عند أول تشغيل (إذا لم توجد قصص)
+        // إضافة قصة افتراضية
         async function addDefaultStory() {
             const storiesRef = await database.ref('stories').once('value');
             if (!storiesRef.exists()) {
-                database.ref('stories/default').set({
+                database.ref('stories/story1').set({
                     title: "القصة الأولى",
                     topic: "مرحباً بك في منصة القصص",
                     content: "هذه هي قصتك الأولى.\n\nيمكنك قراءتها والتعديل عليها.\n\nالأدمن فقط هو من يستطيع تعديل القصص.\n\nاستمتع بالقراءة!",
