@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة القصص - اقرأ وشارك</title>
+    <title>منصة القصص</title>
     <style>
         * {
             margin: 0;
@@ -11,18 +11,15 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
         }
-
         body {
             background: #f5f5f5;
             min-height: 100vh;
             padding: 20px;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-
         .card {
             background: white;
             border-radius: 20px;
@@ -31,7 +28,6 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             border: 1px solid #eee;
         }
-
         .header {
             background: black;
             color: white;
@@ -39,23 +35,15 @@
             margin: -30px -30px 20px -30px;
             padding: 30px;
         }
-
-        h1, h2, h3 {
-            color: black;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
+        .header h1 { color: white; }
+        h1, h2, h3 { color: black; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
             color: #333;
         }
-
         .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 12px;
@@ -65,12 +53,7 @@
             background: white;
             color: black;
         }
-
-        .form-group textarea {
-            min-height: 300px;
-            resize: vertical;
-        }
-
+        .form-group textarea { min-height: 300px; resize: vertical; }
         button {
             background: black;
             color: white;
@@ -81,28 +64,11 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
-        button:hover {
-            background: #333;
-            transform: scale(1.02);
-        }
-
-        .btn-danger {
-            background: #dc3545;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
-        .btn-success {
-            background: #28a745;
-        }
-
-        .btn-success:hover {
-            background: #218838;
-        }
-
+        button:hover { background: #333; transform: scale(1.02); }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
         .story-card {
             background: #f8f9fa;
             padding: 20px;
@@ -112,23 +78,9 @@
             transition: all 0.3s;
             border-right: 5px solid black;
         }
-
-        .story-card:hover {
-            transform: translateX(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .story-title {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: black;
-        }
-
-        .story-topic {
-            color: #666;
-            margin-top: 5px;
-        }
-
+        .story-card:hover { transform: translateX(-5px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .story-title { font-size: 1.3em; font-weight: bold; color: black; }
+        .story-topic { color: #666; margin-top: 5px; }
         .progress-bar {
             background: #e0e0e0;
             border-radius: 10px;
@@ -136,24 +88,9 @@
             margin-top: 10px;
             overflow: hidden;
         }
-
-        .progress-fill {
-            background: black;
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.3s;
-        }
-
-        .reading-content {
-            line-height: 1.8;
-            font-size: 18px;
-            color: #333;
-        }
-
-        .reading-content p {
-            margin-bottom: 20px;
-        }
-
+        .progress-fill { background: black; height: 100%; border-radius: 10px; transition: width 0.3s; }
+        .reading-content { line-height: 1.8; font-size: 18px; color: #333; }
+        .reading-content p { margin-bottom: 20px; }
         .admin-panel {
             background: #f8f9fa;
             border: 2px solid black;
@@ -161,12 +98,6 @@
             padding: 20px;
             border-radius: 15px;
         }
-
-        .user-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
         .user-item {
             background: white;
             padding: 10px;
@@ -177,18 +108,13 @@
             align-items: center;
             border: 1px solid #ddd;
         }
-
-        .hidden {
-            display: none;
-        }
-
+        .hidden { display: none; }
         .tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
-
         .tab {
             background: #e0e0e0;
             padding: 10px 20px;
@@ -196,30 +122,14 @@
             cursor: pointer;
             color: black;
         }
-
-        .tab.active {
-            background: black;
-            color: white;
-        }
-
+        .tab.active { background: black; color: white; }
         .alert {
             padding: 10px;
             border-radius: 10px;
             margin-bottom: 15px;
         }
-
-        .alert-error {
-            background: #ffebee;
-            color: #c62828;
-            border: 1px solid #ef9a9a;
-        }
-
-        .alert-success {
-            background: #e8f5e9;
-            color: #2e7d32;
-            border: 1px solid #a5d6a7;
-        }
-
+        .alert-error { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+        .alert-success { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
         .user-info {
             background: rgba(255,255,255,0.1);
             padding: 15px;
@@ -231,14 +141,7 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-
-        @media (max-width: 768px) {
-            .content {
-                padding: 15px;
-            }
-        }
     </style>
-    <!-- Firebase SDKs (النسخة المتوافقة مع الكود) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -248,17 +151,14 @@
         <!-- شاشة تسجيل الدخول -->
         <div id="authScreen" class="card">
             <div class="header" style="margin: -30px -30px 20px -30px; padding: 30px;">
-                <h1 style="color: white;">📚 منصة القصص</h1>
-                <p style="color: #ccc;">سجل دخولك وابدأ رحلة القراءة</p>
+                <h1>📚 منصة القصص</h1>
+                <p>سجل دخولك وابدأ رحلة القراءة</p>
             </div>
-            
             <div id="authTabs">
                 <div class="tabs">
                     <div class="tab active" onclick="switchAuthTab('login')">تسجيل دخول</div>
                     <div class="tab" onclick="switchAuthTab('signup')">إنشاء حساب</div>
                 </div>
-
-                <!-- نموذج تسجيل الدخول -->
                 <div id="loginForm">
                     <div class="form-group">
                         <label>البريد الإلكتروني</label>
@@ -271,8 +171,6 @@
                     <button onclick="login()">دخول</button>
                     <button onclick="loginWithGoogle()" style="margin-right: 10px; background: #db4437;">دخول بـ Google</button>
                 </div>
-
-                <!-- نموذج إنشاء حساب -->
                 <div id="signupForm" class="hidden">
                     <div class="form-group">
                         <label>الاسم</label>
@@ -295,37 +193,27 @@
             </div>
         </div>
 
-        <!-- الشاشة الرئيسية بعد الدخول -->
+        <!-- الشاشة الرئيسية -->
         <div id="mainScreen" class="hidden">
             <div class="card" style="padding: 0; overflow: hidden;">
                 <div class="header" style="margin: 0; border-radius: 0;">
                     <div class="user-info">
-                        <div>
-                            <strong id="userName"></strong> - كودك: <span id="userCode"></span>
-                        </div>
-                        <div>
-                            <button onclick="logout()" style="background: #dc3545; padding: 8px 20px;">تسجيل خروج</button>
-                        </div>
+                        <div><strong id="userName"></strong> - كودك: <span id="userCode"></span></div>
+                        <div><button onclick="logout()" style="background: #dc3545; padding: 8px 20px;">تسجيل خروج</button></div>
                     </div>
                 </div>
             </div>
-
             <div class="card">
                 <div class="tabs">
                     <div class="tab active" onclick="switchMainTab('stories')">📖 القصص</div>
                     <div class="tab hidden" onclick="switchMainTab('admin')" id="adminTab">⚙️ لوحة الأدمن</div>
                 </div>
-
-                <!-- قائمة القصص -->
                 <div id="storiesPanel">
                     <h2>📚 جميع القصص</h2>
                     <div id="storiesList"></div>
                 </div>
-
-                <!-- لوحة الأدمن -->
                 <div id="adminPanel" class="hidden">
                     <h2>⚙️ لوحة تحكم الأدمن</h2>
-                    
                     <div class="admin-panel">
                         <h3>➕ إضافة قصة جديدة</h3>
                         <div class="form-group">
@@ -342,7 +230,6 @@
                         </div>
                         <button onclick="addNewStory()">➕ إضافة قصة</button>
                     </div>
-
                     <div class="admin-panel">
                         <h3>📝 تعديل القصص</h3>
                         <div class="form-group">
@@ -367,11 +254,10 @@
                             <button onclick="deleteStory()" class="btn-danger">🗑️ حذف القصة</button>
                         </div>
                     </div>
-
                     <div class="admin-panel">
-                        <h3>👑 إدارة المشرفين (الأدمن)</h3>
+                        <h3>👑 إدارة المشرفين</h3>
                         <div class="form-group">
-                            <label>البريد الإلكتروني للمستخدم</label>
+                            <label>البريد الإلكتروني</label>
                             <input type="email" id="adminUserEmail" placeholder="example@email.com">
                         </div>
                         <button onclick="makeAdmin()" class="btn-success">➕ تعيين كأدمن</button>
@@ -379,8 +265,6 @@
                         <div id="adminsList" style="margin-top: 15px;"></div>
                     </div>
                 </div>
-
-                <!-- صفحة القراءة -->
                 <div id="readingPanel" class="hidden">
                     <button onclick="backToStories()" style="margin-bottom: 20px;">← العودة للقصص</button>
                     <h2 id="readingTitle"></h2>
@@ -395,7 +279,6 @@
     </div>
 
     <script>
-        // إعدادات Firebase (الكونفج الجديد)
         const firebaseConfig = {
             apiKey: "AIzaSyDtQfLsSxTEtuIYwrqvkIkne_fdpIEEavM",
             authDomain: "read123-b23d1.firebaseapp.com",
@@ -407,48 +290,40 @@
             measurementId: "G-BTRJ6C3NYE"
         };
 
-        // تهيئة Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const database = firebase.database();
 
-        // متغيرات عامة
         let currentUser = null;
         let currentUserRole = 'user';
         let currentStory = null;
         let saveTimeout = null;
 
-        // تفعيل التخزين المحلي
-        database.setPersistenceEnabled(true);
-
-        // مراقبة حالة تسجيل الدخول
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 currentUser = user;
                 await loadUserData();
-                showMainScreen();
+                document.getElementById('authScreen').classList.add('hidden');
+                document.getElementById('mainScreen').classList.remove('hidden');
                 loadStories();
                 if (currentUserRole === 'admin') {
                     document.getElementById('adminTab').classList.remove('hidden');
                     loadAdminsList();
                     loadStoriesForEdit();
-                } else {
-                    document.getElementById('adminTab').classList.add('hidden');
                 }
             } else {
-                currentUser = null;
-                showAuthScreen();
+                document.getElementById('authScreen').classList.remove('hidden');
+                document.getElementById('mainScreen').classList.add('hidden');
             }
         });
 
-        // تحميل بيانات المستخدم
         async function loadUserData() {
             const userRef = database.ref('users/' + currentUser.uid);
             const snapshot = await userRef.once('value');
             let userData = snapshot.val();
             
             if (!userData) {
-                const personalCode = generateCode();
+                const personalCode = Math.random().toString(36).substring(2, 8).toUpperCase();
                 userData = {
                     email: currentUser.email,
                     name: currentUser.displayName || currentUser.email.split('@')[0],
@@ -459,12 +334,10 @@
                 await userRef.set(userData);
             }
             
-            // التحقق إذا كان المستخدم أدمن من قاعدة البيانات
             const adminEmail = currentUser.email.replace(/\./g, ',');
             const adminCheck = await database.ref('admins/' + adminEmail).once('value');
             currentUserRole = adminCheck.val() === true ? 'admin' : (userData.role || 'user');
             
-            // تحديث الدور في users
             if (currentUserRole !== userData.role) {
                 await userRef.update({ role: currentUserRole });
             }
@@ -473,33 +346,23 @@
             document.getElementById('userCode').innerText = userData.personalCode;
         }
 
-        // إنشاء كود عشوائي
-        function generateCode() {
-            return Math.random().toString(36).substring(2, 8).toUpperCase();
-        }
-
-        // تسجيل الدخول
         function login() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-            
             if (!email || !password) {
                 showAlert('الرجاء إدخال البريد وكلمة المرور', 'error');
                 return;
             }
-            
             auth.signInWithEmailAndPassword(email, password)
                 .catch(error => showAlert('خطأ: ' + error.message, 'error'));
         }
 
-        // تسجيل الدخول بـ Google
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider)
                 .catch(error => showAlert('خطأ: ' + error.message, 'error'));
         }
 
-        // إنشاء حساب جديد
         async function signup() {
             const name = document.getElementById('signupName').value;
             const email = document.getElementById('signupEmail').value;
@@ -510,7 +373,6 @@
                 showAlert('الرجاء ملء جميع الحقول', 'error');
                 return;
             }
-            
             if (password !== confirmPassword) {
                 showAlert('كلمة المرور غير متطابقة', 'error');
                 return;
@@ -518,8 +380,7 @@
             
             try {
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const personalCode = generateCode();
-                
+                const personalCode = Math.random().toString(36).substring(2, 8).toUpperCase();
                 await database.ref('users/' + userCredential.user.uid).set({
                     name: name,
                     email: email,
@@ -527,30 +388,14 @@
                     role: 'user',
                     createdAt: Date.now()
                 });
-                
                 showAlert('تم إنشاء الحساب بنجاح!', 'success');
             } catch (error) {
                 showAlert('خطأ: ' + error.message, 'error');
             }
         }
 
-        // تسجيل الخروج
-        function logout() {
-            auth.signOut();
-        }
+        function logout() { auth.signOut(); }
 
-        // عرض الشاشات
-        function showAuthScreen() {
-            document.getElementById('authScreen').classList.remove('hidden');
-            document.getElementById('mainScreen').classList.add('hidden');
-        }
-
-        function showMainScreen() {
-            document.getElementById('authScreen').classList.add('hidden');
-            document.getElementById('mainScreen').classList.remove('hidden');
-        }
-
-        // تبديل تبويبات التسجيل
         function switchAuthTab(tab) {
             const tabs = document.querySelectorAll('#authTabs .tab');
             tabs.forEach(t => t.classList.remove('active'));
@@ -565,19 +410,13 @@
             }
         }
 
-        // تبديل التبويبات الرئيسية
         function switchMainTab(tab) {
-            const tabs = document.querySelectorAll('#mainScreen .tabs .tab');
-            tabs.forEach(t => t.classList.remove('active'));
             if (tab === 'stories') {
-                tabs[0].classList.add('active');
                 document.getElementById('storiesPanel').classList.remove('hidden');
                 document.getElementById('adminPanel').classList.add('hidden');
                 document.getElementById('readingPanel').classList.add('hidden');
                 loadStories();
-            } else if (tab === 'admin' && currentUserRole === 'admin') {
-                const adminTab = document.querySelector('#mainScreen .tabs .tab:last-child');
-                if (adminTab) adminTab.classList.add('active');
+            } else if (tab === 'admin') {
                 document.getElementById('storiesPanel').classList.add('hidden');
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('readingPanel').classList.add('hidden');
@@ -586,52 +425,42 @@
             }
         }
 
-        // تحميل وعرض القصص
         function loadStories() {
             const storiesRef = database.ref('stories');
             storiesRef.on('value', async (snapshot) => {
                 const stories = snapshot.val();
                 const storiesList = document.getElementById('storiesList');
                 storiesList.innerHTML = '';
-                
                 if (!stories) {
                     storiesList.innerHTML = '<p>لا توجد قصص حالياً</p>';
                     return;
                 }
-                
                 for (const [id, story] of Object.entries(stories)) {
                     const progressRef = await database.ref(`readingProgress/${currentUser.uid}/${id}`).once('value');
                     const progress = progressRef.val();
                     const percentage = progress ? (progress.percentage || 0) : 0;
-                    
                     const storyCard = document.createElement('div');
                     storyCard.className = 'story-card';
                     storyCard.onclick = () => openStory(id, story);
                     storyCard.innerHTML = `
                         <div class="story-title">📖 ${story.title}</div>
-                        <div class="story-topic">${story.topic || 'لا يوجد موضوع'}</div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${percentage}%"></div>
-                        </div>
-                        <div style="font-size: 12px; color: #888; margin-top: 5px;">${percentage}% مكتمل</div>
+                        <div class="story-topic">${story.topic || ''}</div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: ${percentage}%"></div></div>
+                        <div style="font-size: 12px; color: #888;">${percentage}% مكتمل</div>
                     `;
                     storiesList.appendChild(storyCard);
                 }
             });
         }
 
-        // فتح قصة للقراءة
         async function openStory(storyId, story) {
             currentStory = { id: storyId, ...story };
             document.getElementById('storiesPanel').classList.add('hidden');
             document.getElementById('readingPanel').classList.remove('hidden');
             document.getElementById('readingTitle').innerText = story.title;
             document.getElementById('readingTopic').innerText = story.topic || '';
-            
             const paragraphs = story.content.split('\n').filter(p => p.trim());
-            const html = paragraphs.map(p => `<p>${p}</p>`).join('');
-            document.getElementById('readingContent').innerHTML = html;
-            
+            document.getElementById('readingContent').innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
             const progressRef = await database.ref(`readingProgress/${currentUser.uid}/${storyId}`).once('value');
             const progress = progressRef.val();
             if (progress && progress.scrollPosition) {
@@ -643,28 +472,23 @@
             }
         }
 
-        // حفظ آخر موضع قراءة
         function saveScrollPosition() {
             if (!currentStory || !currentUser) return;
-            
             if (saveTimeout) clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 const contentDiv = document.getElementById('readingContent');
                 const scrollPosition = contentDiv.scrollTop;
                 const scrollHeight = contentDiv.scrollHeight - contentDiv.clientHeight;
                 const percentage = scrollHeight > 0 ? Math.round((scrollPosition / scrollHeight) * 100) : 0;
-                
                 await database.ref(`readingProgress/${currentUser.uid}/${currentStory.id}`).set({
                     scrollPosition: scrollPosition,
                     percentage: percentage,
                     lastRead: Date.now()
                 });
-                
                 document.getElementById('readingProgress').style.width = percentage + '%';
             }, 1000);
         }
 
-        // العودة للقصص
         function backToStories() {
             document.getElementById('readingPanel').classList.add('hidden');
             document.getElementById('storiesPanel').classList.remove('hidden');
@@ -672,46 +496,29 @@
             loadStories();
         }
 
-        // إضافة قصة جديدة
         async function addNewStory() {
-            if (currentUserRole !== 'admin') {
-                showAlert('غير مسموح - أنت لست أدمن', 'error');
-                return;
-            }
-            
+            if (currentUserRole !== 'admin') { showAlert('غير مسموح', 'error'); return; }
             const title = document.getElementById('newStoryTitle').value;
             const topic = document.getElementById('newStoryTopic').value;
             const content = document.getElementById('newStoryContent').value;
-            
-            if (!title || !content) {
-                showAlert('الرجاء إدخال عنوان ومحتوى القصة', 'error');
-                return;
-            }
-            
-            const newStoryRef = database.ref('stories').push();
-            await newStoryRef.set({
-                title: title,
-                topic: topic,
-                content: content,
+            if (!title || !content) { showAlert('الرجاء إدخال عنوان ومحتوى', 'error'); return; }
+            await database.ref('stories').push().set({
+                title, topic, content,
                 lastEdited: Date.now(),
                 editedBy: currentUser.uid
             });
-            
             document.getElementById('newStoryTitle').value = '';
             document.getElementById('newStoryTopic').value = '';
             document.getElementById('newStoryContent').value = '';
-            showAlert('تم إضافة القصة بنجاح!', 'success');
+            showAlert('تم إضافة القصة', 'success');
             loadStoriesForEdit();
         }
 
-        // تحميل القصص للتعديل
         function loadStoriesForEdit() {
-            const storiesRef = database.ref('stories');
-            storiesRef.once('value', (snapshot) => {
+            database.ref('stories').once('value', (snapshot) => {
                 const stories = snapshot.val();
                 const select = document.getElementById('editStorySelect');
                 select.innerHTML = '<option value="">اختر قصة لتعديلها...</option>';
-                
                 if (stories) {
                     for (const [id, story] of Object.entries(stories)) {
                         const option = document.createElement('option');
@@ -723,17 +530,11 @@
             });
         }
 
-        // تحميل قصة للتعديل
         async function loadStoryForEdit() {
             const storyId = document.getElementById('editStorySelect').value;
-            if (!storyId) {
-                document.getElementById('editStoryArea').classList.add('hidden');
-                return;
-            }
-            
+            if (!storyId) { document.getElementById('editStoryArea').classList.add('hidden'); return; }
             const storyRef = await database.ref('stories/' + storyId).once('value');
             const story = storyRef.val();
-            
             document.getElementById('editStoryTitle').value = story.title || '';
             document.getElementById('editStoryTopic').value = story.topic || '';
             document.getElementById('editStoryContent').value = story.content || '';
@@ -741,10 +542,8 @@
             window.currentEditStoryId = storyId;
         }
 
-        // تحديث قصة
         async function updateStory() {
             if (!window.currentEditStoryId) return;
-            
             await database.ref('stories/' + window.currentEditStoryId).update({
                 title: document.getElementById('editStoryTitle').value,
                 topic: document.getElementById('editStoryTopic').value,
@@ -752,34 +551,28 @@
                 lastEdited: Date.now(),
                 editedBy: currentUser.uid
             });
-            
-            showAlert('تم تحديث القصة بنجاح!', 'success');
+            showAlert('تم التحديث', 'success');
             loadStories();
             loadStoriesForEdit();
         }
 
-        // حذف قصة
         async function deleteStory() {
             if (!window.currentEditStoryId) return;
-            if (!confirm('هل أنت متأكد من حذف هذه القصة؟')) return;
-            
+            if (!confirm('تأكيد الحذف؟')) return;
             await database.ref('stories/' + window.currentEditStoryId).remove();
-            showAlert('تم حذف القصة', 'success');
+            showAlert('تم الحذف', 'success');
             loadStories();
             loadStoriesForEdit();
             document.getElementById('editStoryArea').classList.add('hidden');
         }
 
-        // تحميل قائمة الأدمن
-        async function loadAdminsList() {
-            const adminsRef = database.ref('admins');
-            adminsRef.on('value', (snapshot) => {
+        function loadAdminsList() {
+            database.ref('admins').on('value', (snapshot) => {
                 const admins = snapshot.val();
                 const adminsList = document.getElementById('adminsList');
                 adminsList.innerHTML = '<h4>المشرفين الحاليين:</h4>';
-                
                 if (admins) {
-                    for (const [email, value] of Object.entries(admins)) {
+                    for (const [email] of Object.entries(admins)) {
                         adminsList.innerHTML += `<div class="user-item">📧 ${email.replace(/,/g, '.')}</div>`;
                     }
                 } else {
@@ -788,33 +581,22 @@
             });
         }
 
-        // تعيين أدمن
         async function makeAdmin() {
             const email = document.getElementById('adminUserEmail').value;
-            if (!email) {
-                showAlert('الرجاء إدخال البريد الإلكتروني', 'error');
-                return;
-            }
-            
+            if (!email) { showAlert('الرجاء إدخال البريد', 'error'); return; }
             await database.ref('admins/' + email.replace(/\./g, ',')).set(true);
-            showAlert('تم تعيين المستخدم كأدمن', 'success');
+            showAlert('تم التعيين', 'success');
             document.getElementById('adminUserEmail').value = '';
         }
 
-        // إزالة أدمن
         async function removeAdmin() {
             const email = document.getElementById('adminUserEmail').value;
-            if (!email) {
-                showAlert('الرجاء إدخال البريد الإلكتروني', 'error');
-                return;
-            }
-            
+            if (!email) { showAlert('الرجاء إدخال البريد', 'error'); return; }
             await database.ref('admins/' + email.replace(/\./g, ',')).remove();
-            showAlert('تم إزالة الأدمن', 'success');
+            showAlert('تم الإزالة', 'success');
             document.getElementById('adminUserEmail').value = '';
         }
 
-        // عرض رسالة تنبيه
         function showAlert(message, type) {
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert alert-${type}`;
@@ -829,14 +611,13 @@
             if (!storiesRef.exists()) {
                 database.ref('stories/story1').set({
                     title: "القصة الأولى",
-                    topic: "مرحباً بك في منصة القصص",
-                    content: "هذه هي قصتك الأولى.\n\nيمكنك قراءتها والتعديل عليها.\n\nالأدمن فقط هو من يستطيع تعديل القصص.\n\nاستمتع بالقراءة!",
+                    topic: "مرحباً بك",
+                    content: "هذه هي قصتك الأولى.\n\nاستمتع بالقراءة!",
                     lastEdited: Date.now(),
                     editedBy: "system"
                 });
             }
         }
-
         addDefaultStory();
     </script>
 </body>
