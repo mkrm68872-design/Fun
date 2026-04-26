@@ -2,922 +2,784 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>تحدي المذاكرة - 90 يوم</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>منصة تعليمية متكاملة | أكاديمية النجاح</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+            font-family: 'Tajawal', sans-serif;
         }
 
         body {
-            background-color: #ffffff;
-            color: #000000;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
+            padding: 20px;
         }
 
         .container {
-            max-width: 100%;
-            width: 100%;
-            background: white;
-            border: 2px solid #000;
-            border-radius: 16px;
-            padding: 20px 15px;
-            position: relative;
-        }
-
-        h1, h2, h3, p, label, td, th {
-            font-weight: 700;
-            letter-spacing: 0;
-            text-shadow: none;
-        }
-
-        input, textarea, [contenteditable] {
-            user-select: text;
-        }
-
-        .login-box {
-            max-width: 350px;
+            max-width: 1400px;
             margin: 0 auto;
-            text-align: center;
-        }
-
-        .login-box h1 {
-            font-size: 2.2rem;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #000;
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-
-        .login-box input {
-            width: 100%;
-            padding: 14px;
-            margin: 8px 0;
-            font-size: 1.1rem;
-            border: 2px solid #000;
-            border-radius: 8px;
-            background: white;
-            font-weight: 700;
-            outline: none;
-        }
-
-        .login-box input:focus {
-            background: #f5f5f5;
-        }
-
-        .login-box button {
-            width: 100%;
-            padding: 14px;
-            font-size: 1.3rem;
-            font-weight: 900;
-            background: white;
-            border: 2px solid #000;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: 0.1s;
-        }
-
-        .login-box button:hover {
-            background: #000;
-            color: white;
-        }
-
-        .error {
-            color: #d32f2f;
-            margin-top: 10px;
-            font-weight: 700;
-        }
-
-        .main-content {
-            display: none;
+            background: rgba(255,255,255,0.95);
+            border-radius: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            overflow: hidden;
+            min-height: 90vh;
         }
 
         .header {
+            background: #2d3748;
+            color: white;
+            padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .user-badge {
-            font-size: 1.4rem;
-            font-weight: 900;
-            background: #000;
-            color: white;
-            padding: 5px 18px;
-            border-radius: 30px;
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .notification-container {
-            position: relative;
-            display: inline-flex;
+        .user-info {
+            display: flex;
             align-items: center;
-            margin-right: 10px;
+            gap: 20px;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 20px;
+            border-radius: 50px;
         }
 
-        .notification-bell {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: black;
-            transition: transform 0.2s;
-            line-height: 1;
-        }
-        .notification-bell:hover {
-            transform: scale(1.1);
-        }
-
-        .notification-dot {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 10px;
-            height: 10px;
-            background-color: red;
-            border-radius: 50%;
-            border: 1px solid white;
-        }
-
-        .notification-panel {
-            position: absolute;
-            top: 70px;
-            left: 20px;
-            background: white;
-            border: 2px solid #000;
-            border-radius: 12px;
-            padding: 15px;
-            min-width: 200px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 1000;
-        }
-        .notification-panel ul {
-            list-style: none;
-        }
-        .notification-panel li {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            font-weight: 700;
-        }
-        .notification-panel li:last-child {
-            border-bottom: none;
-        }
-
-        .logout-btn {
-            background: white;
-            border: 2px solid #000;
-            border-radius: 30px;
-            padding: 8px 18px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .logout-btn:hover {
-            background: #000;
+        .btn-logout {
+            background: #e53e3e;
+            border: none;
             color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
         }
 
-        .table-wrapper {
+        .btn-logout:hover {
+            background: #c53030;
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2d3748;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .toggle-form span {
+            color: #667eea;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .course-image {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .course-info {
+            padding: 20px;
+        }
+
+        .course-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .course-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .purchase-btn {
+            background: #48bb78;
+            width: auto;
+            padding: 8px 20px;
+            font-size: 14px;
+        }
+
+        .watch-btn {
+            background: #ed8936;
+            width: auto;
+            padding: 8px 20px;
+            font-size: 14px;
+        }
+
+        .admin-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .admin-section {
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+        }
+
+        .students-table {
+            width: 100%;
             overflow-x: auto;
-            margin: 15px 0;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            border: 2px solid #000;
-            min-width: 600px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         th {
-            background: #000;
-            color: white;
-            font-weight: 900;
-            padding: 12px 8px;
-            font-size: 1rem;
-            border: 1px solid #000;
+            background: #f7fafc;
+            font-weight: 800;
         }
 
-        td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        td input, td span {
-            width: 100%;
-            border: none;
-            background: transparent;
-            font-size: 1rem;
-            font-weight: 700;
-            text-align: center;
-            outline: none;
-            padding: 6px 3px;
-        }
-
-        td input:focus {
-            background: #f0f0f0;
-            border: 1px solid #000;
-        }
-
-        td span {
+        .admin-btn {
+            width: auto;
+            padding: 5px 12px;
+            font-size: 12px;
+            margin: 2px;
             display: inline-block;
-            background: #f0f0f0;
-            border-radius: 4px;
-            padding: 6px 3px;
         }
 
-        .editable-row {
-            background: #fafafa;
+        .btn-danger {
+            background: #e53e3e;
         }
 
-        .disabled-row td {
-            background: #eeeeee;
-            color: #666;
-            pointer-events: none;
-            opacity: 0.8;
+        .btn-warning {
+            background: #ed8936;
         }
 
-        .disabled-row input, .disabled-row td span {
-            background: #ddd;
-            border-color: #aaa;
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
         }
 
-        .day-display {
-            background: #f0f0f0;
-            border-radius: 4px;
-            padding: 6px 3px;
-            font-weight: 700;
+        .badge-blocked {
+            background: #fed7d7;
+            color: #742a2a;
         }
 
-        .timer-section {
-            margin: 30px 0 20px;
-            padding: 15px;
-            border: 2px solid #000;
-            border-radius: 16px;
-            background: white;
+        .badge-active {
+            background: #c6f6d5;
+            color: #22543d;
         }
 
-        .timer-display {
-            font-size: 3.5rem;
-            font-weight: 900;
+        .loading {
             text-align: center;
-            font-family: monospace;
-            background: #f5f5f5;
-            border-radius: 16px;
-            padding: 10px;
-            border: 2px solid #000;
-            direction: ltr;
+            padding: 50px;
+            font-size: 20px;
         }
 
-        .timer-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .timer-btn {
-            background: white;
-            border: 2px solid #000;
-            border-radius: 30px;
-            padding: 12px 20px;
-            font-size: 1.2rem;
-            font-weight: 900;
-            cursor: pointer;
-            flex: 1 1 0;
-            min-width: 120px;
-            transition: 0.1s;
-        }
-
-        .timer-btn:hover {
-            background: #000;
-            color: white;
-        }
-
-        .timer-btn.pause {
-            background: #000;
-            color: white;
-        }
-        .timer-btn.pause:hover {
-            background: #333;
-        }
-
-        .timer-btn.reset {
-            background: white;
-            border: 2px solid #000;
-        }
-        .timer-btn.reset:hover {
-            background: #000;
-            color: white;
-        }
-
-        .motivation {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background: #f5f5f5;
-            border: 2px solid #000;
-            border-radius: 16px;
-            padding: 15px;
-            margin: 20px 0 10px;
-        }
-
-        .leader {
-            font-size: 1.3rem;
-            font-weight: 900;
-            text-align: center;
-        }
-
-        .progress-container {
-            width: 100%;
-        }
-
-        .progress-bg {
-            background: white;
-            border: 2px solid #000;
-            height: 25px;
-            border-radius: 25px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: #000;
-            transition: width 0.3s;
-        }
-
-        .quote {
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-align: center;
-            border-top: 2px solid #000;
-            padding-top: 12px;
-        }
-
-        .history-section {
-            margin-top: 30px;
-            border-top: 3px solid #000;
-            padding-top: 20px;
-        }
-
-        .history-title {
-            font-size: 1.5rem;
-            font-weight: 900;
-            margin-bottom: 15px;
-        }
-
-        .history-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .history-tab {
-            padding: 8px 20px;
-            border: 2px solid #000;
-            border-radius: 30px;
-            font-weight: 700;
-            cursor: pointer;
-            background: white;
-        }
-
-        .history-tab.active {
-            background: #000;
-            color: white;
-        }
-
-        .history-table-wrapper {
-            overflow-x: auto;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 2px solid #000;
-            border-radius: 8px;
-        }
-
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-
-        .history-table th {
-            background: #333;
-            color: white;
-            padding: 10px 5px;
-            border: 1px solid #000;
-            position: sticky;
-            top: 0;
-            background-color: #333;
-            z-index: 2;
-        }
-
-        .history-table td {
-            padding: 8px 5px;
-            border: 1px solid #000;
-            text-align: center;
-        }
-
-        .no-data {
-            text-align: center;
-            padding: 20px;
-            font-weight: 700;
-            color: #555;
-        }
-
-        footer {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 1rem;
-            font-weight: 700;
-        }
-
-        @media (max-width: 500px) {
-            .container {
-                padding: 15px 10px;
+        @media (max-width: 768px) {
+            .courses-grid {
+                grid-template-columns: 1fr;
             }
-            .timer-display {
-                font-size: 2.8rem;
+            .header {
+                flex-direction: column;
             }
-            .timer-btn {
-                font-size: 1rem;
-                padding: 10px 12px;
-                min-width: 100px;
-            }
-            .user-badge {
-                font-size: 1.2rem;
-                padding: 5px 12px;
-            }
-            .logout-btn {
-                padding: 6px 14px;
-                font-size: 1rem;
-            }
-            th, td {
-                padding: 6px 4px;
-                font-size: 0.9rem;
+            table {
+                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- شاشة تسجيل الدخول -->
-        <div id="loginSection" class="login-box">
-            <h1>تحدي المذاكرة</h1>
-            <p style="margin-bottom: 15px;">أدخل الكود الخاص بك</p>
-            <input type="text" id="codeInput" placeholder="الكود" autocomplete="off">
-            <input type="password" id="passwordInput" placeholder="الرقم السري">
-            <button id="loginBtn">دخول</button>
-            <div id="loginError" class="error"></div>
-        </div>
 
-        <!-- المحتوى الرئيسي بعد تسجيل الدخول -->
-        <div id="mainContent" class="main-content">
-            <div class="header">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="user-badge" id="currentUserBadge">ضيف</div>
-                    <div class="notification-container" id="notificationContainer">
-                        <div class="notification-bell" id="notificationBell">🔔</div>
-                        <div class="notification-dot" id="notificationDot"></div>
-                    </div>
-                </div>
-                <button class="logout-btn" id="logoutBtn">تسجيل خروج</button>
-            </div>
-
-            <!-- لوحة الإشعارات -->
-            <div class="notification-panel" id="notificationPanel" style="display: none;">
-                <ul>
-                    <li>مش هشتمك المرادي</li>
-                </ul>
-            </div>
-
-            <!-- الجدول الرئيسي (اليوم الحالي) مع إزالة عمود الملاحظات -->
-            <div class="table-wrapper">
-                <table id="studyTable">
-                    <thead>
-                        <tr>
-                            <th>الاسم</th>
-                            <th>اليوم</th>
-                            <th>ساعات اليوم</th>
-                            <th>مجموع الساعات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr id="rowMohamed" data-user="mohamed">
-                            <td class="user-name">محمد</td>
-                            <td><span class="day-display" id="mohamedDayDisplay">اليوم <span id="mohamedDayNumber">1</span></span></td>
-                            <td><input type="number" step="0.1" min="0" class="hours-input" id="mohamedHours" value="0" placeholder="0.0"></td>
-                            <td><span class="total-span" id="mohamedTotal">0.0</span></td>
-                        </tr>
-                        <tr id="rowZead" data-user="zead">
-                            <td class="user-name">زياد</td>
-                            <td><span class="day-display" id="zeadDayDisplay">اليوم <span id="zeadDayNumber">1</span></span></td>
-                            <td><input type="number" step="0.1" min="0" class="hours-input" id="zeadHours" value="0" placeholder="0.0"></td>
-                            <td><span class="total-span" id="zeadTotal">0.0</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- عداد المذاكرة -->
-            <div class="timer-section">
-                <div class="timer-display" id="timerDisplay">00:00:00</div>
-                <div class="timer-buttons">
-                    <button class="timer-btn" id="startTimer">بدء</button>
-                    <button class="timer-btn pause" id="pauseTimer">توقف</button>
-                    <button class="timer-btn reset" id="resetTimer">تصفير العداد</button>
-                </div>
-                <p style="text-align: center; margin-top: 10px; font-size: 0.9rem;">"توقف" مؤقت، "تصفير" لإعادة الضبط</p>
-            </div>
-
-            <!-- عناصر تحفيزية -->
-            <div class="motivation">
-                <div class="leader" id="leaderText">من المتقدم؟</div>
-                <div class="progress-container">
-                    <div class="progress-bg">
-                        <div class="progress-fill" id="progressFill" style="width:0%"></div>
-                    </div>
-                </div>
-                <div class="quote" id="quoteText">ابدأ المنافسة الآن</div>
-            </div>
-
-            <!-- قسم سجل الأيام (1-90) -->
-            <div class="history-section">
-                <div class="history-title">📋 سجل الأيام (1-90)</div>
-                <div class="history-tabs">
-                    <div class="history-tab active" id="tabMohamed">محمد</div>
-                    <div class="history-tab" id="tabZead">زياد</div>
-                </div>
-                <div id="historyMohamed" class="history-table-wrapper"></div>
-                <div id="historyZead" class="history-table-wrapper" style="display: none;"></div>
-            </div>
-
-            <footer>يتم حفظ البيانات تلقائيًا محليًا</footer>
-        </div>
+<div class="container" id="app">
+    <div class="header">
+        <div class="logo">📚 منصة تعليمية | أكاديمية النجاح</div>
+        <div id="userHeaderInfo"></div>
     </div>
+    <div class="main-content" id="mainContent">
+        <div class="loading">⏳ جاري تحميل المنصة...</div>
+    </div>
+</div>
 
-    <script>
-        (function() {
-            // منع النسخ واللصق والطباعة والتصوير
-            document.addEventListener('copy', (e) => { e.preventDefault(); return false; });
-            document.addEventListener('cut', (e) => { e.preventDefault(); return false; });
-            document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'PrintScreen' || e.key === 'Print' || (e.ctrlKey && e.key === 'p') || (e.metaKey && e.key === 'p')) {
-                    e.preventDefault();
-                    alert('❌ لا يمكن أخذ لقطة شاشة أو طباعة الصفحة');
-                    return false;
-                }
-                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                    e.preventDefault();
-                    return false;
-                }
+<!-- Tawk.to Script -->
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/69ee0742ee63861c347c9c08/default';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>
+
+<script>
+    // ------------------- Firebase Configuration -------------------
+    const firebaseConfig = {
+        apiKey: "AIzaSyDQs1-RAW00so7ouBbRsCvEdwXQfWd1izU",
+        authDomain: "tryyyyy-23508.firebaseapp.com",
+        projectId: "tryyyyy-23508",
+        storageBucket: "tryyyyy-23508.firebasestorage.app",
+        messagingSenderId: "913680144851",
+        appId: "1:913680144851:web:54c6b76e6634c603fc3726",
+        measurementId: "G-99QRMSG8Z6"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // ------------------- Global Variables -------------------
+    let currentUser = null;
+    let studentsRef = null;
+    let purchasesRef = null;
+
+    // تعريف الكورسات لكل صف
+    const grades = {
+        "3اعدادي": {
+            name: "الصف الثالث الإعدادي",
+            courses: [
+                { id: "c1", name: "اللغة العربية", price: 150, image: "📖", branches: 5, videosPerBranch: 20 },
+                { id: "c2", name: "الرياضيات", price: 150, image: "🧮", branches: 5, videosPerBranch: 20 },
+                { id: "c3", name: "العلوم", price: 150, image: "🔬", branches: 5, videosPerBranch: 20 },
+                { id: "c4", name: "الدراسات الاجتماعية", price: 150, image: "🌍", branches: 5, videosPerBranch: 20 },
+                { id: "c5", name: "اللغة الإنجليزية", price: 150, image: "🇬🇧", branches: 5, videosPerBranch: 20 }
+            ]
+        },
+        "1ثانوي": {
+            name: "الصف الأول الثانوي",
+            courses: [
+                { id: "c6", name: "اللغة العربية", price: 180, image: "📖", branches: 5, videosPerBranch: 20 },
+                { id: "c7", name: "الرياضيات", price: 180, image: "🧮", branches: 5, videosPerBranch: 20 },
+                { id: "c8", name: "الفيزياء", price: 180, image: "⚡", branches: 5, videosPerBranch: 20 },
+                { id: "c9", name: "الكيمياء", price: 180, image: "🧪", branches: 5, videosPerBranch: 20 },
+                { id: "c10", name: "الأحياء", price: 180, image: "🧬", branches: 5, videosPerBranch: 20 }
+            ]
+        },
+        "2ثانوي": {
+            name: "الصف الثاني الثانوي",
+            courses: [
+                { id: "c11", name: "اللغة العربية", price: 200, image: "📖", branches: 5, videosPerBranch: 20 },
+                { id: "c12", name: "الرياضيات", price: 200, image: "🧮", branches: 5, videosPerBranch: 20 },
+                { id: "c13", name: "الفيزياء", price: 200, image: "⚡", branches: 5, videosPerBranch: 20 },
+                { id: "c14", name: "الكيمياء", price: 200, image: "🧪", branches: 5, videosPerBranch: 20 },
+                { id: "c15", name: "التاريخ", price: 200, image: "📜", branches: 5, videosPerBranch: 20 }
+            ]
+        }
+    };
+
+    // توليد كود فريد
+    function generateUniqueCode() {
+        return 'STU' + Math.floor(100000 + Math.random() * 900000);
+    }
+
+    // إنشاء حساب أدمن تلقائي إذا لم يوجد
+    async function ensureAdminAccount() {
+        const adminCheck = await database.ref('students').orderByChild('role').equalTo('admin').once('value');
+        if (!adminCheck.exists()) {
+            const adminId = Date.now();
+            await database.ref('students/' + adminId).set({
+                id: adminId,
+                name: "Administrator",
+                password: "admin123",
+                email: "admin@platform.com",
+                role: "admin",
+                isBlocked: false,
+                code: "ADMIN001",
+                phone: "01000000000",
+                grade: "1ثانوي",
+                createdAt: new Date().toISOString()
             });
+        }
+    }
 
-            // ---------- الإعدادات والبيانات ----------
-            let currentDay = 1; // غيّر يدوياً
+    // تسجيل طالب جديد
+    async function registerStudent(name, password, grade, phone, email) {
+        const emailCheck = await database.ref('students').orderByChild('email').equalTo(email).once('value');
+        if (emailCheck.exists()) {
+            alert("البريد الإلكتروني موجود مسبقاً!");
+            return false;
+        }
+        const code = generateUniqueCode();
+        const newId = Date.now();
+        const studentData = {
+            id: newId,
+            name,
+            password,
+            grade,
+            phone,
+            email,
+            code,
+            isBlocked: false,
+            role: "student",
+            createdAt: new Date().toISOString()
+        };
+        await database.ref('students/' + newId).set(studentData);
+        alert(`✅ تم إنشاء حساب بنجاح!\n🎫 كودك الفريد هو: ${code}\nاحتفظ به للرجوع إليه.`);
+        return true;
+    }
 
-            // القيم الافتراضية للساعات (يمكنك تعديلها)
-            const MOHAMED_DAYS_HOURS = {
-                1: 6.0, 2: 0.0, 3: 0.0, 4: 0.0,
-                // ... أضف الباقي
-            };
-            const ZEAD_DAYS_HOURS = {
-                1: 4.0, 2: 0.0, 3: 0.0, 4: 0.0,
-                // ...
-            };
-
-            const VALID_CODES = {
-                mohamed: { password: '12234', name: 'محمد' },
-                zead: { password: '1234', name: 'زياد' }
-            };
-
-            const STORAGE_KEYS = {
-                studyData: 'studyDataDays_v3',
-                lastTimerDate: 'lastTimerDate',
-                currentUser: 'currentUser'
-            };
-
-            function createDefaultStudyData() {
-                const mohamedDays = {};
-                const zeadDays = {};
-                for (let i = 1; i <= 90; i++) {
-                    mohamedDays[i] = { hours: MOHAMED_DAYS_HOURS[i] || 0 };
-                    zeadDays[i] = { hours: ZEAD_DAYS_HOURS[i] || 0 };
-                }
-                return {
-                    mohamed: { days: mohamedDays, total: 0 },
-                    zead: { days: zeadDays, total: 0 }
-                };
-            }
-
-            let currentUser = null;
-            let studyData = createDefaultStudyData();
-            let timerInterval = null;
-            let timerSeconds = 0;
-            let isTimerRunning = false;
-            let hasNewNotification = true; // لإظهار النقطة الحمراء
-
-            // عناصر DOM
-            const loginSection = document.getElementById('loginSection');
-            const mainContent = document.getElementById('mainContent');
-            const codeInput = document.getElementById('codeInput');
-            const passwordInput = document.getElementById('passwordInput');
-            const loginBtn = document.getElementById('loginBtn');
-            const loginError = document.getElementById('loginError');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const currentUserBadge = document.getElementById('currentUserBadge');
-            const notificationBell = document.getElementById('notificationBell');
-            const notificationPanel = document.getElementById('notificationPanel');
-            const notificationDot = document.getElementById('notificationDot');
-
-            const mohamedDayNumber = document.getElementById('mohamedDayNumber');
-            const mohamedHours = document.getElementById('mohamedHours');
-            const mohamedTotalSpan = document.getElementById('mohamedTotal');
-            const zeadDayNumber = document.getElementById('zeadDayNumber');
-            const zeadHours = document.getElementById('zeadHours');
-            const zeadTotalSpan = document.getElementById('zeadTotal');
-
-            const rowMohamed = document.getElementById('rowMohamed');
-            const rowZead = document.getElementById('rowZead');
-
-            const timerDisplay = document.getElementById('timerDisplay');
-            const startTimerBtn = document.getElementById('startTimer');
-            const pauseTimerBtn = document.getElementById('pauseTimer');
-            const resetTimerBtn = document.getElementById('resetTimer');
-            const leaderText = document.getElementById('leaderText');
-            const progressFill = document.getElementById('progressFill');
-            const quoteText = document.getElementById('quoteText');
-
-            const tabMohamed = document.getElementById('tabMohamed');
-            const tabZead = document.getElementById('tabZead');
-            const historyMohamedDiv = document.getElementById('historyMohamed');
-            const historyZeadDiv = document.getElementById('historyZead');
-
-            const quotes = [
-                'المذاكرة اليوم = نصر الغد',
-                'تفوق على نفسك أولاً',
-                'كل ساعة تحسب لك',
-                'زياد ومحمد في السباق',
-                'استمر، النجاح قريب',
-                'اجعل رقمك يتصدر'
-            ];
-
-            // دالة تحديث النقطة الحمراء
-            function updateNotificationDot() {
-                notificationDot.style.display = hasNewNotification ? 'block' : 'none';
-            }
-
-            // أحداث الجرس
-            function toggleNotificationPanel(e) {
-                e.stopPropagation();
-                if (notificationPanel.style.display === 'none') {
-                    notificationPanel.style.display = 'block';
-                    if (hasNewNotification) {
-                        hasNewNotification = false;
-                        updateNotificationDot();
-                    }
-                } else {
-                    notificationPanel.style.display = 'none';
-                }
-            }
-            notificationBell.addEventListener('click', toggleNotificationPanel);
-            document.addEventListener('click', (e) => {
-                if (!notificationPanel.contains(e.target) && e.target !== notificationBell) {
-                    notificationPanel.style.display = 'none';
-                }
-            });
-            notificationPanel.addEventListener('click', (e) => e.stopPropagation());
-
-            // دوال مساعدة
-            function getTodayDateString() {
-                const d = new Date();
-                return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-            }
-
-            function loadStudyData() {
-                const stored = localStorage.getItem(STORAGE_KEYS.studyData);
-                if (stored) {
-                    try {
-                        const saved = JSON.parse(stored);
-                        if (saved.mohamed?.days) {
-                            for (let day in saved.mohamed.days) {
-                                studyData.mohamed.days[day] = saved.mohamed.days[day];
-                            }
-                        }
-                        if (saved.zead?.days) {
-                            for (let day in saved.zead.days) {
-                                studyData.zead.days[day] = saved.zead.days[day];
-                            }
-                        }
-                    } catch (e) {}
-                }
-                recalcAllTotals();
-            }
-
-            function saveStudyData() {
-                localStorage.setItem(STORAGE_KEYS.studyData, JSON.stringify(studyData));
-            }
-
-            function recalcAllTotals() {
-                let totalM = 0, totalZ = 0;
-                Object.values(studyData.mohamed.days).forEach(d => totalM += d.hours || 0);
-                Object.values(studyData.zead.days).forEach(d => totalZ += d.hours || 0);
-                studyData.mohamed.total = totalM;
-                studyData.zead.total = totalZ;
-                updateTotalsDisplay();
-                updateMotivation();
-            }
-
-            function updateTotalsDisplay() {
-                mohamedTotalSpan.innerText = studyData.mohamed.total.toFixed(1);
-                zeadTotalSpan.innerText = studyData.zead.total.toFixed(1);
-            }
-
-            function loadCurrentDayData() {
-                if (!currentUser) return;
-                mohamedDayNumber.innerText = currentDay;
-                zeadDayNumber.innerText = currentDay;
-                mohamedHours.value = studyData.mohamed.days[currentDay]?.hours || 0;
-                zeadHours.value = studyData.zead.days[currentDay]?.hours || 0;
-            }
-
-            function saveDayData(user, dayNumber, hours) {
-                if (!studyData[user].days[dayNumber]) studyData[user].days[dayNumber] = { hours: 0 };
-                studyData[user].days[dayNumber].hours = parseFloat(hours) || 0;
-                recalcAllTotals();
-                saveStudyData();
-                renderHistory('mohamed');
-                renderHistory('zead');
-            }
-
-            function updateRowsEditable() {
-                rowMohamed.classList.remove('disabled-row', 'editable-row');
-                rowZead.classList.remove('disabled-row', 'editable-row');
-                if (currentUser === 'mohamed') {
-                    rowMohamed.classList.add('editable-row');
-                    rowZead.classList.add('disabled-row');
-                } else if (currentUser === 'zead') {
-                    rowZead.classList.add('editable-row');
-                    rowMohamed.classList.add('disabled-row');
-                }
-            }
-
-            function updateMotivation() {
-                const totalM = studyData.mohamed.total;
-                const totalZ = studyData.zead.total;
-                const maxTotal = Math.max(totalM, totalZ);
-                if (maxTotal === 0) {
-                    leaderText.innerText = 'ابدأ المنافسة!';
-                    progressFill.style.width = '0%';
-                } else {
-                    if (totalM > totalZ) {
-                        leaderText.innerText = `محمد متقدم: ${totalM.toFixed(1)} ساعة`;
-                        progressFill.style.width = (totalM / maxTotal) * 100 + '%';
-                    } else if (totalZ > totalM) {
-                        leaderText.innerText = `زياد متقدم: ${totalZ.toFixed(1)} ساعة`;
-                        progressFill.style.width = (totalZ / maxTotal) * 100 + '%';
-                    } else {
-                        leaderText.innerText = `تعادل ${totalM.toFixed(1)} - ${totalZ.toFixed(1)}`;
-                        progressFill.style.width = '100%';
-                    }
-                }
-                quoteText.innerText = quotes[Math.floor(Math.random() * quotes.length)];
-            }
-
-            function renderHistory(user) {
-                const container = user === 'mohamed' ? historyMohamedDiv : historyZeadDiv;
-                let html = '<table class="history-table"><tr><th>اليوم</th><th>عدد الساعات</th></tr>';
-                for (let day = 1; day <= 90; day++) {
-                    const hours = studyData[user].days[day]?.hours.toFixed(1) || '0.0';
-                    html += `<tr><td>${day}</td><td>${hours}</td></tr>`;
-                }
-                container.innerHTML = html;
-            }
-
-            // دوال العداد
-            function updateTimerDisplay() {
-                const hrs = Math.floor(timerSeconds / 3600);
-                const mins = Math.floor((timerSeconds % 3600) / 60);
-                const secs = timerSeconds % 60;
-                timerDisplay.innerText = `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-            }
-            function startTimer() { if (!isTimerRunning) { isTimerRunning = true; timerInterval = setInterval(() => { timerSeconds++; updateTimerDisplay(); }, 1000); } }
-            function pauseTimer() { clearInterval(timerInterval); isTimerRunning = false; }
-            function resetTimer() { pauseTimer(); timerSeconds = 0; updateTimerDisplay(); }
-
-            // تسجيل الدخول
-            function login(code, password) {
-                const lowerCode = code.trim().toLowerCase();
-                if (lowerCode === 'mohamed' && password === VALID_CODES.mohamed.password) {
-                    currentUser = 'mohamed';
-                } else if (lowerCode === 'zead' && password === VALID_CODES.zead.password) {
-                    currentUser = 'zead';
-                } else {
-                    loginError.innerText = 'كود أو رقم سري غير صحيح';
-                    return false;
-                }
-
-                loginError.innerText = '';
-                localStorage.setItem(STORAGE_KEYS.currentUser, currentUser);
-                currentUserBadge.innerText = VALID_CODES[currentUser].name;
-                loginSection.style.display = 'none';
-                mainContent.style.display = 'block';
-
-                loadStudyData();
-                loadCurrentDayData();
-                updateRowsEditable();
-
-                const today = getTodayDateString();
-                if (localStorage.getItem(STORAGE_KEYS.lastTimerDate) !== today) {
-                    resetTimer();
-                    localStorage.setItem(STORAGE_KEYS.lastTimerDate, today);
-                } else {
-                    pauseTimer();
-                    timerSeconds = 0;
-                    updateTimerDisplay();
-                }
-
-                renderHistory('mohamed');
-                renderHistory('zead');
-                updateMotivation();
-                hasNewNotification = true;
-                updateNotificationDot();
+    // تسجيل الدخول
+    async function loginStudent(emailOrCode, password) {
+        let snapshot = await database.ref('students').orderByChild('email').equalTo(emailOrCode).once('value');
+        if (!snapshot.exists()) {
+            snapshot = await database.ref('students').orderByChild('code').equalTo(emailOrCode).once('value');
+        }
+        
+        if (snapshot.exists()) {
+            let student = null;
+            snapshot.forEach(child => { student = child.val(); });
+            if (student.password === password && !student.isBlocked) {
+                currentUser = student;
+                localStorage.setItem('currentUserId', currentUser.id);
+                alert(`مرحباً ${student.name}`);
+                renderApp();
                 return true;
+            } else if (student.isBlocked) {
+                alert("🚫 حسابك محظور! تواصل مع الإدارة.");
+                return false;
+            } else {
+                alert("كلمة المرور غير صحيحة!");
+                return false;
             }
+        }
+        alert("❌ لم يتم العثور على حساب بهذه البيانات");
+        return false;
+    }
 
-            function logout() {
-                pauseTimer();
+    // شراء كورس
+    async function purchaseCourse(courseId, price) {
+        if (!currentUser) return;
+        const purchaseCheck = await database.ref(`purchases/${currentUser.id}/${courseId}`).once('value');
+        if (purchaseCheck.exists()) {
+            alert("你已经购买了该课程!");
+            return;
+        }
+        if (confirm(`💰 شراء الكورس بسعر ${price} جنيه؟ (محاكاة دفع)`)) {
+            await database.ref(`purchases/${currentUser.id}/${courseId}`).set({
+                courseId: courseId,
+                purchasedAt: new Date().toISOString(),
+                price: price
+            });
+            alert("✅ تم شراء الكورس بنجاح! يمكنك الآن مشاهدة المحتوى.");
+            renderApp();
+        }
+    }
+
+    // إضافة طالب بواسطة الأدمن (ريل تايم)
+    async function adminAddStudent(name, password, grade, phone, email) {
+        const emailCheck = await database.ref('students').orderByChild('email').equalTo(email).once('value');
+        if (emailCheck.exists()) {
+            alert("البريد موجود مسبقاً");
+            return false;
+        }
+        const code = generateUniqueCode();
+        const newId = Date.now();
+        await database.ref('students/' + newId).set({
+            id: newId, name, password, grade, phone, email, code,
+            isBlocked: false, role: "student", createdAt: new Date().toISOString()
+        });
+        alert(`✅ تم إضافة الطالب ${name} بنجاح، كود الطالب: ${code}`);
+        return true;
+    }
+
+    // حظر/فك حظر طالب
+    async function toggleBlockStudent(studentId) {
+        const studentRef = database.ref(`students/${studentId}`);
+        const snapshot = await studentRef.once('value');
+        const student = snapshot.val();
+        if (student) {
+            await studentRef.update({ isBlocked: !student.isBlocked });
+            if (currentUser && currentUser.id == studentId && !student.isBlocked) {
+                // تم حظر المستخدم الحالي
                 currentUser = null;
-                localStorage.removeItem(STORAGE_KEYS.currentUser);
-                loginSection.style.display = 'block';
-                mainContent.style.display = 'none';
-                codeInput.value = '';
-                passwordInput.value = '';
-                loginError.innerText = '';
+                localStorage.removeItem('currentUserId');
+                renderApp();
+                alert("🚫 تم حظر حسابك، تواصل مع الإدارة.");
+            } else {
+                alert(`✅ تم ${student.isBlocked ? 'فك الحظر عن' : 'حظر'} الطالب`);
             }
+        }
+    }
 
-            // أحداث
-            loginBtn.addEventListener('click', () => login(codeInput.value, passwordInput.value));
-            passwordInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') loginBtn.click(); });
-            logoutBtn.addEventListener('click', logout);
-
-            tabMohamed.addEventListener('click', () => {
-                tabMohamed.classList.add('active');
-                tabZead.classList.remove('active');
-                historyMohamedDiv.style.display = 'block';
-                historyZeadDiv.style.display = 'none';
+    // فتح كورس لطالب معين
+    async function adminUnlockCourse(studentId, courseId) {
+        const exists = await database.ref(`purchases/${studentId}/${courseId}`).once('value');
+        if (!exists.exists()) {
+            await database.ref(`purchases/${studentId}/${courseId}`).set({
+                courseId: courseId,
+                purchasedAt: new Date().toISOString(),
+                price: 0,
+                unlockedByAdmin: true
             });
-            tabZead.addEventListener('click', () => {
-                tabZead.classList.add('active');
-                tabMohamed.classList.remove('active');
-                historyZeadDiv.style.display = 'block';
-                historyMohamedDiv.style.display = 'none';
-            });
+            alert("✅ تم فتح الكورس للطالب بنجاح!");
+        } else {
+            alert("⚠️ الكورس مفتوح بالفعل!");
+        }
+    }
 
-            // عند كتابة الساعات - نحفظ البيانات ولكن لا نغير قيمة الحقل
-            mohamedHours.addEventListener('input', function() {
-                if (currentUser === 'mohamed') {
-                    saveDayData('mohamed', currentDay, this.value);
-                }
-            });
-            zeadHours.addEventListener('input', function() {
-                if (currentUser === 'zead') {
-                    saveDayData('zead', currentDay, this.value);
-                }
-            });
+    // تعديل بيانات الطالب
+    async function adminEditStudent(studentId, newName, newPhone, newGrade) {
+        await database.ref(`students/${studentId}`).update({
+            name: newName,
+            phone: newPhone,
+            grade: newGrade
+        });
+        alert("✅ تم تحديث بيانات الطالب");
+        if (currentUser && currentUser.id == studentId) {
+            currentUser.name = newName;
+            currentUser.phone = newPhone;
+            currentUser.grade = newGrade;
+            localStorage.setItem('currentUserId', currentUser.id);
+        }
+    }
 
-            startTimerBtn.addEventListener('click', startTimer);
-            pauseTimerBtn.addEventListener('click', pauseTimer);
-            resetTimerBtn.addEventListener('click', resetTimer);
+    // مشاهدة الكورس
+    window.watchCourse = async function(courseId, courseName) {
+        if (!currentUser) return;
+        const purchaseCheck = await database.ref(`purchases/${currentUser.id}/${courseId}`).once('value');
+        if (!purchaseCheck.exists()) {
+            alert("يجب شراء الكورس أولاً!");
+            return;
+        }
+        let videoHTML = `<h3>🎬 ${courseName} - محتوى تعليمي (فيديوهات نموذجية)</h3>`;
+        videoHTML += `<div style="display:grid; gap:20px;">`;
+        for (let i = 1; i <= 5; i++) {
+            videoHTML += `
+                <div style="background:#f7fafc; padding:15px; border-radius:15px;">
+                    <h4>📘 الفصل ${i}</h4>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:10px;">
+            `;
+            for (let v = 1; v <= 5; v++) {
+                videoHTML += `
+                    <div>
+                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=example" title="فيديو تعليمي" frameborder="0" allowfullscreen></iframe>
+                        <p style="margin-top:5px">📹 فيديو ${v} : شرح الدرس</p>
+                    </div>
+                `;
+            }
+            videoHTML += `</div></div>`;
+        }
+        videoHTML += `</div><button onclick="renderApp()" class="btn-logout" style="margin-top:20px;">⬅️ رجوع للكورسات</button>`;
+        document.getElementById("mainContent").innerHTML = videoHTML;
+    };
 
-            // استعادة الجلسة
-            (function initSession() {
-                const savedUser = localStorage.getItem(STORAGE_KEYS.currentUser);
-                if (savedUser && (savedUser === 'mohamed' || savedUser === 'zead')) {
-                    login(savedUser, VALID_CODES[savedUser].password);
-                }
-            })();
+    // عرض الكورسات للطالب
+    async function renderStudentCourses() {
+        if (!currentUser || currentUser.role !== 'student') return "<div class='loading'>📚 جاري تحميل الكورسات...</div>";
+        const gradeData = grades[currentUser.grade];
+        if (!gradeData) return "<p>⚠️ لم يتم تعيين صف لك</p>";
+        
+        const purchasesSnapshot = await database.ref(`purchases/${currentUser.id}`).once('value');
+        const purchasedCourses = purchasesSnapshot.val() || {};
+        
+        let html = `<h2>📚 كورسات ${gradeData.name}</h2><div class="courses-grid">`;
+        gradeData.courses.forEach(course => {
+            const isPurchased = purchasedCourses[course.id];
+            html += `
+                <div class="course-card">
+                    <div class="course-image">${course.image}</div>
+                    <div class="course-info">
+                        <div class="course-title">${course.name}</div>
+                        <div class="course-price">${course.price} جنيه</div>
+                        <div>📁 ${course.branches} فصول | 🎥 ${course.videosPerBranch} فيديو لكل فصل</div>
+                        ${isPurchased ? `<button class="watch-btn" onclick="watchCourse('${course.id}','${course.name}')">▶️ مشاهدة الكورس</button>` : `<button class="purchase-btn" onclick="purchaseCourse('${course.id}',${course.price})">💰 شراء الكورس</button>`}
+                    </div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+        return html;
+    }
 
-            updateNotificationDot();
-        })();
-    </script>
+    // لوحة تحكم الأدمن (مع إضافة طالب)
+    async function renderAdminPanel() {
+        const studentsSnapshot = await database.ref('students').once('value');
+        const allStudents = [];
+        studentsSnapshot.forEach(child => { allStudents.push(child.val()); });
+        
+        let html = `
+            <div class="admin-panel">
+                <h2><i class="fas fa-user-shield"></i> 👑 لوحة تحكم الأدمن - ريل تايم</h2>
+                <div class="admin-section">
+                    <h3>➕ إضافة طالب جديد</h3>
+                    <input type="text" id="adminName" placeholder="الاسم الكامل">
+                    <input type="password" id="adminPassword" placeholder="الرقم السري">
+                    <select id="adminGrade">
+                        <option value="3اعدادي">3 إعدادي</option>
+                        <option value="1ثانوي">1 ثانوي</option>
+                        <option value="2ثانوي">2 ثانوي</option>
+                    </select>
+                    <input type="text" id="adminPhone" placeholder="رقم الهاتف">
+                    <input type="email" id="adminEmail" placeholder="البريد الإلكتروني">
+                    <button onclick="addStudentByAdmin()">➕ إضافة طالب</button>
+                </div>
+                <div class="admin-section">
+                    <h3>📋 قائمة الطلاب (${allStudents.length})</h3>
+                    <div class="students-table">
+                        <table>
+                            <thead><tr><th>الاسم</th><th>الكود</th><th>الصف</th><th>الهاتف</th><th>البريد</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+                            <tbody>
+                                ${allStudents.filter(s => s.role !== 'admin').map(s => `
+                                    <tr>
+                                        <td>${s.name}</td><td>${s.code}</td><td>${s.grade}</td><td>${s.phone}</td><td>${s.email}</td>
+                                        <td><span class="badge ${s.isBlocked ? 'badge-blocked' : 'badge-active'}">${s.isBlocked ? '🚫 محظور' : '✅ نشط'}</span></td>
+                                        <td>
+                                            <button class="admin-btn btn-danger" onclick="toggleBlockStudent(${s.id})">${s.isBlocked ? 'فك الحظر' : 'حظر'}</button>
+                                            <button class="admin-btn btn-warning" onclick="showUnlockCourse(${s.id})">🔓 فتح كورس</button>
+                                            <button class="admin-btn" onclick="showEditStudent(${s.id})">✏️ تعديل</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        `;
+        return html;
+    }
+
+    window.addStudentByAdmin = async function() {
+        const name = document.getElementById('adminName')?.value;
+        const password = document.getElementById('adminPassword')?.value;
+        const grade = document.getElementById('adminGrade')?.value;
+        const phone = document.getElementById('adminPhone')?.value;
+        const email = document.getElementById('adminEmail')?.value;
+        if (!name || !password || !grade || !phone || !email) {
+            alert("يرجى ملء جميع الحقول");
+            return;
+        }
+        await adminAddStudent(name, password, grade, phone, email);
+        renderApp();
+    };
+
+    window.showUnlockCourse = async function(studentId) {
+        const studentSnap = await database.ref(`students/${studentId}`).once('value');
+        const student = studentSnap.val();
+        const courses = grades[student?.grade]?.courses || [];
+        const courseId = prompt(`اختر ID الكورس لفتحه:\n${courses.map(c => `${c.id}: ${c.name}`).join('\n')}`);
+        if (courseId) adminUnlockCourse(studentId, courseId);
+    };
+
+    window.showEditStudent = async function(studentId) {
+        const studentSnap = await database.ref(`students/${studentId}`).once('value');
+        const student = studentSnap.val();
+        const newName = prompt("الاسم الجديد:", student.name);
+        const newPhone = prompt("رقم الهاتف الجديد:", student.phone);
+        const newGrade = prompt("الصف الجديد (3اعدادي / 1ثانوي / 2ثانوي):", student.grade);
+        if (newName && newPhone && newGrade) await adminEditStudent(studentId, newName, newPhone, newGrade);
+        renderApp();
+    };
+
+    // تسجيل الخروج
+    function logout() {
+        currentUser = null;
+        localStorage.removeItem('currentUserId');
+        renderApp();
+    }
+
+    // واجهة تسجيل الدخول
+    function renderAuth() {
+        return `
+            <div class="form-container">
+                <h2>🔐 تسجيل الدخول</h2>
+                <input type="text" id="loginEmail" placeholder="البريد الإلكتروني أو الكود">
+                <input type="password" id="loginPassword" placeholder="الرقم السري">
+                <button onclick="handleLogin()">دخول</button>
+                <div class="toggle-form"><span onclick="showRegister()">✨ إنشاء حساب جديد</span></div>
+                <hr style="margin:20px 0">
+                <h4>👑 حساب الأدمن التجريبي</h4>
+                <p>البريد: admin@platform.com | كلمة السر: admin123</p>
+                <button onclick="adminLogin()">تسجيل دخول كأدمن</button>
+            </div>
+        `;
+    }
+
+    function renderRegister() {
+        return `
+            <div class="form-container">
+                <h2>📝 إنشاء حساب جديد</h2>
+                <input type="text" id="regName" placeholder="الاسم الكامل">
+                <input type="password" id="regPassword" placeholder="الرقم السري">
+                <select id="regGrade">
+                    <option value="3اعدادي">الصف الثالث الإعدادي</option>
+                    <option value="1ثانوي">الصف الأول الثانوي</option>
+                    <option value="2ثانوي">الصف الثاني الثانوي</option>
+                </select>
+                <input type="tel" id="regPhone" placeholder="رقم الهاتف">
+                <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
+                <button onclick="handleRegister()">إنشاء حساب</button>
+                <div class="toggle-form"><span onclick="showLogin()">🔐 لدي حساب بالفعل</span></div>
+            </div>
+        `;
+    }
+
+    window.handleLogin = async function() {
+        const email = document.getElementById('loginEmail').value;
+        const pwd = document.getElementById('loginPassword').value;
+        await loginStudent(email, pwd);
+    };
+    window.handleRegister = async function() {
+        const name = document.getElementById('regName').value;
+        const pwd = document.getElementById('regPassword').value;
+        const grade = document.getElementById('regGrade').value;
+        const phone = document.getElementById('regPhone').value;
+        const email = document.getElementById('regEmail').value;
+        if (!name || !pwd || !grade || !phone || !email) {
+            alert("جميع الحقول مطلوبة");
+            return;
+        }
+        await registerStudent(name, pwd, grade, phone, email);
+        showLogin();
+    };
+    window.adminLogin = async function() {
+        await ensureAdminAccount();
+        const snapshot = await database.ref('students').orderByChild('email').equalTo('admin@platform.com').once('value');
+        let admin = null;
+        snapshot.forEach(child => { admin = child.val(); });
+        if (admin) {
+            currentUser = admin;
+            localStorage.setItem('currentUserId', currentUser.id);
+            renderApp();
+        }
+    };
+    window.showRegister = function() { renderApp('register'); };
+    window.showLogin = function() { renderApp('login'); };
+    window.toggleBlockStudent = toggleBlockStudent;
+    window.logout = logout;
+
+    async function renderApp(page = null) {
+        const storedId = localStorage.getItem('currentUserId');
+        if (storedId && !currentUser) {
+            const snap = await database.ref(`students/${storedId}`).once('value');
+            if (snap.exists()) currentUser = snap.val();
+        }
+        
+        const headerUser = currentUser ? `<div class="user-info"><span>👋 ${currentUser.name} ${currentUser.role === 'admin' ? '(أدمن)' : ''}</span><button class="btn-logout" onclick="logout()">تسجيل خروج</button></div>` : `<div></div>`;
+        document.getElementById('userHeaderInfo').innerHTML = headerUser;
+        
+        let mainHtml = "";
+        if (!currentUser) {
+            if (page === 'register') mainHtml = renderRegister();
+            else mainHtml = renderAuth();
+        } else {
+            if (currentUser.role === 'admin') {
+                mainHtml = await renderAdminPanel() + await renderStudentCourses();
+            } else {
+                mainHtml = await renderStudentCourses();
+            }
+        }
+        document.getElementById('mainContent').innerHTML = mainHtml;
+    }
+
+    ensureAdminAccount().then(() => renderApp());
+</script>
 </body>
 </html>
