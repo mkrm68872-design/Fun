@@ -3,143 +3,360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة القصص</title>
+    <title>رواية - منصة القصص التفاعلية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         body {
-            background: #f5f5f5;
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            position: relative;
         }
+
+        /* خلفية متحركة */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x bottom;
+            background-size: cover;
+            pointer-events: none;
+        }
+
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
+
+        /* أنيميشن للبطاقات */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            border: 1px solid #eee;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeInUp 0.5s ease-out;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.2);
+        }
+
         .header {
-            background: black;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-radius: 20px 20px 0 0;
-            margin: -30px -30px 20px -30px;
-            padding: 30px;
-        }
-        .header h1 { color: white; }
-        h1, h2, h3 { color: black; margin-bottom: 20px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
-        }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            background: white;
-            color: black;
-        }
-        .form-group textarea { min-height: 300px; resize: vertical; }
-        button {
-            background: black;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        button:hover { background: #333; transform: scale(1.02); }
-        .btn-danger { background: #dc3545; }
-        .btn-danger:hover { background: #c82333; }
-        .btn-success { background: #28a745; }
-        .btn-success:hover { background: #218838; }
-        .story-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border-right: 5px solid black;
-        }
-        .story-card:hover { transform: translateX(-5px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        .story-title { font-size: 1.3em; font-weight: bold; color: black; }
-        .story-topic { color: #666; margin-top: 5px; }
-        .progress-bar {
-            background: #e0e0e0;
-            border-radius: 10px;
-            height: 8px;
-            margin-top: 10px;
+            border-radius: 25px;
+            margin: -35px -35px 25px -35px;
+            padding: 35px;
+            position: relative;
             overflow: hidden;
         }
-        .progress-fill { background: black; height: 100%; border-radius: 10px; transition: width 0.3s; }
-        .reading-content { line-height: 1.8; font-size: 18px; color: #333; }
-        .reading-content p { margin-bottom: 20px; }
-        .admin-panel {
-            background: #f8f9fa;
-            border: 2px solid black;
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 15px;
+
+        .header::before {
+            content: '📚';
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.1;
+            bottom: -20px;
+            left: -20px;
         }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 16px;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 300px;
+            resize: vertical;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Cairo', sans-serif;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .story-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #f8f9fa 100%);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .story-card:hover {
+            transform: translateX(-8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .story-topic {
+            color: #667eea;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 20px;
+            height: 8px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s;
+        }
+
+        .reading-content {
+            line-height: 1.9;
+            font-size: 18px;
+            color: #444;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 20px;
+        }
+
+        .reading-content p {
+            margin-bottom: 25px;
+        }
+
+        .admin-panel {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6f0 100%);
+            border: none;
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 20px;
+        }
+
         .user-item {
             background: white;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #ddd;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s;
         }
-        .hidden { display: none; }
+
+        .user-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
         .tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 15px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
         }
+
         .tab {
-            background: #e0e0e0;
-            padding: 10px 20px;
-            border-radius: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 12px 28px;
+            border-radius: 50px;
             cursor: pointer;
-            color: black;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #667eea;
         }
-        .tab.active { background: black; color: white; }
+
+        .tab:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
         .alert {
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 15px;
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            animation: fadeInUp 0.3s ease-out;
         }
-        .alert-error { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
-        .alert-success { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+
+        .alert-error {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
         .user-info {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 18px;
+            border-radius: 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .card {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .story-title {
+                font-size: 1.2em;
+            }
+        }
+
+        /* سكرول بار جميل */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
         }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -150,45 +367,45 @@
     <div class="container" id="app">
         <!-- شاشة تسجيل الدخول -->
         <div id="authScreen" class="card">
-            <div class="header" style="margin: -30px -30px 20px -30px; padding: 30px;">
-                <h1>📚 منصة القصص</h1>
-                <p>سجل دخولك وابدأ رحلة القراءة</p>
+            <div class="header" style="margin: -35px -35px 25px -35px;">
+                <h1><i class="fas fa-book-open"></i> رواية</h1>
+                <p>منصة القصص التفاعلية - حيث تتحول الكلمات إلى عوالم</p>
             </div>
             <div id="authTabs">
                 <div class="tabs">
-                    <div class="tab active" onclick="switchAuthTab('login')">تسجيل دخول</div>
-                    <div class="tab" onclick="switchAuthTab('signup')">إنشاء حساب</div>
+                    <div class="tab active" onclick="switchAuthTab('login')"><i class="fas fa-sign-in-alt"></i> تسجيل دخول</div>
+                    <div class="tab" onclick="switchAuthTab('signup')"><i class="fas fa-user-plus"></i> إنشاء حساب</div>
                 </div>
                 <div id="loginForm">
                     <div class="form-group">
-                        <label>البريد الإلكتروني</label>
+                        <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
                         <input type="email" id="loginEmail" placeholder="example@email.com">
                     </div>
                     <div class="form-group">
-                        <label>كلمة المرور</label>
+                        <label><i class="fas fa-lock"></i> كلمة المرور</label>
                         <input type="password" id="loginPassword" placeholder="********">
                     </div>
-                    <button onclick="login()">دخول</button>
-                    <button onclick="loginWithGoogle()" style="margin-right: 10px; background: #db4437;">دخول بـ Google</button>
+                    <button onclick="login()"><i class="fas fa-sign-in-alt"></i> دخول</button>
+                    <button onclick="loginWithGoogle()" style="background: #db4437;"><i class="fab fa-google"></i> دخول بـ Google</button>
                 </div>
                 <div id="signupForm" class="hidden">
                     <div class="form-group">
-                        <label>الاسم</label>
+                        <label><i class="fas fa-user"></i> الاسم</label>
                         <input type="text" id="signupName" placeholder="اسمك الكامل">
                     </div>
                     <div class="form-group">
-                        <label>البريد الإلكتروني</label>
+                        <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
                         <input type="email" id="signupEmail" placeholder="example@email.com">
                     </div>
                     <div class="form-group">
-                        <label>كلمة المرور</label>
+                        <label><i class="fas fa-lock"></i> كلمة المرور</label>
                         <input type="password" id="signupPassword" placeholder="********">
                     </div>
                     <div class="form-group">
-                        <label>تأكيد كلمة المرور</label>
+                        <label><i class="fas fa-check-circle"></i> تأكيد كلمة المرور</label>
                         <input type="password" id="signupConfirmPassword" placeholder="********">
                     </div>
-                    <button onclick="signup()">إنشاء حساب</button>
+                    <button onclick="signup()"><i class="fas fa-user-plus"></i> إنشاء حساب</button>
                 </div>
             </div>
         </div>
@@ -196,26 +413,31 @@
         <!-- الشاشة الرئيسية -->
         <div id="mainScreen" class="hidden">
             <div class="card" style="padding: 0; overflow: hidden;">
-                <div class="header" style="margin: 0; border-radius: 0;">
+                <div class="header" style="margin: 0; border-radius: 25px;">
                     <div class="user-info">
-                        <div><strong id="userName"></strong> - كودك: <span id="userCode"></span></div>
-                        <div><button onclick="logout()" style="background: #dc3545; padding: 8px 20px;">تسجيل خروج</button></div>
+                        <div>
+                            <i class="fas fa-user-circle"></i> <strong id="userName"></strong>
+                            <span class="badge"><i class="fas fa-code"></i> كودك: <span id="userCode"></span></span>
+                        </div>
+                        <div>
+                            <button onclick="logout()" style="background: rgba(255,255,255,0.2); padding: 10px 25px;"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</button>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="card">
                 <div class="tabs">
-                    <div class="tab active" onclick="switchMainTab('stories')">📖 القصص</div>
-                    <div class="tab hidden" onclick="switchMainTab('admin')" id="adminTab">⚙️ لوحة الأدمن</div>
+                    <div class="tab active" onclick="switchMainTab('stories')"><i class="fas fa-book"></i> القصص</div>
+                    <div class="tab hidden" onclick="switchMainTab('admin')" id="adminTab"><i class="fas fa-crown"></i> لوحة الأدمن</div>
                 </div>
                 <div id="storiesPanel">
-                    <h2>📚 جميع القصص</h2>
+                    <h2><i class="fas fa-feather-alt"></i> جميع القصص</h2>
                     <div id="storiesList"></div>
                 </div>
                 <div id="adminPanel" class="hidden">
-                    <h2>⚙️ لوحة تحكم الأدمن</h2>
+                    <h2><i class="fas fa-crown"></i> لوحة تحكم الأدمن</h2>
                     <div class="admin-panel">
-                        <h3>➕ إضافة قصة جديدة</h3>
+                        <h3><i class="fas fa-plus-circle"></i> إضافة قصة جديدة</h3>
                         <div class="form-group">
                             <label>عنوان القصة</label>
                             <input type="text" id="newStoryTitle" placeholder="عنوان القصة">
@@ -228,10 +450,10 @@
                             <label>محتوى القصة</label>
                             <textarea id="newStoryContent" placeholder="نص القصة كاملاً..."></textarea>
                         </div>
-                        <button onclick="addNewStory()">➕ إضافة قصة</button>
+                        <button onclick="addNewStory()"><i class="fas fa-save"></i> إضافة قصة</button>
                     </div>
                     <div class="admin-panel">
-                        <h3>📝 تعديل القصص</h3>
+                        <h3><i class="fas fa-edit"></i> تعديل القصص</h3>
                         <div class="form-group">
                             <select id="editStorySelect" onchange="loadStoryForEdit()">
                                 <option value="">اختر قصة لتعديلها...</option>
@@ -250,25 +472,25 @@
                                 <label>محتوى القصة</label>
                                 <textarea id="editStoryContent"></textarea>
                             </div>
-                            <button onclick="updateStory()">💾 حفظ التعديلات</button>
-                            <button onclick="deleteStory()" class="btn-danger">🗑️ حذف القصة</button>
+                            <button onclick="updateStory()"><i class="fas fa-save"></i> حفظ التعديلات</button>
+                            <button onclick="deleteStory()" class="btn-danger"><i class="fas fa-trash"></i> حذف القصة</button>
                         </div>
                     </div>
                     <div class="admin-panel">
-                        <h3>👑 إدارة المشرفين</h3>
+                        <h3><i class="fas fa-users-cog"></i> إدارة المشرفين</h3>
                         <div class="form-group">
                             <label>البريد الإلكتروني</label>
                             <input type="email" id="adminUserEmail" placeholder="example@email.com">
                         </div>
-                        <button onclick="makeAdmin()" class="btn-success">➕ تعيين كأدمن</button>
-                        <button onclick="removeAdmin()" class="btn-danger">➖ إزالة من الأدمن</button>
-                        <div id="adminsList" style="margin-top: 15px;"></div>
+                        <button onclick="makeAdmin()" class="btn-success"><i class="fas fa-user-plus"></i> تعيين كأدمن</button>
+                        <button onclick="removeAdmin()" class="btn-danger"><i class="fas fa-user-minus"></i> إزالة من الأدمن</button>
+                        <div id="adminsList" style="margin-top: 20px;"></div>
                     </div>
                 </div>
                 <div id="readingPanel" class="hidden">
-                    <button onclick="backToStories()" style="margin-bottom: 20px;">← العودة للقصص</button>
+                    <button onclick="backToStories()" style="margin-bottom: 20px;"><i class="fas fa-arrow-right"></i> العودة للقصص</button>
                     <h2 id="readingTitle"></h2>
-                    <p id="readingTopic" style="color: #666; margin-bottom: 20px;"></p>
+                    <p id="readingTopic" style="color: #667eea; margin-bottom: 20px;"></p>
                     <div class="progress-bar" style="margin-bottom: 20px;">
                         <div class="progress-fill" id="readingProgress" style="width: 0%"></div>
                     </div>
@@ -432,7 +654,7 @@
                 const storiesList = document.getElementById('storiesList');
                 storiesList.innerHTML = '';
                 if (!stories) {
-                    storiesList.innerHTML = '<p>لا توجد قصص حالياً</p>';
+                    storiesList.innerHTML = '<p style="text-align:center;"><i class="fas fa-book-open"></i> لا توجد قصص حالياً</p>';
                     return;
                 }
                 for (const [id, story] of Object.entries(stories)) {
@@ -443,10 +665,10 @@
                     storyCard.className = 'story-card';
                     storyCard.onclick = () => openStory(id, story);
                     storyCard.innerHTML = `
-                        <div class="story-title">📖 ${story.title}</div>
-                        <div class="story-topic">${story.topic || ''}</div>
+                        <div class="story-title"><i class="fas fa-book"></i> ${story.title}</div>
+                        <div class="story-topic"><i class="fas fa-tag"></i> ${story.topic || 'قصة جديدة'}</div>
                         <div class="progress-bar"><div class="progress-fill" style="width: ${percentage}%"></div></div>
-                        <div style="font-size: 12px; color: #888;">${percentage}% مكتمل</div>
+                        <div style="font-size: 12px; color: #888; margin-top: 10px;"><i class="fas fa-chart-line"></i> ${percentage}% مكتمل</div>
                     `;
                     storiesList.appendChild(storyCard);
                 }
@@ -457,8 +679,8 @@
             currentStory = { id: storyId, ...story };
             document.getElementById('storiesPanel').classList.add('hidden');
             document.getElementById('readingPanel').classList.remove('hidden');
-            document.getElementById('readingTitle').innerText = story.title;
-            document.getElementById('readingTopic').innerText = story.topic || '';
+            document.getElementById('readingTitle').innerHTML = `<i class="fas fa-book-open"></i> ${story.title}`;
+            document.getElementById('readingTopic').innerHTML = `<i class="fas fa-tag"></i> ${story.topic || ''}`;
             const paragraphs = story.content.split('\n').filter(p => p.trim());
             document.getElementById('readingContent').innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
             const progressRef = await database.ref(`readingProgress/${currentUser.uid}/${storyId}`).once('value');
@@ -497,11 +719,11 @@
         }
 
         async function addNewStory() {
-            if (currentUserRole !== 'admin') { showAlert('غير مسموح', 'error'); return; }
+            if (currentUserRole !== 'admin') { showAlert('غير مسموح - أنت لست أدمن', 'error'); return; }
             const title = document.getElementById('newStoryTitle').value;
             const topic = document.getElementById('newStoryTopic').value;
             const content = document.getElementById('newStoryContent').value;
-            if (!title || !content) { showAlert('الرجاء إدخال عنوان ومحتوى', 'error'); return; }
+            if (!title || !content) { showAlert('الرجاء إدخال عنوان ومحتوى القصة', 'error'); return; }
             await database.ref('stories').push().set({
                 title, topic, content,
                 lastEdited: Date.now(),
@@ -510,7 +732,7 @@
             document.getElementById('newStoryTitle').value = '';
             document.getElementById('newStoryTopic').value = '';
             document.getElementById('newStoryContent').value = '';
-            showAlert('تم إضافة القصة', 'success');
+            showAlert('تم إضافة القصة بنجاح!', 'success');
             loadStoriesForEdit();
         }
 
@@ -551,16 +773,16 @@
                 lastEdited: Date.now(),
                 editedBy: currentUser.uid
             });
-            showAlert('تم التحديث', 'success');
+            showAlert('تم تحديث القصة بنجاح!', 'success');
             loadStories();
             loadStoriesForEdit();
         }
 
         async function deleteStory() {
             if (!window.currentEditStoryId) return;
-            if (!confirm('تأكيد الحذف؟')) return;
+            if (!confirm('هل أنت متأكد من حذف هذه القصة؟')) return;
             await database.ref('stories/' + window.currentEditStoryId).remove();
-            showAlert('تم الحذف', 'success');
+            showAlert('تم حذف القصة', 'success');
             loadStories();
             loadStoriesForEdit();
             document.getElementById('editStoryArea').classList.add('hidden');
@@ -570,10 +792,10 @@
             database.ref('admins').on('value', (snapshot) => {
                 const admins = snapshot.val();
                 const adminsList = document.getElementById('adminsList');
-                adminsList.innerHTML = '<h4>المشرفين الحاليين:</h4>';
+                adminsList.innerHTML = '<h4><i class="fas fa-users"></i> المشرفين الحاليين:</h4>';
                 if (admins) {
                     for (const [email] of Object.entries(admins)) {
-                        adminsList.innerHTML += `<div class="user-item">📧 ${email.replace(/,/g, '.')}</div>`;
+                        adminsList.innerHTML += `<div class="user-item"><i class="fas fa-user-shield"></i> ${email.replace(/,/g, '.')}</div>`;
                     }
                 } else {
                     adminsList.innerHTML += '<p>لا يوجد مشرفين</p>';
@@ -583,36 +805,35 @@
 
         async function makeAdmin() {
             const email = document.getElementById('adminUserEmail').value;
-            if (!email) { showAlert('الرجاء إدخال البريد', 'error'); return; }
+            if (!email) { showAlert('الرجاء إدخال البريد الإلكتروني', 'error'); return; }
             await database.ref('admins/' + email.replace(/\./g, ',')).set(true);
-            showAlert('تم التعيين', 'success');
+            showAlert('تم تعيين المستخدم كأدمن', 'success');
             document.getElementById('adminUserEmail').value = '';
         }
 
         async function removeAdmin() {
             const email = document.getElementById('adminUserEmail').value;
-            if (!email) { showAlert('الرجاء إدخال البريد', 'error'); return; }
+            if (!email) { showAlert('الرجاء إدخال البريد الإلكتروني', 'error'); return; }
             await database.ref('admins/' + email.replace(/\./g, ',')).remove();
-            showAlert('تم الإزالة', 'success');
+            showAlert('تم إزالة الأدمن', 'success');
             document.getElementById('adminUserEmail').value = '';
         }
 
         function showAlert(message, type) {
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert alert-${type}`;
-            alertDiv.innerText = message;
+            alertDiv.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
             document.querySelector('#app').prepend(alertDiv);
             setTimeout(() => alertDiv.remove(), 3000);
         }
 
-        // إضافة قصة افتراضية
         async function addDefaultStory() {
             const storiesRef = await database.ref('stories').once('value');
             if (!storiesRef.exists()) {
                 database.ref('stories/story1').set({
-                    title: "القصة الأولى",
-                    topic: "مرحباً بك",
-                    content: "هذه هي قصتك الأولى.\n\nاستمتع بالقراءة!",
+                    title: "بداية الرحلة",
+                    topic: "قصة البداية",
+                    content: "مرحباً بك في منصة رواية.\n\nهذه هي قصتك الأولى.\n\nيمكنك قراءتها والاستمتاع بها.\n\nالأدمن فقط هو من يستطيع إضافة وتعديل القصص.\n\nاستمتع برحلتك الأدبية!",
                     lastEdited: Date.now(),
                     editedBy: "system"
                 });
