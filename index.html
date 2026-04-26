@@ -2,784 +2,617 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>منصة تعليمية متكاملة | أكاديمية النجاح</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <title>الأسد الملكي - 4K Ultra Realistic</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            background: #0a0a0a;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
         }
 
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: rgba(255,255,255,0.95);
-            border-radius: 30px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            overflow: hidden;
-            min-height: 90vh;
-        }
-
-        .header {
-            background: #2d3748;
-            color: white;
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: rgba(255,255,255,0.1);
-            padding: 8px 20px;
-            border-radius: 50px;
-        }
-
-        .btn-logout {
-            background: #e53e3e;
-            border: none;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .btn-logout:hover {
-            background: #c53030;
-            transform: scale(1.05);
-        }
-
-        .main-content {
-            padding: 30px;
-        }
-
-        .form-container {
-            max-width: 500px;
-            margin: 50px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-
-        .form-container h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #2d3748;
-        }
-
-        input, select {
             width: 100%;
-            padding: 12px 15px;
-            margin: 10px 0;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .toggle-form {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .toggle-form span {
-            color: #667eea;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .course-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: 0.3s;
-            cursor: pointer;
-        }
-
-        .course-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-
-        .course-image {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            height: 150px;
+            height: 100%;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 60px;
+            align-items: center;
+            position: relative;
         }
 
-        .course-info {
-            padding: 20px;
-        }
-
-        .course-title {
-            font-size: 22px;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .course-price {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-            margin: 10px 0;
-        }
-
-        .purchase-btn {
-            background: #48bb78;
-            width: auto;
-            padding: 8px 20px;
-            font-size: 14px;
-        }
-
-        .watch-btn {
-            background: #ed8936;
-            width: auto;
-            padding: 8px 20px;
-            font-size: 14px;
-        }
-
-        .admin-panel {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 20px;
-            margin-bottom: 30px;
-        }
-
-        .admin-section {
-            margin-bottom: 30px;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 20px;
-        }
-
-        .students-table {
+        .image-wrapper {
+            position: relative;
             width: 100%;
-            overflow-x: auto;
+            height: 100%;
+            overflow: hidden;
+            touch-action: none;
         }
 
-        table {
+        .lion-image {
             width: 100%;
-            border-collapse: collapse;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            filter: contrast(1.15) saturate(1.25) brightness(1.05) sharpness(1.2);
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+            -webkit-user-drag: none;
+            user-select: none;
         }
 
-        th, td {
-            padding: 12px;
-            text-align: right;
-            border-bottom: 1px solid #e2e8f0;
+        /* خصلات الشعر المتقدمة */
+        .hair-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
         }
 
-        th {
-            background: #f7fafc;
-            font-weight: 800;
+        .hair-strand {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.7;
+            filter: blur(0.5px);
+            border-radius: 50%;
+            transform-origin: top center;
+            will-change: transform;
         }
 
-        .admin-btn {
-            width: auto;
-            padding: 5px 12px;
+        /* خصلات الجانب الأيسر */
+        .strand-l1 {
+            top: 18%;
+            left: 5%;
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #8B4513 30%, #D2691E 70%, transparent 100%);
+            animation: swayWind1 2.5s ease-in-out infinite;
+        }
+
+        .strand-l2 {
+            top: 28%;
+            left: 2%;
+            width: 100px;
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent 0%, #CD853F 40%, #DEB887 80%, transparent 100%);
+            animation: swayWind2 3.2s ease-in-out infinite;
+            animation-delay: 0.5s;
+        }
+
+        .strand-l3 {
+            top: 38%;
+            left: 8%;
+            width: 90px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #A0522D 30%, #D2691E 60%, transparent 100%);
+            animation: swayWind3 2.8s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+
+        .strand-l4 {
+            top: 48%;
+            left: 3%;
+            width: 85px;
+            height: 1.8px;
+            background: linear-gradient(90deg, transparent 0%, #8B4513 35%, #CD853F 75%, transparent 100%);
+            animation: swayWind1 3.5s ease-in-out infinite;
+            animation-delay: 1.5s;
+        }
+
+        .strand-l5 {
+            top: 58%;
+            left: 6%;
+            width: 75px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #D2691E 40%, #DEB887 80%, transparent 100%);
+            animation: swayWind2 2.2s ease-in-out infinite;
+            animation-delay: 0.8s;
+        }
+
+        /* خصلات الجانب الأيمن */
+        .strand-r1 {
+            top: 20%;
+            right: 5%;
+            width: 85px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #8B4513 30%, #D2691E 70%, transparent 100%);
+            animation: swayWind1 2.7s ease-in-out infinite reverse;
+        }
+
+        .strand-r2 {
+            top: 30%;
+            right: 2%;
+            width: 95px;
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent 0%, #CD853F 40%, #DEB887 80%, transparent 100%);
+            animation: swayWind3 3.0s ease-in-out infinite reverse;
+            animation-delay: 0.6s;
+        }
+
+        .strand-r3 {
+            top: 40%;
+            right: 7%;
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #A0522D 30%, #D2691E 60%, transparent 100%);
+            animation: swayWind2 3.3s ease-in-out infinite reverse;
+            animation-delay: 1.2s;
+        }
+
+        .strand-r4 {
+            top: 50%;
+            right: 4%;
+            width: 90px;
+            height: 1.8px;
+            background: linear-gradient(90deg, transparent 0%, #8B4513 35%, #CD853F 75%, transparent 100%);
+            animation: swayWind1 2.9s ease-in-out infinite reverse;
+            animation-delay: 0.4s;
+        }
+
+        .strand-r5 {
+            top: 60%;
+            right: 6%;
+            width: 70px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #D2691E 40%, #DEB887 80%, transparent 100%);
+            animation: swayWind3 2.6s ease-in-out infinite reverse;
+            animation-delay: 1.8s;
+        }
+
+        /* خصلات إضافية للعمق */
+        .strand-deep1 {
+            top: 25%;
+            left: 12%;
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139,69,19,0.5), transparent);
+            animation: swayWind2 4s ease-in-out infinite;
+            opacity: 0.4;
+        }
+
+        .strand-deep2 {
+            top: 45%;
+            right: 10%;
+            width: 65px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(205,133,63,0.5), transparent);
+            animation: swayWind1 3.8s ease-in-out infinite reverse;
+            opacity: 0.4;
+        }
+
+        @keyframes swayWind1 {
+            0%, 100% { transform: rotate(0deg) translateX(0) scaleX(1); }
+            25% { transform: rotate(4deg) translateX(8px) scaleX(1.05); }
+            50% { transform: rotate(0deg) translateX(0) scaleX(1); }
+            75% { transform: rotate(-3deg) translateX(-6px) scaleX(0.95); }
+        }
+
+        @keyframes swayWind2 {
+            0%, 100% { transform: rotate(0deg) translateX(0) scaleY(1); }
+            33% { transform: rotate(-5deg) translateX(-10px) scaleY(1.1); }
+            66% { transform: rotate(3deg) translateX(6px) scaleY(0.9); }
+        }
+
+        @keyframes swayWind3 {
+            0%, 100% { transform: rotate(0deg) translateX(0); }
+            20% { transform: rotate(6deg) translateX(12px); }
+            40% { transform: rotate(-2deg) translateX(-4px); }
+            60% { transform: rotate(4deg) translateX(8px); }
+            80% { transform: rotate(-5deg) translateX(-10px); }
+        }
+
+        /* تأثير الضباب والإضاءة */
+        .atmosphere {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(255,200,100,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(255,150,50,0.08) 0%, transparent 40%);
+            mix-blend-mode: overlay;
+            animation: lightShift 8s ease-in-out infinite;
+        }
+
+        @keyframes lightShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* جسيمات عائمة */
+        .particle {
+            position: absolute;
+            background: rgba(255, 220, 150, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% { opacity: 1; transform: scale(1); }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-10vh) translateX(30px) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* معلومات */
+        .info-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 15px;
+            color: rgba(255, 255, 255, 0.9);
             font-size: 12px;
-            margin: 2px;
-            display: inline-block;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px 18px;
+            border-radius: 12px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            max-width: 200px;
         }
 
-        .btn-danger {
-            background: #e53e3e;
+        .info-overlay h1 {
+            font-size: 18px;
+            margin-bottom: 4px;
+            color: #FFD700;
+            text-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
         }
 
-        .btn-warning {
-            background: #ed8936;
+        .info-overlay p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
+        .quality-badge {
+            position: absolute;
+            top: 20px;
+            right: 15px;
+            background: linear-gradient(135deg, #FFD700, #FF8C00);
+            color: #000;
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 12px;
             font-weight: bold;
+            font-size: 13px;
+            z-index: 10;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
         }
 
-        .badge-blocked {
-            background: #fed7d7;
-            color: #742a2a;
+        .touch-hint {
+            position: absolute;
+            bottom: 20px;
+            right: 15px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 11px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 14px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        .badge-active {
-            background: #c6f6d5;
-            color: #22543d;
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
 
-        .loading {
-            text-align: center;
-            padding: 50px;
-            font-size: 20px;
+        /* تأثير التنفس */
+        .breathing {
+            animation: breathe 5s ease-in-out infinite;
         }
 
-        @media (max-width: 768px) {
-            .courses-grid {
-                grid-template-columns: 1fr;
-            }
-            .header {
-                flex-direction: column;
-            }
-            table {
-                font-size: 12px;
-            }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        /* تأثير اللمعان على العيون */
+        .eye-glow {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 8%;
+            background: radial-gradient(ellipse, rgba(255,215,0,0.1) 0%, transparent 70%);
+            pointer-events: none;
+            animation: eyeShine 4s ease-in-out infinite;
+            filter: blur(8px);
+        }
+
+        @keyframes eyeShine {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        /* شريط التحميل */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-text {
+            color: #FFD700;
+            font-size: 18px;
+            animation: loaderPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loaderPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
     </style>
 </head>
 <body>
-
-<div class="container" id="app">
-    <div class="header">
-        <div class="logo">📚 منصة تعليمية | أكاديمية النجاح</div>
-        <div id="userHeaderInfo"></div>
+    <!-- شاشة التحميل -->
+    <div class="loader" id="loader">
+        <div class="loader-text">جاري تحميل الأسد الملكي...</div>
     </div>
-    <div class="main-content" id="mainContent">
-        <div class="loading">⏳ جاري تحميل المنصة...</div>
+
+    <div class="container">
+        <div class="image-wrapper" id="wrapper">
+            <img src="https://img.freepik.com/premium-photo/strength-beauty-lion-captured-8k-realistic-detail_1110513-11596.jpg?semt=ais_hybrid&w=1920&q=95" 
+                 alt="أسد ملكي بتفاصيل فائقة الواقعية" 
+                 class="lion-image breathing" 
+                 id="lionImg"
+                 loading="eager">
+            
+            <!-- خصلات الشعر -->
+            <div class="hair-container" id="hairContainer">
+                <div class="hair-strand strand-l1"></div>
+                <div class="hair-strand strand-l2"></div>
+                <div class="hair-strand strand-l3"></div>
+                <div class="hair-strand strand-l4"></div>
+                <div class="hair-strand strand-l5"></div>
+                <div class="hair-strand strand-r1"></div>
+                <div class="hair-strand strand-r2"></div>
+                <div class="hair-strand strand-r3"></div>
+                <div class="hair-strand strand-r4"></div>
+                <div class="hair-strand strand-r5"></div>
+                <div class="hair-strand strand-deep1"></div>
+                <div class="hair-strand strand-deep2"></div>
+            </div>
+            
+            <!-- لمعان العيون -->
+            <div class="eye-glow"></div>
+            
+            <!-- طبقة الجو -->
+            <div class="atmosphere"></div>
+            
+            <!-- معلومات -->
+            <div class="info-overlay">
+                <h1>الأسد الملكي</h1>
+                <p>صورة فائقة الوضوح 4K مع تأثيرات حركية واقعية وتفاعل لمس</p>
+            </div>
+            
+            <div class="quality-badge">4K ULTRA HD</div>
+            <div class="touch-hint" id="touchHint">المس الشاشة للتفاعل</div>
+        </div>
     </div>
-</div>
 
-<!-- Tawk.to Script -->
-<script type="text/javascript">
-    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-    (function () {
-        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-        s1.async = true;
-        s1.src = 'https://embed.tawk.to/69ee0742ee63861c347c9c08/default';
-        s1.charset = 'UTF-8';
-        s1.setAttribute('crossorigin', '*');
-        s0.parentNode.insertBefore(s1, s0);
-    })();
-</script>
+    <script>
+        // إخفاء شاشة التحميل
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1000);
+        });
 
-<script>
-    // ------------------- Firebase Configuration -------------------
-    const firebaseConfig = {
-        apiKey: "AIzaSyDQs1-RAW00so7ouBbRsCvEdwXQfWd1izU",
-        authDomain: "tryyyyy-23508.firebaseapp.com",
-        projectId: "tryyyyy-23508",
-        storageBucket: "tryyyyy-23508.firebasestorage.app",
-        messagingSenderId: "913680144851",
-        appId: "1:913680144851:web:54c6b76e6634c603fc3726",
-        measurementId: "G-99QRMSG8Z6"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-
-    // ------------------- Global Variables -------------------
-    let currentUser = null;
-    let studentsRef = null;
-    let purchasesRef = null;
-
-    // تعريف الكورسات لكل صف
-    const grades = {
-        "3اعدادي": {
-            name: "الصف الثالث الإعدادي",
-            courses: [
-                { id: "c1", name: "اللغة العربية", price: 150, image: "📖", branches: 5, videosPerBranch: 20 },
-                { id: "c2", name: "الرياضيات", price: 150, image: "🧮", branches: 5, videosPerBranch: 20 },
-                { id: "c3", name: "العلوم", price: 150, image: "🔬", branches: 5, videosPerBranch: 20 },
-                { id: "c4", name: "الدراسات الاجتماعية", price: 150, image: "🌍", branches: 5, videosPerBranch: 20 },
-                { id: "c5", name: "اللغة الإنجليزية", price: 150, image: "🇬🇧", branches: 5, videosPerBranch: 20 }
-            ]
-        },
-        "1ثانوي": {
-            name: "الصف الأول الثانوي",
-            courses: [
-                { id: "c6", name: "اللغة العربية", price: 180, image: "📖", branches: 5, videosPerBranch: 20 },
-                { id: "c7", name: "الرياضيات", price: 180, image: "🧮", branches: 5, videosPerBranch: 20 },
-                { id: "c8", name: "الفيزياء", price: 180, image: "⚡", branches: 5, videosPerBranch: 20 },
-                { id: "c9", name: "الكيمياء", price: 180, image: "🧪", branches: 5, videosPerBranch: 20 },
-                { id: "c10", name: "الأحياء", price: 180, image: "🧬", branches: 5, videosPerBranch: 20 }
-            ]
-        },
-        "2ثانوي": {
-            name: "الصف الثاني الثانوي",
-            courses: [
-                { id: "c11", name: "اللغة العربية", price: 200, image: "📖", branches: 5, videosPerBranch: 20 },
-                { id: "c12", name: "الرياضيات", price: 200, image: "🧮", branches: 5, videosPerBranch: 20 },
-                { id: "c13", name: "الفيزياء", price: 200, image: "⚡", branches: 5, videosPerBranch: 20 },
-                { id: "c14", name: "الكيمياء", price: 200, image: "🧪", branches: 5, videosPerBranch: 20 },
-                { id: "c15", name: "التاريخ", price: 200, image: "📜", branches: 5, videosPerBranch: 20 }
-            ]
-        }
-    };
-
-    // توليد كود فريد
-    function generateUniqueCode() {
-        return 'STU' + Math.floor(100000 + Math.random() * 900000);
-    }
-
-    // إنشاء حساب أدمن تلقائي إذا لم يوجد
-    async function ensureAdminAccount() {
-        const adminCheck = await database.ref('students').orderByChild('role').equalTo('admin').once('value');
-        if (!adminCheck.exists()) {
-            const adminId = Date.now();
-            await database.ref('students/' + adminId).set({
-                id: adminId,
-                name: "Administrator",
-                password: "admin123",
-                email: "admin@platform.com",
-                role: "admin",
-                isBlocked: false,
-                code: "ADMIN001",
-                phone: "01000000000",
-                grade: "1ثانوي",
-                createdAt: new Date().toISOString()
-            });
-        }
-    }
-
-    // تسجيل طالب جديد
-    async function registerStudent(name, password, grade, phone, email) {
-        const emailCheck = await database.ref('students').orderByChild('email').equalTo(email).once('value');
-        if (emailCheck.exists()) {
-            alert("البريد الإلكتروني موجود مسبقاً!");
-            return false;
-        }
-        const code = generateUniqueCode();
-        const newId = Date.now();
-        const studentData = {
-            id: newId,
-            name,
-            password,
-            grade,
-            phone,
-            email,
-            code,
-            isBlocked: false,
-            role: "student",
-            createdAt: new Date().toISOString()
-        };
-        await database.ref('students/' + newId).set(studentData);
-        alert(`✅ تم إنشاء حساب بنجاح!\n🎫 كودك الفريد هو: ${code}\nاحتفظ به للرجوع إليه.`);
-        return true;
-    }
-
-    // تسجيل الدخول
-    async function loginStudent(emailOrCode, password) {
-        let snapshot = await database.ref('students').orderByChild('email').equalTo(emailOrCode).once('value');
-        if (!snapshot.exists()) {
-            snapshot = await database.ref('students').orderByChild('code').equalTo(emailOrCode).once('value');
-        }
-        
-        if (snapshot.exists()) {
-            let student = null;
-            snapshot.forEach(child => { student = child.val(); });
-            if (student.password === password && !student.isBlocked) {
-                currentUser = student;
-                localStorage.setItem('currentUserId', currentUser.id);
-                alert(`مرحباً ${student.name}`);
-                renderApp();
-                return true;
-            } else if (student.isBlocked) {
-                alert("🚫 حسابك محظور! تواصل مع الإدارة.");
-                return false;
-            } else {
-                alert("كلمة المرور غير صحيحة!");
-                return false;
+        // إنشاء جسيمات عائمة
+        function createParticles() {
+            const wrapper = document.getElementById('wrapper');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 2.5 + 0.5;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 8 + 8) + 's';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                wrapper.appendChild(particle);
             }
         }
-        alert("❌ لم يتم العثور على حساب بهذه البيانات");
-        return false;
-    }
 
-    // شراء كورس
-    async function purchaseCourse(courseId, price) {
-        if (!currentUser) return;
-        const purchaseCheck = await database.ref(`purchases/${currentUser.id}/${courseId}`).once('value');
-        if (purchaseCheck.exists()) {
-            alert("你已经购买了该课程!");
-            return;
-        }
-        if (confirm(`💰 شراء الكورس بسعر ${price} جنيه؟ (محاكاة دفع)`)) {
-            await database.ref(`purchases/${currentUser.id}/${courseId}`).set({
-                courseId: courseId,
-                purchasedAt: new Date().toISOString(),
-                price: price
-            });
-            alert("✅ تم شراء الكورس بنجاح! يمكنك الآن مشاهدة المحتوى.");
-            renderApp();
-        }
-    }
+        // متغيرات التفاعل
+        const wrapper = document.getElementById('wrapper');
+        const lionImg = document.getElementById('lionImg');
+        const hairContainer = document.getElementById('hairContainer');
+        const touchHint = document.getElementById('touchHint');
+        let isTouching = false;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let currentX = 0;
+        let currentY = 0;
 
-    // إضافة طالب بواسطة الأدمن (ريل تايم)
-    async function adminAddStudent(name, password, grade, phone, email) {
-        const emailCheck = await database.ref('students').orderByChild('email').equalTo(email).once('value');
-        if (emailCheck.exists()) {
-            alert("البريد موجود مسبقاً");
-            return false;
-        }
-        const code = generateUniqueCode();
-        const newId = Date.now();
-        await database.ref('students/' + newId).set({
-            id: newId, name, password, grade, phone, email, code,
-            isBlocked: false, role: "student", createdAt: new Date().toISOString()
-        });
-        alert(`✅ تم إضافة الطالب ${name} بنجاح، كود الطالب: ${code}`);
-        return true;
-    }
+        // تفاعل اللمس (Touch)
+        wrapper.addEventListener('touchstart', (e) => {
+            isTouching = true;
+            touchHint.style.opacity = '0';
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            
+            // اهتزاز خفيف (إذا كان مدعوماً)
+            if (navigator.vibrate) navigator.vibrate(10);
+        }, { passive: true });
 
-    // حظر/فك حظر طالب
-    async function toggleBlockStudent(studentId) {
-        const studentRef = database.ref(`students/${studentId}`);
-        const snapshot = await studentRef.once('value');
-        const student = snapshot.val();
-        if (student) {
-            await studentRef.update({ isBlocked: !student.isBlocked });
-            if (currentUser && currentUser.id == studentId && !student.isBlocked) {
-                // تم حظر المستخدم الحالي
-                currentUser = null;
-                localStorage.removeItem('currentUserId');
-                renderApp();
-                alert("🚫 تم حظر حسابك، تواصل مع الإدارة.");
-            } else {
-                alert(`✅ تم ${student.isBlocked ? 'فك الحظر عن' : 'حظر'} الطالب`);
-            }
-        }
-    }
-
-    // فتح كورس لطالب معين
-    async function adminUnlockCourse(studentId, courseId) {
-        const exists = await database.ref(`purchases/${studentId}/${courseId}`).once('value');
-        if (!exists.exists()) {
-            await database.ref(`purchases/${studentId}/${courseId}`).set({
-                courseId: courseId,
-                purchasedAt: new Date().toISOString(),
-                price: 0,
-                unlockedByAdmin: true
-            });
-            alert("✅ تم فتح الكورس للطالب بنجاح!");
-        } else {
-            alert("⚠️ الكورس مفتوح بالفعل!");
-        }
-    }
-
-    // تعديل بيانات الطالب
-    async function adminEditStudent(studentId, newName, newPhone, newGrade) {
-        await database.ref(`students/${studentId}`).update({
-            name: newName,
-            phone: newPhone,
-            grade: newGrade
-        });
-        alert("✅ تم تحديث بيانات الطالب");
-        if (currentUser && currentUser.id == studentId) {
-            currentUser.name = newName;
-            currentUser.phone = newPhone;
-            currentUser.grade = newGrade;
-            localStorage.setItem('currentUserId', currentUser.id);
-        }
-    }
-
-    // مشاهدة الكورس
-    window.watchCourse = async function(courseId, courseName) {
-        if (!currentUser) return;
-        const purchaseCheck = await database.ref(`purchases/${currentUser.id}/${courseId}`).once('value');
-        if (!purchaseCheck.exists()) {
-            alert("يجب شراء الكورس أولاً!");
-            return;
-        }
-        let videoHTML = `<h3>🎬 ${courseName} - محتوى تعليمي (فيديوهات نموذجية)</h3>`;
-        videoHTML += `<div style="display:grid; gap:20px;">`;
-        for (let i = 1; i <= 5; i++) {
-            videoHTML += `
-                <div style="background:#f7fafc; padding:15px; border-radius:15px;">
-                    <h4>📘 الفصل ${i}</h4>
-                    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:10px;">
-            `;
-            for (let v = 1; v <= 5; v++) {
-                videoHTML += `
-                    <div>
-                        <iframe width="100%" height="180" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=example" title="فيديو تعليمي" frameborder="0" allowfullscreen></iframe>
-                        <p style="margin-top:5px">📹 فيديو ${v} : شرح الدرس</p>
-                    </div>
+        wrapper.addEventListener('touchmove', (e) => {
+            if (!isTouching) return;
+            e.preventDefault();
+            
+            const touch = e.touches[0];
+            const deltaX = (touch.clientX - touchStartX) / 10;
+            const deltaY = (touch.clientY - touchStartY) / 10;
+            
+            currentX = deltaX;
+            currentY = deltaY;
+            
+            // تحريك الصورة
+            lionImg.style.transform = `scale(1.1) translate(${-deltaX}px, ${-deltaY}px)`;
+            
+            // تحريك خصلات الشعر بشكل مكثف
+            const strands = document.querySelectorAll('.hair-strand');
+            strands.forEach((strand, index) => {
+                const intensity = (index % 2 === 0) ? 1.5 : -1.5;
+                const delay = index * 0.1;
+                strand.style.transform = `
+                    rotate(${deltaX * intensity}deg) 
+                    translateX(${deltaX * 3}px) 
+                    translateY(${deltaY * 2}px)
+                    scaleX(${1 + Math.abs(deltaX) * 0.01})
                 `;
-            }
-            videoHTML += `</div></div>`;
-        }
-        videoHTML += `</div><button onclick="renderApp()" class="btn-logout" style="margin-top:20px;">⬅️ رجوع للكورسات</button>`;
-        document.getElementById("mainContent").innerHTML = videoHTML;
-    };
-
-    // عرض الكورسات للطالب
-    async function renderStudentCourses() {
-        if (!currentUser || currentUser.role !== 'student') return "<div class='loading'>📚 جاري تحميل الكورسات...</div>";
-        const gradeData = grades[currentUser.grade];
-        if (!gradeData) return "<p>⚠️ لم يتم تعيين صف لك</p>";
-        
-        const purchasesSnapshot = await database.ref(`purchases/${currentUser.id}`).once('value');
-        const purchasedCourses = purchasesSnapshot.val() || {};
-        
-        let html = `<h2>📚 كورسات ${gradeData.name}</h2><div class="courses-grid">`;
-        gradeData.courses.forEach(course => {
-            const isPurchased = purchasedCourses[course.id];
-            html += `
-                <div class="course-card">
-                    <div class="course-image">${course.image}</div>
-                    <div class="course-info">
-                        <div class="course-title">${course.name}</div>
-                        <div class="course-price">${course.price} جنيه</div>
-                        <div>📁 ${course.branches} فصول | 🎥 ${course.videosPerBranch} فيديو لكل فصل</div>
-                        ${isPurchased ? `<button class="watch-btn" onclick="watchCourse('${course.id}','${course.name}')">▶️ مشاهدة الكورس</button>` : `<button class="purchase-btn" onclick="purchaseCourse('${course.id}',${course.price})">💰 شراء الكورس</button>`}
-                    </div>
-                </div>
+                strand.style.transition = `transform ${0.1 + delay}s ease-out`;
+            });
+            
+            // تأثير الإضاءة الديناميكية
+            const atmosphere = document.querySelector('.atmosphere');
+            const lightX = (touch.clientX / window.innerWidth) * 100;
+            const lightY = (touch.clientY / window.innerHeight) * 100;
+            atmosphere.style.background = `
+                radial-gradient(ellipse at ${lightX}% ${lightY}%, rgba(255,200,100,0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at ${100-lightX}% ${100-lightY}%, rgba(255,150,50,0.1) 0%, transparent 40%)
             `;
+        }, { passive: false });
+
+        wrapper.addEventListener('touchend', () => {
+            isTouching = false;
+            
+            // العودة التدريجية للوضع الطبيعي
+            lionImg.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            lionImg.style.transform = 'scale(1) translate(0, 0)';
+            
+            const strands = document.querySelectorAll('.hair-strand');
+            strands.forEach((strand, index) => {
+                strand.style.transition = `transform ${0.5 + index * 0.05}s ease-out`;
+                strand.style.transform = 'rotate(0deg) translateX(0) translateY(0) scaleX(1)';
+            });
+            
+            setTimeout(() => {
+                lionImg.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                strands.forEach(strand => {
+                    strand.style.transition = '';
+                    strand.style.transform = '';
+                });
+            }, 800);
         });
-        html += `</div>`;
-        return html;
-    }
 
-    // لوحة تحكم الأدمن (مع إضافة طالب)
-    async function renderAdminPanel() {
-        const studentsSnapshot = await database.ref('students').once('value');
-        const allStudents = [];
-        studentsSnapshot.forEach(child => { allStudents.push(child.val()); });
-        
-        let html = `
-            <div class="admin-panel">
-                <h2><i class="fas fa-user-shield"></i> 👑 لوحة تحكم الأدمن - ريل تايم</h2>
-                <div class="admin-section">
-                    <h3>➕ إضافة طالب جديد</h3>
-                    <input type="text" id="adminName" placeholder="الاسم الكامل">
-                    <input type="password" id="adminPassword" placeholder="الرقم السري">
-                    <select id="adminGrade">
-                        <option value="3اعدادي">3 إعدادي</option>
-                        <option value="1ثانوي">1 ثانوي</option>
-                        <option value="2ثانوي">2 ثانوي</option>
-                    </select>
-                    <input type="text" id="adminPhone" placeholder="رقم الهاتف">
-                    <input type="email" id="adminEmail" placeholder="البريد الإلكتروني">
-                    <button onclick="addStudentByAdmin()">➕ إضافة طالب</button>
-                </div>
-                <div class="admin-section">
-                    <h3>📋 قائمة الطلاب (${allStudents.length})</h3>
-                    <div class="students-table">
-                        <table>
-                            <thead><tr><th>الاسم</th><th>الكود</th><th>الصف</th><th>الهاتف</th><th>البريد</th><th>الحالة</th><th>إجراءات</th></tr></thead>
-                            <tbody>
-                                ${allStudents.filter(s => s.role !== 'admin').map(s => `
-                                    <tr>
-                                        <td>${s.name}</td><td>${s.code}</td><td>${s.grade}</td><td>${s.phone}</td><td>${s.email}</td>
-                                        <td><span class="badge ${s.isBlocked ? 'badge-blocked' : 'badge-active'}">${s.isBlocked ? '🚫 محظور' : '✅ نشط'}</span></td>
-                                        <td>
-                                            <button class="admin-btn btn-danger" onclick="toggleBlockStudent(${s.id})">${s.isBlocked ? 'فك الحظر' : 'حظر'}</button>
-                                            <button class="admin-btn btn-warning" onclick="showUnlockCourse(${s.id})">🔓 فتح كورس</button>
-                                            <button class="admin-btn" onclick="showEditStudent(${s.id})">✏️ تعديل</button>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        `;
-        return html;
-    }
+        // تفاعل الماوس (للأجهزة المكتبية)
+        wrapper.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.clientX) / 30;
+            const y = (window.innerHeight / 2 - e.clientY) / 30;
+            
+            lionImg.style.transform = `scale(1.05) translate(${x}px, ${y}px)`;
+            
+            const strands = document.querySelectorAll('.hair-strand');
+            strands.forEach((strand, index) => {
+                const intensity = (index % 2 === 0) ? 1.2 : -1.2;
+                strand.style.transform = `
+                    rotate(${x * intensity}deg) 
+                    translateX(${x * 2}px)
+                    scaleX(${1 + Math.abs(x) * 0.005})
+                `;
+            });
+        });
 
-    window.addStudentByAdmin = async function() {
-        const name = document.getElementById('adminName')?.value;
-        const password = document.getElementById('adminPassword')?.value;
-        const grade = document.getElementById('adminGrade')?.value;
-        const phone = document.getElementById('adminPhone')?.value;
-        const email = document.getElementById('adminEmail')?.value;
-        if (!name || !password || !grade || !phone || !email) {
-            alert("يرجى ملء جميع الحقول");
-            return;
-        }
-        await adminAddStudent(name, password, grade, phone, email);
-        renderApp();
-    };
+        wrapper.addEventListener('mouseleave', () => {
+            lionImg.style.transform = 'scale(1) translate(0, 0)';
+            const strands = document.querySelectorAll('.hair-strand');
+            strands.forEach(strand => {
+                strand.style.transform = '';
+            });
+        });
 
-    window.showUnlockCourse = async function(studentId) {
-        const studentSnap = await database.ref(`students/${studentId}`).once('value');
-        const student = studentSnap.val();
-        const courses = grades[student?.grade]?.courses || [];
-        const courseId = prompt(`اختر ID الكورس لفتحه:\n${courses.map(c => `${c.id}: ${c.name}`).join('\n')}`);
-        if (courseId) adminUnlockCourse(studentId, courseId);
-    };
-
-    window.showEditStudent = async function(studentId) {
-        const studentSnap = await database.ref(`students/${studentId}`).once('value');
-        const student = studentSnap.val();
-        const newName = prompt("الاسم الجديد:", student.name);
-        const newPhone = prompt("رقم الهاتف الجديد:", student.phone);
-        const newGrade = prompt("الصف الجديد (3اعدادي / 1ثانوي / 2ثانوي):", student.grade);
-        if (newName && newPhone && newGrade) await adminEditStudent(studentId, newName, newPhone, newGrade);
-        renderApp();
-    };
-
-    // تسجيل الخروج
-    function logout() {
-        currentUser = null;
-        localStorage.removeItem('currentUserId');
-        renderApp();
-    }
-
-    // واجهة تسجيل الدخول
-    function renderAuth() {
-        return `
-            <div class="form-container">
-                <h2>🔐 تسجيل الدخول</h2>
-                <input type="text" id="loginEmail" placeholder="البريد الإلكتروني أو الكود">
-                <input type="password" id="loginPassword" placeholder="الرقم السري">
-                <button onclick="handleLogin()">دخول</button>
-                <div class="toggle-form"><span onclick="showRegister()">✨ إنشاء حساب جديد</span></div>
-                <hr style="margin:20px 0">
-                <h4>👑 حساب الأدمن التجريبي</h4>
-                <p>البريد: admin@platform.com | كلمة السر: admin123</p>
-                <button onclick="adminLogin()">تسجيل دخول كأدمن</button>
-            </div>
-        `;
-    }
-
-    function renderRegister() {
-        return `
-            <div class="form-container">
-                <h2>📝 إنشاء حساب جديد</h2>
-                <input type="text" id="regName" placeholder="الاسم الكامل">
-                <input type="password" id="regPassword" placeholder="الرقم السري">
-                <select id="regGrade">
-                    <option value="3اعدادي">الصف الثالث الإعدادي</option>
-                    <option value="1ثانوي">الصف الأول الثانوي</option>
-                    <option value="2ثانوي">الصف الثاني الثانوي</option>
-                </select>
-                <input type="tel" id="regPhone" placeholder="رقم الهاتف">
-                <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
-                <button onclick="handleRegister()">إنشاء حساب</button>
-                <div class="toggle-form"><span onclick="showLogin()">🔐 لدي حساب بالفعل</span></div>
-            </div>
-        `;
-    }
-
-    window.handleLogin = async function() {
-        const email = document.getElementById('loginEmail').value;
-        const pwd = document.getElementById('loginPassword').value;
-        await loginStudent(email, pwd);
-    };
-    window.handleRegister = async function() {
-        const name = document.getElementById('regName').value;
-        const pwd = document.getElementById('regPassword').value;
-        const grade = document.getElementById('regGrade').value;
-        const phone = document.getElementById('regPhone').value;
-        const email = document.getElementById('regEmail').value;
-        if (!name || !pwd || !grade || !phone || !email) {
-            alert("جميع الحقول مطلوبة");
-            return;
-        }
-        await registerStudent(name, pwd, grade, phone, email);
-        showLogin();
-    };
-    window.adminLogin = async function() {
-        await ensureAdminAccount();
-        const snapshot = await database.ref('students').orderByChild('email').equalTo('admin@platform.com').once('value');
-        let admin = null;
-        snapshot.forEach(child => { admin = child.val(); });
-        if (admin) {
-            currentUser = admin;
-            localStorage.setItem('currentUserId', currentUser.id);
-            renderApp();
-        }
-    };
-    window.showRegister = function() { renderApp('register'); };
-    window.showLogin = function() { renderApp('login'); };
-    window.toggleBlockStudent = toggleBlockStudent;
-    window.logout = logout;
-
-    async function renderApp(page = null) {
-        const storedId = localStorage.getItem('currentUserId');
-        if (storedId && !currentUser) {
-            const snap = await database.ref(`students/${storedId}`).once('value');
-            if (snap.exists()) currentUser = snap.val();
-        }
-        
-        const headerUser = currentUser ? `<div class="user-info"><span>👋 ${currentUser.name} ${currentUser.role === 'admin' ? '(أدمن)' : ''}</span><button class="btn-logout" onclick="logout()">تسجيل خروج</button></div>` : `<div></div>`;
-        document.getElementById('userHeaderInfo').innerHTML = headerUser;
-        
-        let mainHtml = "";
-        if (!currentUser) {
-            if (page === 'register') mainHtml = renderRegister();
-            else mainHtml = renderAuth();
-        } else {
-            if (currentUser.role === 'admin') {
-                mainHtml = await renderAdminPanel() + await renderStudentCourses();
-            } else {
-                mainHtml = await renderStudentCourses();
+        // تفاعل النقر المزدوج (تكبير)
+        let lastTap = 0;
+        wrapper.addEventListener('touchend', (e) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 300 && tapLength > 0) {
+                // نقر مزدوج
+                lionImg.style.transform = 'scale(1.3)';
+                setTimeout(() => {
+                    lionImg.style.transform = 'scale(1)';
+                }, 500);
+                if (navigator.vibrate) navigator.vibrate([50, 50]);
             }
-        }
-        document.getElementById('mainContent').innerHTML = mainHtml;
-    }
+            lastTap = currentTime;
+        });
 
-    ensureAdminAccount().then(() => renderApp());
-</script>
+        // تفاعل الإمالة (Gyroscope) للهواتف
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (e) => {
+                if (isTouching) return; // لا تتداخل مع اللمس
+                
+                const tiltX = e.gamma || 0; // إمالة يمين/يسار
+                const tiltY = e.beta || 0;  // إمالة أمام/خلف
+                
+                const moveX = tiltX * 0.5;
+                const moveY = tiltY * 0.3;
+                
+                lionImg.style.transform = `scale(1.02) translate(${moveX}px, ${moveY}px)`;
+                
+                // خصلات الشعر تتأثر بالإمالة
+                const strands = document.querySelectorAll('.hair-strand');
+                strands.forEach((strand, index) => {
+                    const intensity = (index % 2 === 0) ? 0.8 : -0.8;
+                    strand.style.transform = `rotate(${tiltX * intensity}deg) translateX(${tiltX * 1.5}px)`;
+                });
+            });
+        }
+
+        // تغير الإضاءة العشوائي
+        setInterval(() => {
+            const atmosphere = document.querySelector('.atmosphere');
+            const opacity = 0.8 + Math.random() * 0.2;
+            atmosphere.style.opacity = opacity;
+        }, 3000);
+
+        // إنشاء الجسيمات
+        createParticles();
+
+        // منع التمرير الافتراضي
+        document.body.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+    </script>
 </body>
 </html>
