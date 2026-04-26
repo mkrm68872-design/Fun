@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClanVerse | منصة الكلانات المتكاملة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>ClanVerse | منصة الكلانات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style>
         * {
@@ -15,44 +15,56 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0B0F1C 0%, #1A1F2E 100%);
+            background: #FFFFFF;
             min-height: 100vh;
-            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1E2436;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #F59E0B;
-            border-radius: 10px;
+        /* Animated Background Waves */
+        .wave-bg {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
         }
 
-        /* Main Container */
+        .wave-bg svg {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%;
+            animation: waveAnimation 20s ease-in-out infinite;
+        }
+
+        @keyframes waveAnimation {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(-20px) translateY(10px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        /* Container */
         .app-container {
-            max-width: 1600px;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 20px;
         }
 
         /* Header */
         .header {
-            background: rgba(30, 36, 54, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 16px 28px;
+            background: #FFFFFF;
+            border-bottom: 2px solid #E5E7EB;
+            padding: 16px 24px;
             margin-bottom: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 16px;
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .logo-area {
@@ -64,86 +76,79 @@
         .logo-icon {
             width: 45px;
             height: 45px;
-            background: linear-gradient(135deg, #F59E0B, #D97706);
-            border-radius: 14px;
+            background: #000000;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 24px;
+            color: white;
         }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
-            background: linear-gradient(135deg, #F59E0B, #FBBF24);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: #000000;
         }
 
         .user-profile {
             display: flex;
             align-items: center;
             gap: 16px;
-            background: #0B0F1C;
+            background: #F9FAFB;
             padding: 8px 20px 8px 16px;
-            border-radius: 60px;
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 50px;
+            border: 1px solid #E5E7EB;
         }
 
         .user-avatar {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            border: 2px solid #F59E0B;
+            border: 2px solid #000000;
             object-fit: cover;
-        }
-
-        .user-info-text {
-            text-align: right;
         }
 
         .user-name {
             font-weight: 700;
-            color: #fff;
+            color: #000000;
             font-size: 14px;
         }
 
         .user-clan {
             font-size: 12px;
-            color: #F59E0B;
+            color: #6B7280;
         }
 
         .edit-profile-btn {
-            background: #2A3042;
-            border: none;
+            background: #F3F4F6;
+            border: 1px solid #E5E7EB;
             padding: 8px 14px;
             border-radius: 40px;
-            color: white;
             cursor: pointer;
             transition: 0.2s;
             font-size: 13px;
         }
 
         .edit-profile-btn:hover {
-            background: #F59E0B;
-            color: #0B0F1C;
+            background: #000000;
+            color: white;
         }
 
         /* Dashboard Grid */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 300px 1fr 320px;
-            gap: 20px;
+            grid-template-columns: 280px 1fr 300px;
+            gap: 24px;
         }
 
-        /* Sidebar Left - Rankings */
-        .rankings-card {
-            background: #131726;
-            border-radius: 24px;
+        /* Cards */
+        .card {
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 20px;
             padding: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-            height: fit-content;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .card-header {
@@ -151,91 +156,75 @@
             align-items: center;
             gap: 10px;
             margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(245, 158, 11, 0.3);
+            padding-bottom: 12px;
+            border-bottom: 2px solid #F3F4F6;
         }
 
         .card-header i {
-            font-size: 24px;
-            color: #F59E0B;
+            font-size: 20px;
+            color: #000000;
         }
 
         .card-header h2 {
-            font-size: 18px;
-            color: white;
+            font-size: 16px;
+            color: #000000;
+            font-weight: 700;
         }
 
+        /* Clan List */
         .clan-list {
             list-style: none;
         }
 
         .clan-item {
-            background: #0B0F1C;
+            background: #F9FAFB;
             margin-bottom: 10px;
             padding: 12px 16px;
-            border-radius: 14px;
+            border-radius: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             transition: 0.2s;
-            border: 1px solid transparent;
+            border: 1px solid #F3F4F6;
         }
 
         .clan-item:hover {
-            border-color: rgba(245, 158, 11, 0.3);
+            border-color: #000000;
             transform: translateX(-5px);
         }
 
         .clan-rank {
             font-weight: 800;
-            color: #F59E0B;
+            color: #000000;
             font-size: 18px;
-            width: 40px;
-        }
-
-        .clan-info {
-            flex: 1;
-            display: flex;
-            align-items: baseline;
-            gap: 12px;
         }
 
         .clan-name {
             font-weight: 600;
-            color: white;
+            color: #000000;
         }
 
         .clan-points {
-            background: #F59E0B20;
+            background: #F3F4F6;
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 12px;
-            color: #F59E0B;
-        }
-
-        /* Main Content */
-        .main-chat-area {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            color: #000000;
         }
 
         /* Tabs */
         .tabs-container {
             display: flex;
-            gap: 12px;
-            background: #131726;
-            padding: 8px;
-            border-radius: 60px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .tab-btn {
             flex: 1;
             padding: 12px;
-            border: none;
-            background: transparent;
-            color: #8E95B0;
-            border-radius: 50px;
+            border: 1px solid #E5E7EB;
+            background: #FFFFFF;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
             transition: 0.2s;
@@ -245,82 +234,59 @@
             gap: 8px;
         }
 
-        .tab-btn i {
-            font-size: 16px;
-        }
-
         .tab-btn.active {
-            background: #F59E0B;
-            color: #0B0F1C;
+            background: #000000;
+            color: #FFFFFF;
+            border-color: #000000;
         }
 
-        /* Chat Container */
+        /* Chat */
         .chat-wrapper {
-            background: #131726;
-            border-radius: 24px;
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .chat-header-bar {
-            background: #0B0F1C;
-            padding: 16px 20px;
+            background: #F9FAFB;
+            padding: 14px 20px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+            border-bottom: 1px solid #E5E7EB;
         }
 
         .chat-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
             font-weight: 600;
-        }
-
-        .chat-status {
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: #10B98120;
-            color: #10B981;
+            color: #000000;
         }
 
         .messages-area {
-            height: 380px;
+            height: 350px;
             overflow-y: auto;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .message {
-            max-width: 75%;
+            max-width: 70%;
             padding: 10px 16px;
             border-radius: 18px;
             font-size: 14px;
-            animation: fadeIn 0.2s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .message.own {
-            background: #F59E0B;
-            color: #0B0F1C;
+            background: #000000;
+            color: #FFFFFF;
             align-self: flex-end;
-            border-bottom-right-radius: 4px;
         }
 
         .message.other {
-            background: #1E2436;
-            color: white;
+            background: #F3F4F6;
+            color: #000000;
             align-self: flex-start;
-            border-bottom-left-radius: 4px;
         }
 
         .message-sender {
@@ -330,141 +296,79 @@
             opacity: 0.8;
         }
 
-        .message-text {
-            word-wrap: break-word;
-        }
-
         .chat-input-area {
             display: flex;
             gap: 12px;
             padding: 16px 20px;
-            background: #0B0F1C;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            background: #FFFFFF;
+            border-top: 1px solid #E5E7EB;
         }
 
         .chat-input-area input {
             flex: 1;
             padding: 12px 18px;
-            border: none;
+            border: 1px solid #E5E7EB;
             border-radius: 40px;
-            background: #1E2436;
-            color: white;
+            background: #F9FAFB;
             outline: none;
         }
 
         .chat-input-area button {
-            background: #F59E0B;
+            background: #000000;
+            color: white;
             border: none;
             padding: 12px 24px;
             border-radius: 40px;
             cursor: pointer;
-            font-weight: 600;
             transition: 0.2s;
         }
 
-        .chat-input-area button:hover {
-            background: #D97706;
-        }
-
-        /* Right Sidebar - Extra */
-        .right-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .info-card {
-            background: #131726;
-            border-radius: 24px;
-            padding: 20px;
-        }
-
-        .scrim-text-area {
-            background: #0B0F1C;
-            padding: 16px;
-            border-radius: 16px;
-            margin-top: 12px;
-            font-size: 13px;
-            color: #8E95B0;
-        }
-
+        /* Admin */
         .admin-panel {
-            background: #131726;
-            border-radius: 24px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 1px solid rgba(245, 158, 11, 0.2);
+            margin-top: 24px;
         }
-
         .users-list {
             max-height: 250px;
             overflow-y: auto;
             margin-top: 12px;
         }
-
         .user-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px;
-            background: #0B0F1C;
+            background: #F9FAFB;
             margin-bottom: 8px;
             border-radius: 12px;
         }
-
         .admin-buttons button {
-            background: #2A3042;
-            border: none;
+            background: #F3F4F6;
+            border: 1px solid #E5E7EB;
             padding: 5px 10px;
             border-radius: 8px;
             margin: 0 3px;
             cursor: pointer;
-            font-size: 11px;
-            color: white;
         }
 
-        /* Modal */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: #131726;
-            border-radius: 28px;
-            padding: 28px;
-            width: 400px;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .modal-content input, .modal-content textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #2A3042;
-            border-radius: 14px;
-            background: #0B0F1C;
-            color: white;
-            outline: none;
-        }
-
+        /* Buttons */
         .btn-primary {
-            background: #F59E0B;
-            color: #0B0F1C;
+            background: #000000;
+            color: white;
             padding: 12px;
             border: none;
             border-radius: 40px;
             cursor: pointer;
-            font-weight: 700;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #E5E7EB;
+            padding: 12px;
+            border-radius: 40px;
+            cursor: pointer;
             width: 100%;
             margin-top: 10px;
         }
@@ -473,141 +377,138 @@
             display: none;
         }
 
-        @media (max-width: 1100px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            .rankings-card, .right-sidebar {
-                order: 1;
-            }
+        /* Login Page */
+        .login-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #FFFFFF;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-card {
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 32px;
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.05);
+        }
+
+        .login-card .logo-icon {
+            margin: 0 auto 20px;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 1px solid #E5E7EB;
+            border-radius: 40px;
+            background: #F9FAFB;
+            outline: none;
+        }
+
+        .divider {
+            margin: 20px 0;
+            border-top: 1px solid #E5E7EB;
+            position: relative;
+        }
+        .divider span {
+            background: white;
+            padding: 0 10px;
+            position: relative;
+            top: -11px;
+            color: #9CA3AF;
+        }
+
+        @media (max-width: 1000px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <!-- Header -->
+
+<div class="wave-bg">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style="opacity:0.3;">
+        <path fill="#000000" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+    </svg>
+</div>
+
+<div id="app" class="app-container hidden">
     <div class="header">
         <div class="logo-area">
             <div class="logo-icon">⚔️</div>
             <div class="logo-text">ClanVerse</div>
         </div>
         <div class="user-profile" id="userProfile">
-            <div class="user-info-text">
+            <div>
                 <div class="user-name" id="userNameDisplay">زائر</div>
                 <div class="user-clan" id="userClanDisplay">الكلان: -</div>
             </div>
-            <img class="user-avatar" id="userAvatarImg" src="https://ui-avatars.com/api/?background=F59E0B&color=fff" alt="avatar">
+            <img class="user-avatar" id="userAvatarImg" src="https://ui-avatars.com/api/?background=000&color=fff" alt="avatar">
             <button class="edit-profile-btn" id="editProfileBtn"><i class="fas fa-user-edit"></i></button>
         </div>
     </div>
 
     <div class="dashboard-grid">
-        <!-- Left Rankings -->
-        <div class="rankings-card">
-            <div class="card-header">
-                <i class="fas fa-trophy"></i>
-                <h2>أفضل 10 كلانات</h2>
-            </div>
-            <ul class="clan-list" id="clanList">
-                <li style="color:#8E95B0;">جاري التحميل...</li>
-            </ul>
+        <div class="card">
+            <div class="card-header"><i class="fas fa-trophy"></i><h2>أفضل 10 كلانات</h2></div>
+            <ul class="clan-list" id="clanList"><li>جاري التحميل...</li></ul>
         </div>
 
-        <!-- Main Chat Area -->
-        <div class="main-chat-area">
+        <div>
             <div class="tabs-container">
-                <button class="tab-btn active" data-tab="general"><i class="fas fa-comments"></i> الشات العام</button>
-                <button class="tab-btn" data-tab="scrim"><i class="fas fa-skull"></i> شات الاسكرام</button>
-                <button class="tab-btn" data-tab="tickets"><i class="fas fa-headset"></i> الدعم الفني</button>
+                <button class="tab-btn active" data-tab="general"><i class="fas fa-comments"></i> عام</button>
+                <button class="tab-btn" data-tab="scrim"><i class="fas fa-skull"></i> اسكرام</button>
+                <button class="tab-btn" data-tab="tickets"><i class="fas fa-headset"></i> دعم</button>
             </div>
-
-            <!-- General Chat -->
-            <div class="chat-wrapper" id="generalChat">
-                <div class="chat-header-bar">
-                    <div class="chat-title"><i class="fas fa-globe"></i> الشات العام</div>
-                    <div class="chat-status" id="generalChatStatus"><i class="fas fa-lock-open"></i> مفتوح</div>
-                </div>
-                <div class="messages-area" id="generalMessages"></div>
-                <div class="chat-input-area">
-                    <input type="text" id="generalInput" placeholder="اكتب رسالتك...">
-                    <button id="generalSendBtn"><i class="fas fa-paper-plane"></i></button>
-                </div>
-            </div>
-
-            <!-- Scrim Chat (Hidden) -->
-            <div class="chat-wrapper hidden" id="scrimChat">
-                <div class="chat-header-bar">
-                    <div class="chat-title"><i class="fas fa-skull-crossbones"></i> شات الاسكرام (خاص)</div>
-                </div>
-                <div class="messages-area" id="scrimMessages"></div>
-                <div class="chat-input-area">
-                    <input type="text" id="scrimInput" placeholder="رسالة خاصة...">
-                    <button id="scrimSendBtn"><i class="fas fa-paper-plane"></i></button>
-                </div>
-            </div>
-
-            <!-- Tickets (Hidden) -->
-            <div class="hidden" id="ticketsSection">
-                <div class="info-card">
-                    <button id="newTicketBtn" class="btn-primary"><i class="fas fa-plus-circle"></i> فتح تذكرة جديدة</button>
-                    <div id="userTickets" class="scrim-text-area" style="margin-top: 15px;"></div>
-                </div>
-            </div>
+            <div class="chat-wrapper" id="generalChat"><div class="chat-header-bar"><div class="chat-title">💬 الشات العام</div></div><div class="messages-area" id="generalMessages"></div><div class="chat-input-area"><input id="generalInput" placeholder="رسالة..."><button id="generalSendBtn"><i class="fas fa-paper-plane"></i></button></div></div>
+            <div class="chat-wrapper hidden" id="scrimChat"><div class="chat-header-bar"><div class="chat-title">🎙️ شات الاسكرام</div></div><div class="messages-area" id="scrimMessages"></div><div class="chat-input-area"><input id="scrimInput" placeholder="رسالة..."><button id="scrimSendBtn"><i class="fas fa-paper-plane"></i></button></div></div>
+            <div class="hidden" id="ticketsSection"><div class="card"><button id="newTicketBtn" class="btn-primary">➕ تذكرة جديدة</button><div id="userTickets" class="users-list" style="margin-top:15px;"></div></div></div>
         </div>
 
-        <!-- Right Sidebar -->
-        <div class="right-sidebar">
-            <div class="info-card">
-                <div class="card-header">
-                    <i class="fas fa-clipboard-list"></i>
-                    <h2>التسجيل للاسكرام</h2>
-                </div>
-                <div class="scrim-text-area">
-                    <p id="scrimRegistrationText">لا توجد تسجيلات حالياً</p>
-                    <button id="editScrimTextBtn" class="hidden" style="margin-top: 10px; background:#F59E0B; border:none; padding:5px 12px; border-radius:20px; cursor:pointer;">✏️ تعديل النص</button>
-                </div>
+        <div>
+            <div class="card">
+                <div class="card-header"><i class="fas fa-clipboard-list"></i><h2>التسجيل للاسكرام</h2></div>
+                <div style="background:#F9FAFB; padding:15px; border-radius:12px;"><p id="scrimRegistrationText">لا توجد تسجيلات</p><button id="editScrimTextBtn" class="hidden btn-outline" style="margin-top:10px;">✏️ تعديل</button></div>
             </div>
-
-            <div class="admin-panel hidden" id="adminPanel">
-                <div class="card-header">
-                    <i class="fas fa-crown"></i>
-                    <h2>لوحة التحكم</h2>
-                </div>
-                <div class="users-list" id="adminUsersList"></div>
-                <button id="addClanBtn" class="btn-primary" style="margin-top: 12px;"><i class="fas fa-plus"></i> إضافة كلان</button>
-                <button id="resetChatBtn" class="btn-primary" style="background:#EF4444; margin-top: 8px;"><i class="fas fa-trash"></i> مسح الشات العام</button>
-            </div>
+            <div class="card admin-panel hidden" id="adminPanel"><div class="card-header"><i class="fas fa-crown"></i><h2>لوحة الادمن</h2></div><div class="users-list" id="adminUsersList"></div><button id="addClanBtn" class="btn-primary">➕ إضافة كلان</button><button id="resetChatBtn" class="btn-outline" style="color:red;">🗑️ مسح الشات</button></div>
         </div>
     </div>
 </div>
 
-<!-- Modals -->
-<div id="profileModal" class="modal hidden">
-    <div class="modal-content">
-        <h3 style="color:white; margin-bottom:15px;"><i class="fas fa-user-edit"></i> تعديل الملف الشخصي</h3>
-        <input type="text" id="editName" placeholder="الاسم">
-        <input type="text" id="editClan" placeholder="اسم الكلان">
-        <input type="url" id="editAvatar" placeholder="رابط الصورة">
-        <button id="saveProfileBtn" class="btn-primary">حفظ التغييرات</button>
-        <button id="closeModalBtn" class="btn-primary" style="background:#2A3042;">إلغاء</button>
-    </div>
-</div>
-
-<div id="ticketModal" class="modal hidden">
-    <div class="modal-content">
-        <h3 style="color:white;">📬 تذكرة جديدة</h3>
-        <input type="text" id="ticketTitle" placeholder="العنوان">
-        <textarea id="ticketMessage" rows="4" placeholder="وصف المشكلة..."></textarea>
-        <button id="submitTicketBtn" class="btn-primary">إرسال</button>
-        <button id="closeTicketModalBtn" class="btn-primary" style="background:#2A3042;">إلغاء</button>
+<!-- Login Page -->
+<div id="loginPage" class="login-page">
+    <div class="login-card">
+        <div class="logo-icon" style="margin:0 auto 20px;">⚔️</div>
+        <h2 style="margin-bottom:20px;">مرحباً بك</h2>
+        <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
+        <input type="password" id="loginPassword" placeholder="كلمة المرور">
+        <button id="loginBtn" class="btn-primary">تسجيل الدخول</button>
+        <div class="divider"><span>أو</span></div>
+        <button id="googleLoginBtn" class="btn-outline"><i class="fab fa-google"></i> تسجيل الدخول بجوجل</button>
+        <hr style="margin:20px 0;">
+        <h4 style="margin-bottom:10px;">إنشاء حساب جديد</h4>
+        <input type="text" id="regName" placeholder="الاسم الكامل">
+        <input type="text" id="regClan" placeholder="اسم الكلان">
+        <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
+        <input type="password" id="regPassword" placeholder="كلمة المرور">
+        <button id="registerBtn" class="btn-outline">إنشاء حساب</button>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, updateDoc, deleteDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
-    import { getDatabase, ref, set, onDisconnect, onValue, push, remove } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    import { getDatabase, ref, set, onValue, push, remove } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA74xI6RlWmOJSeE472TVMiGz2dC9rzbSU",
@@ -623,51 +524,26 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
     const rtdb = getDatabase(app);
+    const provider = new GoogleAuthProvider();
 
     let currentUser = null;
     let currentUserData = null;
     let isAdmin = false;
 
-    const ADMIN_EMAIL = "admin@system.com";
-    const ADMIN_PASSWORD = "Admin123456";
-
-    function showLoginModal() {
-        const modal = document.createElement('div');
-        modal.className = 'modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <h3 style="color:white; text-align:center;">🔐 تسجيل الدخول</h3>
-                <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
-                <input type="password" id="loginPassword" placeholder="كلمة المرور">
-                <button id="doLoginBtn" class="btn-primary">دخول</button>
-                <button id="closeLoginModal" class="btn-primary" style="background:#2A3042;">إلغاء</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        document.getElementById('doLoginBtn').onclick = async () => {
-            const email = document.getElementById('loginEmail').value;
-            const pwd = document.getElementById('loginPassword').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, pwd);
-                modal.remove();
-            } catch(e) { alert('خطأ: ' + e.message); }
-        };
-        document.getElementById('closeLoginModal').onclick = () => modal.remove();
-    }
+    function escapeHtml(str) { return str?.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m; }) || ''; }
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            currentUser = user;
             const userDoc = await getDoc(doc(db, 'users', user.uid));
             if (userDoc.exists()) {
                 currentUserData = userDoc.data();
                 isAdmin = currentUserData.role === 'admin';
             } else {
-                const role = user.email === ADMIN_EMAIL ? 'admin' : 'member';
+                const role = user.email === 'admin@system.com' ? 'admin' : 'member';
                 await setDoc(doc(db, 'users', user.uid), {
                     name: user.displayName || 'مستخدم',
                     clan: 'بدون كلان',
-                    avatar: 'https://ui-avatars.com/api/?background=F59E0B&color=fff',
+                    avatar: user.photoURL || 'https://ui-avatars.com/api/?background=000&color=fff',
                     email: user.email,
                     role: role,
                     uid: user.uid
@@ -675,9 +551,11 @@
                 currentUserData = { name: user.displayName || 'مستخدم', clan: 'بدون كلان', role: role };
                 isAdmin = role === 'admin';
             }
-            document.getElementById('userNameDisplay').innerHTML = currentUserData.name;
+            document.getElementById('app').classList.remove('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('userNameDisplay').innerText = currentUserData.name;
             document.getElementById('userClanDisplay').innerHTML = `الكلان: ${currentUserData.clan}`;
-            document.getElementById('userAvatarImg').src = currentUserData.avatar || 'https://ui-avatars.com/api/?background=F59E0B&color=fff';
+            document.getElementById('userAvatarImg').src = currentUserData.avatar || 'https://ui-avatars.com/api/?background=000&color=fff';
             if (isAdmin) {
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('editScrimTextBtn').classList.remove('hidden');
@@ -686,155 +564,60 @@
             loadClans();
             loadGeneralChat();
             loadScrimChat();
+            currentUser = user;
         } else {
-            showLoginModal();
+            document.getElementById('app').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
         }
     });
+
+    document.getElementById('loginBtn').onclick = async () => {
+        const email = document.getElementById('loginEmail').value;
+        const pwd = document.getElementById('loginPassword').value;
+        try { await signInWithEmailAndPassword(auth, email, pwd); } catch(e) { alert('خطأ: '+e.message); }
+    };
+    document.getElementById('googleLoginBtn').onclick = async () => {
+        try { await signInWithPopup(auth, provider); } catch(e) { alert('خطأ جوجل: '+e.message); }
+    };
+    document.getElementById('registerBtn').onclick = async () => {
+        const name = document.getElementById('regName').value;
+        const clan = document.getElementById('regClan').value;
+        const email = document.getElementById('regEmail').value;
+        const pwd = document.getElementById('regPassword').value;
+        if (!name || !clan || !email || !pwd) return alert('املأ كل الحقول');
+        try {
+            const userCred = await createUserWithEmailAndPassword(auth, email, pwd);
+            await updateProfile(userCred.user, { displayName: name });
+            const role = email === 'admin@system.com' ? 'admin' : 'member';
+            await setDoc(doc(db, 'users', userCred.user.uid), { name, clan, avatar: 'https://ui-avatars.com/api/?background=000&color=fff', email, role, uid: userCred.user.uid });
+        } catch(e) { alert('خطأ: '+e.message); }
+    };
 
     async function loadClans() {
         const q = query(collection(db, 'clans'), orderBy('points', 'desc'));
         onSnapshot(q, (snap) => {
-            const clans = [];
-            snap.forEach(doc => clans.push({ id: doc.id, ...doc.data() }));
-            const top10 = clans.slice(0,10);
+            const clans = snap.docs.map(d => ({ id:d.id, ...d.data() })).slice(0,10);
             const container = document.getElementById('clanList');
-            if (top10.length === 0) { container.innerHTML = '<li style="color:#8E95B0;">لا توجد كلانات</li>'; return; }
-            container.innerHTML = top10.map((c,i) => `
-                <li class="clan-item">
-                    <span class="clan-rank">${i+1}</span>
-                    <div class="clan-info">
-                        <span class="clan-name">${escapeHtml(c.name)}</span>
-                        <span class="clan-points">${c.points || 0} نقطة</span>
-                    </div>
-                </li>
-            `).join('');
+            if(clans.length===0) { container.innerHTML='<li>لا توجد كلانات</li>'; return; }
+            container.innerHTML = clans.map((c,i) => `<li class="clan-item"><span class="clan-rank">${i+1}</span><span class="clan-name">${escapeHtml(c.name)}</span><span class="clan-points">${c.points||0}</span></li>`).join('');
         });
     }
 
-    function loadGeneralChat() {
-        const messagesRef = ref(rtdb, 'generalChat');
-        onValue(messagesRef, (snap) => {
-            const msgs = snap.val() || {};
-            const container = document.getElementById('generalMessages');
-            const msgsArray = Object.values(msgs);
-            container.innerHTML = msgsArray.map(m => `
-                <div class="message ${m.uid === currentUser?.uid ? 'own' : 'other'}">
-                    <div class="message-sender">${escapeHtml(m.name)}</div>
-                    <div class="message-text">${escapeHtml(m.text)}</div>
-                </div>
-            `).join('');
-            container.scrollTop = container.scrollHeight;
-        });
-    }
+    function loadGeneralChat() { onValue(ref(rtdb, 'generalChat'), snap => { const msgs = Object.values(snap.val()||{}); document.getElementById('generalMessages').innerHTML = msgs.map(m => `<div class="message ${m.uid===currentUser?.uid?'own':'other'}"><div class="message-sender">${escapeHtml(m.name)}</div><div>${escapeHtml(m.text)}</div></div>`).join(''); }); }
+    document.getElementById('generalSendBtn').onclick = () => { const input=document.getElementById('generalInput'); if(!input.value.trim()||!currentUser) return; push(ref(rtdb, 'generalChat'), { text:input.value, name:currentUserData.name, uid:currentUser.uid, timestamp:Date.now() }); input.value=''; };
+    function loadScrimChat() { onValue(ref(rtdb, 'scrimChat'), snap => { const msgs = Object.values(snap.val()||{}); document.getElementById('scrimMessages').innerHTML = msgs.map(m => `<div class="message ${m.uid===currentUser?.uid?'own':'other'}"><div class="message-sender">${escapeHtml(m.name)}</div><div>${escapeHtml(m.text)}</div></div>`).join(''); }); }
+    document.getElementById('scrimSendBtn').onclick = () => { const input=document.getElementById('scrimInput'); if(!input.value.trim()||!currentUser) return; push(ref(rtdb, 'scrimChat'), { text:input.value, name:currentUserData.name, uid:currentUser.uid, timestamp:Date.now() }); input.value=''; };
 
-    document.getElementById('generalSendBtn').onclick = () => {
-        const input = document.getElementById('generalInput');
-        if (!input.value.trim() || !currentUser) return;
-        push(ref(rtdb, 'generalChat'), {
-            text: input.value,
-            name: currentUserData.name,
-            uid: currentUser.uid,
-            timestamp: Date.now()
-        });
-        input.value = '';
-    };
+    document.querySelectorAll('.tab-btn').forEach(btn=>{ btn.onclick=()=>{ document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const tab=btn.dataset.tab; document.getElementById('generalChat').classList.add('hidden'); document.getElementById('scrimChat').classList.add('hidden'); document.getElementById('ticketsSection').classList.add('hidden'); if(tab==='general') document.getElementById('generalChat').classList.remove('hidden'); if(tab==='scrim') document.getElementById('scrimChat').classList.remove('hidden'); if(tab==='tickets') document.getElementById('ticketsSection').classList.remove('hidden'); }; });
 
-    function loadScrimChat() {
-        const scrimRef = ref(rtdb, 'scrimChat');
-        onValue(scrimRef, (snap) => {
-            const msgs = snap.val() || {};
-            const container = document.getElementById('scrimMessages');
-            const msgsArray = Object.values(msgs);
-            container.innerHTML = msgsArray.map(m => `
-                <div class="message ${m.uid === currentUser?.uid ? 'own' : 'other'}">
-                    <div class="message-sender">${escapeHtml(m.name)}</div>
-                    <div class="message-text">${escapeHtml(m.text)}</div>
-                </div>
-            `).join('');
-        });
-    }
-
-    document.getElementById('scrimSendBtn').onclick = () => {
-        const input = document.getElementById('scrimInput');
-        if (!input.value.trim() || !currentUser) return;
-        push(ref(rtdb, 'scrimChat'), {
-            text: input.value,
-            name: currentUserData.name,
-            uid: currentUser.uid,
-            timestamp: Date.now()
-        });
-        input.value = '';
-    };
-
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.onclick = () => {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const tab = btn.dataset.tab;
-            document.getElementById('generalChat').classList.add('hidden');
-            document.getElementById('scrimChat').classList.add('hidden');
-            document.getElementById('ticketsSection').classList.add('hidden');
-            if (tab === 'general') document.getElementById('generalChat').classList.remove('hidden');
-            if (tab === 'scrim') document.getElementById('scrimChat').classList.remove('hidden');
-            if (tab === 'tickets') document.getElementById('ticketsSection').classList.remove('hidden');
-        };
-    });
-
-    async function loadAdminUsers() {
-        const q = query(collection(db, 'users'));
-        onSnapshot(q, (snap) => {
-            const container = document.getElementById('adminUsersList');
-            const users = [];
-            snap.forEach(doc => users.push({ id: doc.id, ...doc.data() }));
-            container.innerHTML = users.map(u => `
-                <div class="user-row">
-                    <span>${escapeHtml(u.name)} (${u.role})</span>
-                    <div class="admin-buttons">
-                        <button onclick='window.makeAdmin("${u.id}")'>👑 ادمن</button>
-                        <button onclick='window.banUser("${u.id}")'>🚫 حظر</button>
-                    </div>
-                </div>
-            `).join('');
-        });
-    }
-
-    window.makeAdmin = async (userId) => await updateDoc(doc(db, 'users', userId), { role: 'admin' });
-    window.banUser = async (userId) => await updateDoc(doc(db, 'users', userId), { banned: true });
-
-    document.getElementById('editProfileBtn').onclick = () => {
-        document.getElementById('profileModal').classList.remove('hidden');
-        document.getElementById('editName').value = currentUserData.name;
-        document.getElementById('editClan').value = currentUserData.clan;
-        document.getElementById('editAvatar').value = currentUserData.avatar || '';
-    };
-    document.getElementById('saveProfileBtn').onclick = async () => {
-        await updateDoc(doc(db, 'users', currentUser.uid), {
-            name: document.getElementById('editName').value,
-            clan: document.getElementById('editClan').value,
-            avatar: document.getElementById('editAvatar').value
-        });
-        if (currentUser.displayName !== document.getElementById('editName').value) await updateProfile(currentUser, { displayName: document.getElementById('editName').value });
-        document.getElementById('profileModal').classList.add('hidden');
-        location.reload();
-    };
-    document.getElementById('closeModalBtn').onclick = () => document.getElementById('profileModal').classList.add('hidden');
-
-    document.getElementById('addClanBtn').onclick = async () => {
-        const name = prompt('اسم الكلان:');
-        if (name) await addDoc(collection(db, 'clans'), { name, points: 0 });
-    };
-    document.getElementById('resetChatBtn').onclick = async () => {
-        if (confirm('مسح كل رسائل الشات العام؟')) await set(ref(rtdb, 'generalChat'), {});
-    };
-
-    const scrimTextRef = ref(rtdb, 'settings/scrimText');
-    onValue(scrimTextRef, (snap) => document.getElementById('scrimRegistrationText').innerText = snap.val() || 'لا توجد تسجيلات');
-    document.getElementById('editScrimTextBtn').onclick = () => {
-        const newText = prompt('نص التسجيل للاسكرام:', document.getElementById('scrimRegistrationText').innerText);
-        if (newText) set(scrimTextRef, newText);
-    };
-
-    function escapeHtml(str) { return str?.replace(/[&<>]/g, function(m){ if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m; }) || ''; }
+    async function loadAdminUsers() { onSnapshot(collection(db,'users'), snap => { document.getElementById('adminUsersList').innerHTML = snap.docs.map(d => ({ id:d.id, ...d.data() })).map(u => `<div class="user-row"><span>${escapeHtml(u.name)} (${u.role})</span><div class="admin-buttons"><button onclick='window.makeAdmin("${u.id}")'>👑 ادمن</button><button onclick='window.banUser("${u.id}")'>🚫 حظر</button></div></div>`).join(''); }); }
+    window.makeAdmin = async (id) => await updateDoc(doc(db,'users',id), { role:'admin' });
+    window.banUser = async (id) => await updateDoc(doc(db,'users',id), { banned:true });
+    document.getElementById('addClanBtn').onclick = async () => { const name=prompt('اسم الكلان'); if(name) await addDoc(collection(db,'clans'), { name, points:0 }); };
+    document.getElementById('resetChatBtn').onclick = async () => { if(confirm('مسح الشات العام؟')) await set(ref(rtdb,'generalChat'), {}); };
+    document.getElementById('editProfileBtn').onclick = () => { const newName=prompt('الاسم الجديد', currentUserData.name); const newClan=prompt('الكلان الجديد', currentUserData.clan); if(newName && newClan) updateDoc(doc(db,'users',currentUser.uid), { name:newName, clan:newClan }).then(()=>location.reload()); };
+    onValue(ref(rtdb, 'settings/scrimText'), snap => document.getElementById('scrimRegistrationText').innerText = snap.val() || 'لا توجد تسجيلات');
+    document.getElementById('editScrimTextBtn').onclick = () => { const newText=prompt('نص جديد', document.getElementById('scrimRegistrationText').innerText); if(newText) set(ref(rtdb,'settings/scrimText'), newText); };
 </script>
 </body>
 </html>
