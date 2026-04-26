@@ -2,448 +2,794 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>ظِلال - عالم القصص الغامضة | إدارة ومستخدمين</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة القصص - اقرأ وشارك</title>
     <style>
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f5f5f5;
-            --bg-card: #fafafa;
-            --bg-card-hover: #f0f0f0;
-            --bg-input: #ffffff;
-            --text-primary: #000000;
-            --text-secondary: #555555;
-            --text-muted: #888888;
-            --border: #dddddd;
-            --accent: #000000;
-            --accent-hover: #333333;
-            --accent-light: #666666;
-            --shadow: rgba(0,0,0,0.1);
-            --shadow-strong: rgba(0,0,0,0.2);
-            --overlay-bg: rgba(255,255,255,0.98);
-            --reader-bg: #ffffff;
-            --danger: #000000;
-            --success: #000000;
-            --warning-bg: #000000;
-            --warning-text: #ffffff;
-            --progress-bg: #eeeeee;
-            --progress-fill: #000000;
-            --note-bg: #f5f5f5;
-            --note-border: #000000;
-            --admin-badge: #d4af37;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
         }
-        [data-theme="dark"] {
-            --bg-primary: #000000;
-            --bg-secondary: #0a0a0a;
-            --bg-card: #111111;
-            --bg-card-hover: #1a1a1a;
-            --bg-input: #000000;
-            --text-primary: #ffffff;
-            --text-secondary: #aaaaaa;
-            --text-muted: #666666;
-            --border: #333333;
-            --accent: #ffffff;
-            --accent-hover: #cccccc;
-            --accent-light: #999999;
-            --shadow: rgba(255,255,255,0.05);
-            --shadow-strong: rgba(255,255,255,0.1);
-            --overlay-bg: rgba(0,0,0,0.98);
-            --reader-bg: #000000;
-            --danger: #ffffff;
-            --success: #ffffff;
-            --warning-bg: #ffffff;
-            --warning-text: #000000;
-            --progress-bg: #333333;
-            --progress-fill: #ffffff;
-            --note-bg: #111111;
-            --note-border: #ffffff;
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
-        body { font-family: 'Cairo', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; user-select: none; -webkit-user-select: none; }
-        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
-        .particle { position: absolute; width: 2px; height: 2px; background: var(--text-muted); border-radius: 50%; animation: float 15s infinite; opacity: 0.3; }
-        @keyframes float { 0%,100% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.3; } 90% { opacity: 0.3; } 100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; } }
-        .theme-toggle { position: fixed; top: 20px; left: 20px; z-index: 1000; background: var(--bg-card); border: 1px solid var(--border); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 2px 10px var(--shadow); }
-        .theme-toggle:hover { transform: scale(1.1); }
-        .login-page { display: flex; justify-content: center; align-items: center; min-height: 100vh; position: relative; z-index: 1; }
-        .login-container { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 50px 40px; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 20px 60px var(--shadow-strong); position: relative; }
-        .login-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); }
-        .logo { font-family: 'Amiri', serif; font-size: 3rem; font-weight: 700; margin-bottom: 10px; }
-        .subtitle { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 35px; letter-spacing: 3px; }
-        .google-btn { width: 100%; padding: 15px; background: var(--accent); border: none; border-radius: 12px; color: var(--bg-primary); font-family: 'Cairo', sans-serif; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 15px; }
-        .google-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
-        .admin-login-link { margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer; text-decoration: underline; }
-        .error-msg { color: var(--danger); font-size: 0.85rem; margin-top: 15px; opacity: 0; transition: opacity 0.3s; }
-        .error-msg.show { opacity: 1; }
-        .app-page { display: none; min-height: 100vh; position: relative; z-index: 1; }
-        .app-header { background: var(--bg-secondary); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 10px; }
-        .app-logo { font-family: 'Amiri', serif; font-size: 1.8rem; }
-        .user-info { display: flex; align-items: center; gap: 15px; }
-        .admin-badge { background: var(--admin-badge); color: #000; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
-        .logout-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 8px 20px; border-radius: 8px; cursor: pointer; }
-        .logout-btn:hover { background: var(--accent); color: var(--bg-primary); }
-        .hero-section { text-align: center; padding: 60px 20px 40px; }
-        .hero-title { font-family: 'Amiri', serif; font-size: 2.5rem; margin-bottom: 15px; }
-        .hero-desc { color: var(--text-secondary); max-width: 600px; margin: 0 auto; line-height: 1.8; }
-        .continue-banner { max-width: 900px; margin: 0 auto 20px; padding: 0 30px; display: none; }
-        .continue-banner.show { display: block; animation: fadeIn 0.5s ease; }
-        .continue-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .continue-card:hover { background: var(--bg-card-hover); transform: translateX(-5px); }
-        .stories-container { max-width: 900px; margin: 0 auto; padding: 20px 30px 60px; }
-        .stories-grid { display: grid; gap: 20px; }
-        .story-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 25px 30px; cursor: pointer; transition: all 0.4s ease; position: relative; }
-        .story-card:hover { background: var(--bg-card-hover); transform: translateX(-5px); box-shadow: 0 10px 40px var(--shadow-strong); border-color: var(--accent); }
-        .story-number { display: inline-block; background: var(--accent); color: var(--bg-primary); width: 32px; height: 32px; border-radius: 50%; text-align: center; line-height: 32px; font-size: 0.85rem; font-weight: 700; margin-left: 15px; }
-        .story-title-text { font-family: 'Amiri', serif; font-size: 1.3rem; font-weight: 700; }
-        .story-progress { font-size: 0.75rem; color: var(--text-muted); background: var(--progress-bg); padding: 4px 10px; border-radius: 20px; }
-        .admin-controls { margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end; }
-        .admin-btn { background: transparent; border: 1px solid var(--accent); padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
-        .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay-bg); z-index: 1000; overflow-y: auto; }
-        .reader-content { max-width: 800px; margin: 0 auto; padding: 60px 30px 120px; }
-        .reader-close { position: fixed; top: 20px; left: 30px; background: var(--accent); color: var(--bg-primary); border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; }
-        .reader-title { font-family: 'Amiri', serif; font-size: 2.2rem; text-align: center; margin-bottom: 10px; }
-        .reader-body { font-family: 'Amiri', serif; font-size: 1.15rem; line-height: 2.2; text-align: justify; }
-        .notes-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid var(--border); }
-        .note-input-area { background: var(--note-bg); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 20px; }
-        .note-textarea { width: 100%; background: transparent; border: none; color: var(--text-primary); min-height: 80px; outline: none; resize: vertical; }
-        .note-btn { padding: 8px 20px; border-radius: 8px; cursor: pointer; border: none; }
-        .note-btn-primary { background: var(--accent); color: var(--bg-primary); }
-        .notes-list { display: flex; flex-direction: column; gap: 12px; }
-        .note-item { background: var(--note-bg); border-right: 3px solid var(--note-border); border-radius: 8px; padding: 15px; position: relative; }
-        .note-delete { position: absolute; top: 10px; left: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem; opacity: 0; }
-        .note-item:hover .note-delete { opacity: 1; }
-        .protection-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--warning-bg); color: var(--warning-text); text-align: center; padding: 10px; font-size: 0.8rem; z-index: 999; }
-        .reading-progress-container { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--progress-bg); z-index: 1002; }
-        .reading-progress-bar { height: 100%; background: var(--progress-fill); width: 0%; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width:600px) { .app-header { padding: 15px 20px; } .hero-title { font-size: 1.8rem; } }
-        /* Admin Panel */
-        .admin-panel { display: none; position: fixed; top: 0; right: 0; width: 380px; height: 100%; background: var(--bg-card); border-left: 1px solid var(--border); z-index: 1100; padding: 20px; overflow-y: auto; box-shadow: -5px 0 30px var(--shadow); }
-        .admin-panel.show { display: block; animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        .admin-panel h3 { margin-bottom: 20px; font-family: 'Amiri', serif; }
-        .user-list { list-style: none; margin-top: 15px; }
-        .user-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); }
-        .kick-btn { background: var(--danger); color: white; border: none; padding: 4px 10px; border-radius: 6px; cursor: pointer; }
-        .edit-story-area { margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--border); }
-        .edit-story-area input, .edit-story-area textarea, .edit-story-area select { width: 100%; margin: 8px 0; padding: 10px; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-primary); border-radius: 8px; font-family: 'Cairo', sans-serif; }
-        .save-story-btn { background: var(--accent); color: var(--bg-primary); padding: 8px; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 8px; }
-        .close-admin { position: absolute; top: 10px; left: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* بطاقات وبطاقات */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        h1, h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            min-height: 300px;
+            resize: vertical;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .story-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-right: 5px solid #667eea;
+        }
+
+        .story-card:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .story-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .story-topic {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 8px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        .reading-content {
+            line-height: 1.8;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .reading-content p {
+            margin-bottom: 20px;
+        }
+
+        .admin-panel {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            margin-top: 20px;
+        }
+
+        .user-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: #e0e0e0;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .alert {
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .alert-error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 15px;
+            }
+        }
     </style>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
 <body>
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">☀</button>
-    <div class="particles" id="particles"></div>
-    <div class="login-page" id="loginPage">
-        <div class="login-container">
-            <div class="logo">ظِلال</div>
-            <div class="subtitle">عالم القصص الغامضة</div>
-            <button class="google-btn" id="googleLoginBtn">🔐 دخول بحساب Google</button>
-            <div class="admin-login-link" id="showAdminLogin">🔑 تسجيل دخول الأدمن (كود سري)</div>
-            <div class="error-msg" id="errorMsg"></div>
+    <div class="container" id="app">
+        <!-- شاشة تسجيل الدخول -->
+        <div id="authScreen" class="card">
+            <div class="header" style="margin: -30px -30px 20px -30px; padding: 30px;">
+                <h1>📚 منصة القصص</h1>
+                <p>سجل دخولك وابدأ رحلة القراءة</p>
+            </div>
+            
+            <div id="authTabs">
+                <div class="tabs">
+                    <div class="tab active" onclick="switchAuthTab('login')">تسجيل دخول</div>
+                    <div class="tab" onclick="switchAuthTab('signup')">إنشاء حساب</div>
+                </div>
+
+                <!-- نموذج تسجيل الدخول -->
+                <div id="loginForm">
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="loginEmail" placeholder="example@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="loginPassword" placeholder="********">
+                    </div>
+                    <button onclick="login()">دخول</button>
+                    <button onclick="loginWithGoogle()" style="margin-right: 10px; background: #db4437;">دخول بـ Google</button>
+                </div>
+
+                <!-- نموذج إنشاء حساب -->
+                <div id="signupForm" class="hidden">
+                    <div class="form-group">
+                        <label>الاسم</label>
+                        <input type="text" id="signupName" placeholder="اسمك الكامل">
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="signupEmail" placeholder="example@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="signupPassword" placeholder="********">
+                    </div>
+                    <div class="form-group">
+                        <label>تأكيد كلمة المرور</label>
+                        <input type="password" id="signupConfirmPassword" placeholder="********">
+                    </div>
+                    <button onclick="signup()">إنشاء حساب</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشاشة الرئيسية بعد الدخول -->
+        <div id="mainScreen" class="hidden">
+            <div class="card header">
+                <div class="user-info" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong id="userName"></strong> - كودك: <span id="userCode"></span>
+                    </div>
+                    <div>
+                        <button onclick="logout()" class="btn-danger" style="padding: 8px 20px;">تسجيل خروج</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="tabs">
+                    <div class="tab active" onclick="switchMainTab('stories')">📖 القصص</div>
+                    <div class="tab" onclick="switchMainTab('admin')" id="adminTab" class="hidden">⚙️ لوحة الأدمن</div>
+                </div>
+
+                <!-- قائمة القصص -->
+                <div id="storiesPanel">
+                    <h2>📚 جميع القصص</h2>
+                    <div id="storiesList"></div>
+                </div>
+
+                <!-- لوحة الأدمن -->
+                <div id="adminPanel" class="hidden">
+                    <h2>⚙️ لوحة تحكم الأدمن</h2>
+                    
+                    <div class="admin-panel card">
+                        <h3>➕ إضافة قصة جديدة</h3>
+                        <div class="form-group">
+                            <label>عنوان القصة</label>
+                            <input type="text" id="newStoryTitle" placeholder="عنوان القصة">
+                        </div>
+                        <div class="form-group">
+                            <label>موضوع القصة</label>
+                            <input type="text" id="newStoryTopic" placeholder="وصف قصير عن القصة">
+                        </div>
+                        <div class="form-group">
+                            <label>محتوى القصة</label>
+                            <textarea id="newStoryContent" placeholder="نص القصة كاملاً..."></textarea>
+                        </div>
+                        <button onclick="addNewStory()">➕ إضافة قصة</button>
+                    </div>
+
+                    <div class="admin-panel card">
+                        <h3>📝 تعديل القصص</h3>
+                        <select id="editStorySelect" onchange="loadStoryForEdit()" style="width: 100%; padding: 10px; margin-bottom: 15px;">
+                            <option value="">اختر قصة لتعديلها...</option>
+                        </select>
+                        <div id="editStoryArea" class="hidden">
+                            <div class="form-group">
+                                <label>عنوان القصة</label>
+                                <input type="text" id="editStoryTitle">
+                            </div>
+                            <div class="form-group">
+                                <label>موضوع القصة</label>
+                                <input type="text" id="editStoryTopic">
+                            </div>
+                            <div class="form-group">
+                                <label>محتوى القصة</label>
+                                <textarea id="editStoryContent"></textarea>
+                            </div>
+                            <button onclick="updateStory()">💾 حفظ التعديلات</button>
+                            <button onclick="deleteStory()" class="btn-danger">🗑️ حذف القصة</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-panel card">
+                        <h3>👑 إدارة المشرفين (الأدمن)</h3>
+                        <div class="form-group">
+                            <label>البريد الإلكتروني للمستخدم</label>
+                            <input type="email" id="adminUserEmail" placeholder="example@email.com">
+                        </div>
+                        <button onclick="makeAdmin()" class="btn-success">➕ تعيين كأدمن</button>
+                        <button onclick="removeAdmin()" class="btn-danger">➖ إزالة من الأدمن</button>
+                        <div id="adminsList" style="margin-top: 15px;"></div>
+                    </div>
+                </div>
+
+                <!-- صفحة القراءة -->
+                <div id="readingPanel" class="hidden">
+                    <button onclick="backToStories()" style="margin-bottom: 20px;">← العودة للقصص</button>
+                    <h2 id="readingTitle"></h2>
+                    <p id="readingTopic" style="color: #666; margin-bottom: 20px;"></p>
+                    <div class="progress-bar" style="margin-bottom: 20px;">
+                        <div class="progress-fill" id="readingProgress" style="width: 0%"></div>
+                    </div>
+                    <div id="readingContent" class="reading-content" onscroll="saveScrollPosition()"></div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="app-page" id="appPage">
-        <div class="reading-progress-container" id="progressContainer" style="display:none;"><div class="reading-progress-bar" id="progressBar"></div></div>
-        <header class="app-header">
-            <div class="app-logo">ظِلال</div>
-            <div class="user-info"><span id="userNameDisplay"></span><span id="adminBadge" style="display:none;" class="admin-badge">أدمن</span><button class="logout-btn" onclick="logout()">خروج</button><button id="adminPanelBtn" style="display:none;" class="logout-btn" onclick="toggleAdminPanel()">👑 إدارة</button></div>
-        </header>
-        <section class="hero-section"><h1 class="hero-title">قصص من عالم آخر</h1><p class="hero-desc">عشر قصص غامضة تنتظرك خلف كل عنوان. اضغط على أي قصة لدخول عالمها...</p></section>
-        <div class="continue-banner" id="continueBanner"><div class="continue-card" onclick="continueReading()"><div class="continue-info"><h3 id="continueTitle">استمر في القراءة</h3><p id="continueDesc"></p></div><button class="continue-btn" style="background:var(--accent);color:var(--bg-primary);padding:8px 16px;border-radius:8px;">استمرار</button></div></div>
-        <div class="stories-container"><div class="stories-grid" id="storiesGrid"></div></div>
-    </div>
-    <div class="reader-overlay" id="readerOverlay"><button class="reader-close" onclick="closeReader()">×</button><div class="reader-content"><div class="reader-title" id="readerTitle"></div><div class="reader-subtitle" id="readerSubtitle"></div><div class="reader-body" id="readerBody"></div><div class="notes-section"><div class="notes-header"><h3>📝 ملاحظاتي</h3><span class="notes-count" id="notesCount">٠ ملاحظات</span></div><div class="note-input-area"><textarea class="note-textarea" id="noteInput" placeholder="اكتب ملاحظتك عن هذه القصة..."></textarea><div class="note-actions"><button class="note-btn note-btn-secondary" onclick="clearNoteInput()">مسح</button><button class="note-btn note-btn-primary" onclick="addNote()">إضافة ملاحظة</button></div></div><div class="notes-list" id="notesList"></div></div></div></div>
-    <div class="protection-bar" id="protectionBar" style="display:none;">⚠ هذا المحتوى محمي - نسخ أو تصوير الشاشة ممنوع</div>
-    <div class="admin-panel" id="adminPanel"><button class="close-admin" onclick="toggleAdminPanel()">✕</button><h3>لوحة التحكم - إدارة المستخدمين والقصص</h3><div><h4>📋 المستخدمون المسجلون</h4><ul class="user-list" id="userList"></ul></div><div class="edit-story-area"><h4>✏️ تعديل أو إضافة قصة</h4><select id="storySelectEdit"></select><input type="text" id="editStoryTitle" placeholder="عنوان القصة"><textarea id="editStoryPreview" placeholder="مقدمة القصة" rows="2"></textarea><textarea id="editStoryContent" placeholder="نص القصة كاملاً (HTML مسموح)" rows="6"></textarea><button class="save-story-btn" onclick="saveStoryChanges()">💾 حفظ التعديلات</button><button class="save-story-btn" style="margin-top:10px;background:var(--accent-light);" onclick="addNewStory()">➕ إضافة قصة جديدة</button></div></div>
+
     <script>
-        // Firebase Config (استخدم Firebase project الخاص بك)
+        // إعدادات Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyA74xI6RlWmOJSeE472TVMiGz2dC9rzbSU",
             authDomain: "tryy12345678.firebaseapp.com",
+            databaseURL: "https://tryy12345678-default-rtdb.firebaseio.com",
             projectId: "tryy12345678",
             storageBucket: "tryy12345678.firebasestorage.app",
             messagingSenderId: "924494362795",
-            appId: "1:924494362795:web:340d90c2e67a8e31139fee"
+            appId: "1:924494362795:web:340d90c2e67a8e31139fee",
+            measurementId: "G-C56N59JFK1"
         };
-        
+
+        // تهيئة Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const db = firebase.firestore();
-        
-        // القصص الافتراضية (سيتم تخزينها في Firestore)
-        let storiesData = [
-            { title: "المرآة التي لا تعكس", preview: "اشترى ياسر مرآة عتيقة من سوق الخردة، لكنه اكتشف أن انعكاسه فيها يبتسم وهو لا يفعل...", content: "<p>في زقاق ضيق بأحد أحياء المدينة القديمة، وجد ياسر مرآةً عتيقةً ذات إطار من الخشب المحروق. باعه التاجر إياها بثمن بخس، وهمس وهو يسلّمها: 'احتفظ بها بعيداً عن الضوء القمر'.</p><p>في تلك الليلة، وقف ياسر أمام المرآة ليرى كيف تبدو عليه. لكن ما رآه جعل دمه يتجمد في عروقه. انعكاسه كان يبتسم. ابتسامة عريضة لا تصل إلى عينيه. بينما هو في الحقيقة كان يرتعد من الخوف.</p><p>في الليلة الخامسة، لم يعد هناك ياسر. فقط مرآةٌ جديدةٌ في سوق الخردة، وانعكاسٌ يبدو أكثر حيويةً مما يجب.</p>" },
-            { title: "الساعة الثالثة والثلث", preview: "تستيقظ ليلى كل ليلة في تمام الساعة ٣:١٧ صباحاً، وتجد رسالةً جديدةً على هاتفها من رقم غريب...", content: "<p>بدأ الأمر ككابوس متكرر. تستيقظ ليلى كل ليلة في تمام الساعة الثالثة والثلث صباحاً. لكنها اكتشفت أن هاتفها يهتز دائماً في نفس اللحظة.</p><p>رسالة واحدة من رقم غريب: 'أنا أقترب'.</p><p>في الصباح، وجدت الشرطة بابها مفتوحاً ولا أثر لها. لكن الهاتف كان على الطاولة، وعليه رسالة واحدة مرسلة في الثالثة والثلث: 'شكراً لك على الضيافة'.</p>" },
-            { title: "الطفل في الصورة القديمة", preview: "وجد عمر صورةً قديمةً لجدّه وهو طفل، لكنه لاحظ وجود طفلٍ آخر في الخلفية يبدو مألوفاً بشكل مزعج...", content: "<p>بين كراتين ذكريات جدّه المتوفى، وجد عمر صورةً بالأبيض والأسود. طفلٌ صغيرٌ يقف أمام بيتٍ قديم. لكن ما شدّ انتباهه كان طفلاً آخر في الخلفية، يقف خلف النافذة.</p><p>في الصباح، وجدت الأم الصورة على الطاولة. لكن الطفل في المقدمة اختفى، وبقي فقط طفلٌ واحدٌ خلف النافذة... يبدو أكبرَ قليلاً مما كان.</p>" },
-            { title: "الرقم ١٣ في المصعد", preview: "يعمل سالم في مبنى من ١٢ طابقاً، لكن ذات ليلة ضغط زراً لم يرَه من قبل... الطابق الثالث عشر", content: "<p>كان سالم يعمل حارس ليليّاً في مبنىً إدارياً من اثني عشر طابقاً. كان يعرف كل زر في المصعد، كل صرير في الأبواب، كل ظل في الردهات.</p><p>لكن في ليلة الجمعة الثالثة عشرة، لاحظ زراً جديداً. بين الطابق الثاني عشر والطابق الأرضي، ظهر زرٌ صغيرٌ مكتوبٌ عليه '١٣'.</p><p>لم يُعثر على سالم أبداً. لكن الحارس الجديد يقول إنه يسمع صوتاً يأتي من داخل المصعد بعد منتصف الليل. صوتاً يهمس: 'لا تضغط زر ١٣'.</p>" },
-            { title: "الجار الذي ينسخ الحركات", preview: "انتقلت سارة إلى شقة جديدة، واكتشفت أن جارها في الشقة المقابلة يقلد كل حركاتها بدقةٍ مخيفة...", content: "<p>كانت الشقة الجديدة مثاليةً لسارة. إطلالةٌ رائعة، سعرٌ مناسب، وجارٌ هادئ. لكنها سرعان ما لاحظت شيئاً غريباً.</p><p>الجار في الشقة المقابلة كان يظهر دائماً خلف نافذته في نفس اللحظة التي تظهر هي فيها. إذا شربت قهوتها، شرب هو. إذا قرأت كتاباً، فتح هو كتاباً.</p><p>في الليلة التاسعة، قررت أن تختبر حدود هذه اللعبة. أحضرت سكيناً. نظر إليها الجار من نافذته، وابتسم لأول مرة. ثم أخرج هو أيضاً سكيناً.</p>" },
-            { title: "الرسالة من تحت الباب", preview: "كل ليلة، تجد فاطمة ورقةً صغيرةً تنزلق من تحت باب غرفتها، مكتوبٌ فيها ما ستفعله في اليوم التالي قبل أن تفعله...", content: "<p>بدأت الرسائل في ليلة عيد ميلادها الخامس والعشرين. ورقةٌ صغيرةٌ بيضاء تنزلق من تحت الباب في منتصف الليل. كانت تحتوي على جملةٍ واحدة: 'غداً ستشربين قهوةً بدلاً من الشاي'.</p><p>في الليلة قبل الأخيرة، جاءت الرسالة: 'غداً ستموتين في الساعة ١١:٤٧ مساءً'.</p><p>عند ١١:٤٧ بالضبط، سقطت الورقة من يدها. وعندما نظرت إلى المرآة، رأت نفسها لا تتحرك. بينما كانت هي في الحقيقة... ترتعد.</p>" }
-        ];
-        
-        let currentUser = null, isAdmin = false, currentStoryIndex = -1, currentTheme = localStorage.getItem('zilal_theme') || 'light';
+        const database = firebase.database();
 
-        function initTheme() { document.documentElement.setAttribute('data-theme', currentTheme); updateThemeIcon(); }
-        function toggleTheme() { currentTheme = currentTheme === 'light' ? 'dark' : 'light'; document.documentElement.setAttribute('data-theme', currentTheme); localStorage.setItem('zilal_theme', currentTheme); updateThemeIcon(); }
-        function updateThemeIcon() { const btn = document.getElementById('themeToggle'); btn.textContent = currentTheme === 'light' ? '☾' : '☀'; }
-        function createParticles() { for(let i=0;i<50;i++){ let p=document.createElement('div'); p.className='particle'; p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*15+'s'; p.style.animationDuration=(10+Math.random()*10)+'s'; document.getElementById('particles').appendChild(p); } }
+        // متغيرات عامة
+        let currentUser = null;
+        let currentUserRole = 'user';
+        let currentStory = null;
+        let saveTimeout = null;
 
-        // تحميل القصص من Firestore
-        async function loadStoriesFromFirestore() {
-            try {
-                const snapshot = await db.collection('stories').orderBy('index').get();
-                if(!snapshot.empty){
-                    storiesData = [];
-                    snapshot.forEach(doc=>{ storiesData.push(doc.data()); });
-                } else {
-                    await saveStoriesToFirestore();
+        // تفعيل التخزين المحلي
+        database.setPersistenceEnabled(true);
+
+        // مراقبة حالة تسجيل الدخول
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserData();
+                showMainScreen();
+                loadStories();
+                if (currentUserRole === 'admin') {
+                    document.getElementById('adminTab').classList.remove('hidden');
+                    loadAdminsList();
+                    loadStoriesForEdit();
                 }
-                renderStories();
-                populateStorySelect();
-            } catch(e){ console.warn(e); renderStories(); }
-        }
-        
-        async function saveStoriesToFirestore() {
-            for(let i=0;i<storiesData.length;i++){
-                await db.collection('stories').doc(i.toString()).set({...storiesData[i], index:i});
-            }
-        }
-
-        async function saveStoryChanges(){
-            let idx=parseInt(document.getElementById('storySelectEdit').value);
-            storiesData[idx]={
-                title:document.getElementById('editStoryTitle').value,
-                preview:document.getElementById('editStoryPreview').value,
-                content:document.getElementById('editStoryContent').value
-            };
-            await db.collection('stories').doc(idx.toString()).set({...storiesData[idx], index:idx});
-            renderStories();
-            closeReader();
-            alert('✓ تم حفظ القصة بنجاح');
-        }
-        
-        async function addNewStory(){
-            let newIndex=storiesData.length;
-            let newStory={ title:"قصة جديدة", preview:"مقدمة القصة...", content:"<p>نص القصة...</p>" };
-            storiesData.push(newStory);
-            await db.collection('stories').doc(newIndex.toString()).set({...newStory, index:newIndex});
-            renderStories();
-            populateStorySelect();
-            alert('✓ تم إضافة قصة جديدة');
-        }
-
-        function populateStorySelect(){
-            let sel=document.getElementById('storySelectEdit');
-            if(!sel) return;
-            sel.innerHTML='';
-            storiesData.forEach((s,i)=>{
-                let opt=document.createElement('option');
-                opt.value=i;
-                opt.textContent=`${i+1}- ${s.title}`;
-                sel.appendChild(opt);
-            });
-            sel.onchange=()=>{
-                let idx=sel.value;
-                document.getElementById('editStoryTitle').value=storiesData[idx].title;
-                document.getElementById('editStoryPreview').value=storiesData[idx].preview;
-                document.getElementById('editStoryContent').value=storiesData[idx].content;
-            };
-            if(storiesData.length) sel.onchange();
-        }
-
-        // إدارة المستخدمين (حظر/طرد)
-        async function loadUsersAndKick(){
-            if(!isAdmin) return;
-            const usersSnap = await db.collection('users').get();
-            let listDiv = document.getElementById('userList');
-            listDiv.innerHTML = '';
-            for(let doc of usersSnap.docs){
-                let user = doc.data();
-                let li = document.createElement('li');
-                li.className = 'user-item';
-                li.innerHTML = `<span>${user.email || user.name || 'مستخدم'}</span><button class="kick-btn" onclick="kickUser('${doc.id}')">طرد</button>`;
-                listDiv.appendChild(li);
-            }
-        }
-        
-        async function kickUser(uid){
-            if(!isAdmin) return;
-            await db.collection('users').doc(uid).delete();
-            if(auth.currentUser && auth.currentUser.uid === uid) logout();
-            loadUsersAndKick();
-            alert('✓ تم حظر المستخدم');
-        }
-        
-        async function trackUser(email, name, uid){
-            if(!isAdmin){
-                await db.collection('users').doc(uid).set({ email, name, lastLogin: new Date(), uid }, { merge: true });
-            }
-        }
-
-        function renderStories(){
-            let grid=document.getElementById('storiesGrid');
-            if(!grid) return;
-            grid.innerHTML=storiesData.map((story,i)=>`
-                <div class="story-card fade-in" style="animation-delay:${i*0.1}s" data-index="${i}">
-                    <div class="story-header">
-                        <div>
-                            <span class="story-number">${i+1}</span>
-                            <span class="story-title-text">${story.title}</span>
-                        </div>
-                        ${getStoryProgress(i)>0?`<span class="story-progress">${getStoryProgress(i)}%</span>`:''}
-                    </div>
-                    <div class="story-preview">${story.preview}</div>
-                    ${isAdmin?`<div class="admin-controls"><button class="admin-btn" onclick="event.stopPropagation();openEditStory(${i})">✏️ تعديل</button></div>`:''}
-                </div>
-            `).join('');
-            document.querySelectorAll('.story-card').forEach((card,idx)=>{
-                card.onclick = () => openStory(parseInt(card.dataset.index));
-            });
-        }
-        
-        function getStoryProgress(index){ let saved=localStorage.getItem(`zilal_progress_${index}`); return saved?parseFloat(saved):0; }
-        
-        function openStory(index, continueReading=false){
-            currentStoryIndex=index;
-            let story=storiesData[index];
-            document.getElementById('readerTitle').innerHTML=story.title;
-            document.getElementById('readerSubtitle').innerHTML=`القصة ${index+1} من ${storiesData.length}`;
-            document.getElementById('readerBody').innerHTML=story.content+'<div class="reader-divider" style="text-align:center;margin:30px 0;">• • •</div><p style="text-align:center;color:var(--text-muted);">نهاية القصة</p>';
-            document.getElementById('readerOverlay').style.display='block';
-            document.body.style.overflow='hidden';
-            document.getElementById('progressContainer').style.display='block';
-            localStorage.setItem('zilal_last_story', index);
-            renderNotes(index);
-            if(continueReading){
-                let savedScroll=localStorage.getItem(`zilal_scroll_${index}`);
-                if(savedScroll) setTimeout(()=>{ document.getElementById('readerOverlay').scrollTop=parseInt(savedScroll); },100);
-            } else { document.getElementById('readerOverlay').scrollTop=0; }
-        }
-        
-        function closeReader(){
-            if(currentStoryIndex>=0){
-                let overlay=document.getElementById('readerOverlay');
-                let scrollTop=overlay.scrollTop;
-                let scrollHeight=overlay.scrollHeight-overlay.clientHeight;
-                let progress=scrollHeight>0?(scrollTop/scrollHeight)*100:0;
-                localStorage.setItem(`zilal_scroll_${currentStoryIndex}`, scrollTop);
-                localStorage.setItem(`zilal_progress_${currentStoryIndex}`, progress.toFixed(1));
-            }
-            document.getElementById('readerOverlay').style.display='none';
-            document.body.style.overflow='';
-            document.getElementById('progressContainer').style.display='none';
-            document.getElementById('progressBar').style.width='0%';
-            renderStories();
-            checkContinueReading();
-        }
-        
-        document.getElementById('readerOverlay')?.addEventListener('scroll',function(){
-            if(currentStoryIndex<0) return;
-            let scrollTop=this.scrollTop;
-            let scrollHeight=this.scrollHeight-this.clientHeight;
-            let progress=scrollHeight>0?(scrollTop/scrollHeight)*100:0;
-            document.getElementById('progressBar').style.width=progress+'%';
-            localStorage.setItem(`zilal_scroll_${currentStoryIndex}`, scrollTop);
-            localStorage.setItem(`zilal_progress_${currentStoryIndex}`, progress.toFixed(1));
-        });
-        
-        function getNotes(storyIndex){ let key=`zilal_notes_${storyIndex}`; let saved=localStorage.getItem(key); return saved?JSON.parse(saved):[]; }
-        function saveNotes(storyIndex,notes){ localStorage.setItem(`zilal_notes_${storyIndex}`,JSON.stringify(notes)); }
-        function renderNotes(storyIndex){
-            let notes=getNotes(storyIndex);
-            let list=document.getElementById('notesList');
-            let countSpan=document.getElementById('notesCount');
-            countSpan.innerText=`${notes.length} ملاحظات`;
-            if(notes.length===0){ list.innerHTML='<div class="empty-notes">لا توجد ملاحظات بعد.</div>'; return; }
-            list.innerHTML=notes.map((note,i)=>`<div class="note-item"><button class="note-delete" onclick="deleteNote(${i})">×</button><div class="note-date">${note.date}</div><div class="note-text">${escapeHtml(note.text)}</div></div>`).join('');
-        }
-        function addNote(){ let input=document.getElementById('noteInput'); let text=input.value.trim(); if(!text||currentStoryIndex<0) return; let notes=getNotes(currentStoryIndex); let now=new Date(); let dateStr=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${now.getMinutes()}`; notes.unshift({text,date:dateStr}); saveNotes(currentStoryIndex,notes); input.value=''; renderNotes(currentStoryIndex); renderStories(); }
-        function deleteNote(noteIndex){ let notes=getNotes(currentStoryIndex); notes.splice(noteIndex,1); saveNotes(currentStoryIndex,notes); renderNotes(currentStoryIndex); renderStories(); }
-        function clearNoteInput(){ document.getElementById('noteInput').value=''; }
-        function escapeHtml(str){ let div=document.createElement('div'); div.textContent=str; return div.innerHTML; }
-        
-        function checkContinueReading(){
-            let lastStory=localStorage.getItem('zilal_last_story');
-            if(lastStory!==null&&storiesData[parseInt(lastStory)]){
-                let story=storiesData[parseInt(lastStory)];
-                document.getElementById('continueTitle').innerText='استمر في قراءة: '+story.title;
-                document.getElementById('continueDesc').innerText=`آخر قصة كنت تقرأها`;
-                document.getElementById('continueBanner').classList.add('show');
-            } else { document.getElementById('continueBanner').classList.remove('show'); }
-        }
-        function continueReading(){ let lastStory=localStorage.getItem('zilal_last_story'); if(lastStory!==null) openStory(parseInt(lastStory), true); }
-        function openEditStory(index){ if(!isAdmin) return; populateStorySelect(); document.getElementById('storySelectEdit').value=index; document.getElementById('storySelectEdit').onchange(); toggleAdminPanel(); }
-        function toggleAdminPanel(){ let panel=document.getElementById('adminPanel'); panel.classList.toggle('show'); if(isAdmin && panel.classList.contains('show')) loadUsersAndKick(); }
-        function activateProtection(){
-            document.addEventListener('contextmenu',e=>e.preventDefault());
-            document.addEventListener('copy',e=>e.preventDefault());
-            document.addEventListener('keydown',e=>{ if(e.ctrlKey&&(e.key==='c'||e.key==='x'||e.key==='s')) e.preventDefault(); if(e.key==='F12') e.preventDefault(); if(e.key==='PrintScreen'){ e.preventDefault(); alert('التقاط الشاشة ممنوع!'); } if(e.key==='Escape') closeReader(); });
-        }
-        
-        async function googleLogin(){
-            try{
-                let result=await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-                let user=result.user;
-                let isAdminEmail = (user.email === 'admin@zilal.com') || (user.email === 'mmkk@admin.com');
-                if(isAdminEmail){ isAdmin=true; document.getElementById('adminBadge').style.display='inline-block'; document.getElementById('adminPanelBtn').style.display='inline-block'; }
-                else { isAdmin=false; }
-                await trackUser(user.email, user.displayName, user.uid);
-                currentUser=user;
-                document.getElementById('userNameDisplay').innerText=user.displayName||user.email;
-                document.getElementById('loginPage').style.display='none';
-                document.getElementById('appPage').style.display='block';
-                document.getElementById('protectionBar').style.display='block';
-                await loadStoriesFromFirestore();
-                checkContinueReading();
-                activateProtection();
-            } catch(err){ document.getElementById('errorMsg').innerText='فشل تسجيل الدخول: '+err.message; document.getElementById('errorMsg').classList.add('show'); setTimeout(()=>document.getElementById('errorMsg').classList.remove('show'),3000); }
-        }
-        
-        async function adminCodeLogin(){
-            let code=prompt("أدخل كود الأدمن السري:");
-            if(code==='mmkk#' || code==='6677#'){
-                isAdmin=true;
-                document.getElementById('adminBadge').style.display='inline-block';
-                document.getElementById('adminPanelBtn').style.display='inline-block';
-                document.getElementById('userNameDisplay').innerText='الأدمن';
-                document.getElementById('loginPage').style.display='none';
-                document.getElementById('appPage').style.display='block';
-                document.getElementById('protectionBar').style.display='block';
-                await loadStoriesFromFirestore();
-                checkContinueReading();
-                activateProtection();
-            } else alert("كود غير صحيح");
-        }
-        
-        function logout(){ auth.signOut(); localStorage.clear(); document.getElementById('appPage').style.display='none'; document.getElementById('loginPage').style.display='flex'; document.getElementById('protectionBar').style.display='none'; closeReader(); isAdmin=false; currentUser=null; }
-        
-        auth.onAuthStateChanged(async(user)=>{
-            if(user){
-                let isAdminEmail = (user.email === 'admin@zilal.com');
-                isAdmin = isAdminEmail;
-                document.getElementById('userNameDisplay').innerText=user.displayName||user.email;
-                if(isAdminEmail){ document.getElementById('adminBadge').style.display='inline-block'; document.getElementById('adminPanelBtn').style.display='inline-block'; }
-                document.getElementById('loginPage').style.display='none';
-                document.getElementById('appPage').style.display='block';
-                document.getElementById('protectionBar').style.display='block';
-                await loadStoriesFromFirestore();
-                checkContinueReading();
-                activateProtection();
             } else {
-                document.getElementById('appPage').style.display='none';
-                document.getElementById('loginPage').style.display='flex';
-                isAdmin=false;
+                currentUser = null;
+                showAuthScreen();
             }
         });
-        
-        document.getElementById('googleLoginBtn').onclick=googleLogin;
-        document.getElementById('showAdminLogin').onclick=adminCodeLogin;
-        initTheme(); createParticles(); populateStorySelect();
+
+        // تحميل بيانات المستخدم
+        async function loadUserData() {
+            const userRef = database.ref('users/' + currentUser.uid);
+            const snapshot = await userRef.once('value');
+            let userData = snapshot.val();
+            
+            if (!userData) {
+                // إنشاء بيانات لمستخدم جديد
+                const personalCode = generateCode();
+                userData = {
+                    email: currentUser.email,
+                    name: currentUser.displayName || currentUser.email.split('@')[0],
+                    personalCode: personalCode,
+                    role: 'user',
+                    createdAt: Date.now()
+                };
+                await userRef.set(userData);
+            }
+            
+            currentUserRole = userData.role || 'user';
+            document.getElementById('userName').innerText = userData.name;
+            document.getElementById('userCode').innerText = userData.personalCode;
+        }
+
+        // إنشاء كود عشوائي
+        function generateCode() {
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+
+        // تسجيل الدخول
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .catch(error => showAlert('خطأ: ' + error.message, 'error'));
+        }
+
+        // تسجيل الدخول بـ Google
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .catch(error => showAlert('خطأ: ' + error.message, 'error'));
+        }
+
+        // إنشاء حساب جديد
+        async function signup() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            
+            if (!name || !email || !password) {
+                showAlert('الرجاء ملء جميع الحقول', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showAlert('كلمة المرور غير متطابقة', 'error');
+                return;
+            }
+            
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const personalCode = generateCode();
+                
+                await database.ref('users/' + userCredential.user.uid).set({
+                    name: name,
+                    email: email,
+                    personalCode: personalCode,
+                    role: 'user',
+                    createdAt: Date.now()
+                });
+                
+                showAlert('تم إنشاء الحساب بنجاح!', 'success');
+            } catch (error) {
+                showAlert('خطأ: ' + error.message, 'error');
+            }
+        }
+
+        // تسجيل الخروج
+        function logout() {
+            auth.signOut();
+        }
+
+        // عرض الشاشات
+        function showAuthScreen() {
+            document.getElementById('authScreen').classList.remove('hidden');
+            document.getElementById('mainScreen').classList.add('hidden');
+        }
+
+        function showMainScreen() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('mainScreen').classList.remove('hidden');
+        }
+
+        // تبديل تبويبات التسجيل
+        function switchAuthTab(tab) {
+            const tabs = document.querySelectorAll('#authTabs .tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            if (tab === 'login') {
+                tabs[0].classList.add('active');
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('signupForm').classList.add('hidden');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('signupForm').classList.remove('hidden');
+            }
+        }
+
+        // تبديل التبويبات الرئيسية
+        function switchMainTab(tab) {
+            document.querySelectorAll('#mainScreen .tabs .tab').forEach(t => t.classList.remove('active'));
+            if (tab === 'stories') {
+                document.querySelector('#mainScreen .tabs .tab:first-child').classList.add('active');
+                document.getElementById('storiesPanel').classList.remove('hidden');
+                document.getElementById('adminPanel').classList.add('hidden');
+                document.getElementById('readingPanel').classList.add('hidden');
+                loadStories();
+            } else if (tab === 'admin' && currentUserRole === 'admin') {
+                document.querySelector('#mainScreen .tabs .tab:last-child').classList.add('active');
+                document.getElementById('storiesPanel').classList.add('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
+                document.getElementById('readingPanel').classList.add('hidden');
+                loadAdminsList();
+                loadStoriesForEdit();
+            }
+        }
+
+        // تحميل وعرض القصص
+        function loadStories() {
+            const storiesRef = database.ref('stories');
+            storiesRef.on('value', async (snapshot) => {
+                const stories = snapshot.val();
+                const storiesList = document.getElementById('storiesList');
+                storiesList.innerHTML = '';
+                
+                if (!stories) {
+                    storiesList.innerHTML = '<p>لا توجد قصص حالياً</p>';
+                    return;
+                }
+                
+                for (const [id, story] of Object.entries(stories)) {
+                    // تحميل تقدم القراءة
+                    const progressRef = await database.ref(`readingProgress/${currentUser.uid}/${id}`).once('value');
+                    const progress = progressRef.val();
+                    const percentage = progress ? (progress.percentage || 0) : 0;
+                    
+                    const storyCard = document.createElement('div');
+                    storyCard.className = 'story-card';
+                    storyCard.onclick = () => openStory(id, story);
+                    storyCard.innerHTML = `
+                        <div class="story-title">📖 ${story.title}</div>
+                        <div class="story-topic">${story.topic || 'لا يوجد موضوع'}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div style="font-size: 12px; color: #888; margin-top: 5px;">${percentage}% مكتمل</div>
+                    `;
+                    storiesList.appendChild(storyCard);
+                }
+            });
+        }
+
+        // فتح قصة للقراءة
+        async function openStory(storyId, story) {
+            currentStory = { id: storyId, ...story };
+            document.getElementById('storiesPanel').classList.add('hidden');
+            document.getElementById('readingPanel').classList.remove('hidden');
+            document.getElementById('readingTitle').innerText = story.title;
+            document.getElementById('readingTopic').innerText = story.topic || '';
+            
+            // تحويل النص إلى HTML مع فقرات
+            const paragraphs = story.content.split('\n').filter(p => p.trim());
+            const html = paragraphs.map(p => `<p>${p}</p>`).join('');
+            document.getElementById('readingContent').innerHTML = html;
+            
+            // استعادة آخر موضع قراءة
+            const progressRef = await database.ref(`readingProgress/${currentUser.uid}/${storyId}`).once('value');
+            const progress = progressRef.val();
+            if (progress && progress.scrollPosition) {
+                setTimeout(() => {
+                    const contentDiv = document.getElementById('readingContent');
+                    contentDiv.scrollTop = progress.scrollPosition;
+                    document.getElementById('readingProgress').style.width = (progress.percentage || 0) + '%';
+                }, 100);
+            }
+        }
+
+        // حفظ آخر موضع قراءة
+        function saveScrollPosition() {
+            if (!currentStory || !currentUser) return;
+            
+            if (saveTimeout) clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                const contentDiv = document.getElementById('readingContent');
+                const scrollPosition = contentDiv.scrollTop;
+                const scrollHeight = contentDiv.scrollHeight - contentDiv.clientHeight;
+                const percentage = scrollHeight > 0 ? Math.round((scrollPosition / scrollHeight) * 100) : 0;
+                
+                await database.ref(`readingProgress/${currentUser.uid}/${currentStory.id}`).set({
+                    scrollPosition: scrollPosition,
+                    percentage: percentage,
+                    lastRead: Date.now()
+                });
+                
+                document.getElementById('readingProgress').style.width = percentage + '%';
+            }, 1000);
+        }
+
+        // العودة للقصص
+        function backToStories() {
+            document.getElementById('readingPanel').classList.add('hidden');
+            document.getElementById('storiesPanel').classList.remove('hidden');
+            currentStory = null;
+            loadStories();
+        }
+
+        // إضافة قصة جديدة (للأدمن)
+        async function addNewStory() {
+            if (currentUserRole !== 'admin') {
+                showAlert('غير مسموح - أنت لست أدمن', 'error');
+                return;
+            }
+            
+            const title = document.getElementById('newStoryTitle').value;
+            const topic = document.getElementById('newStoryTopic').value;
+            const content = document.getElementById('newStoryContent').value;
+            
+            if (!title || !content) {
+                showAlert('الرجاء إدخال عنوان ومحتوى القصة', 'error');
+                return;
+            }
+            
+            const newStoryRef = database.ref('stories').push();
+            await newStoryRef.set({
+                title: title,
+                topic: topic,
+                content: content,
+                lastEdited: Date.now(),
+                editedBy: currentUser.uid
+            });
+            
+            document.getElementById('newStoryTitle').value = '';
+            document.getElementById('newStoryTopic').value = '';
+            document.getElementById('newStoryContent').value = '';
+            showAlert('تم إضافة القصة بنجاح!', 'success');
+            loadStoriesForEdit();
+        }
+
+        // تحميل القصص للتعديل
+        function loadStoriesForEdit() {
+            const storiesRef = database.ref('stories');
+            storiesRef.once('value', (snapshot) => {
+                const stories = snapshot.val();
+                const select = document.getElementById('editStorySelect');
+                select.innerHTML = '<option value="">اختر قصة لتعديلها...</option>';
+                
+                if (stories) {
+                    for (const [id, story] of Object.entries(stories)) {
+                        const option = document.createElement('option');
+                        option.value = id;
+                        option.textContent = story.title;
+                        select.appendChild(option);
+                    }
+                }
+            });
+        }
+
+        // تحميل قصة للتعديل
+        async function loadStoryForEdit() {
+            const storyId = document.getElementById('editStorySelect').value;
+            if (!storyId) {
+                document.getElementById('editStoryArea').classList.add('hidden');
+                return;
+            }
+            
+            const storyRef = await database.ref('stories/' + storyId).once('value');
+            const story = storyRef.val();
+            
+            document.getElementById('editStoryTitle').value = story.title || '';
+            document.getElementById('editStoryTopic').value = story.topic || '';
+            document.getElementById('editStoryContent').value = story.content || '';
+            document.getElementById('editStoryArea').classList.remove('hidden');
+            window.currentEditStoryId = storyId;
+        }
+
+        // تحديث قصة
+        async function updateStory() {
+            if (!window.currentEditStoryId) return;
+            
+            await database.ref('stories/' + window.currentEditStoryId).update({
+                title: document.getElementById('editStoryTitle').value,
+                topic: document.getElementById('editStoryTopic').value,
+                content: document.getElementById('editStoryContent').value,
+                lastEdited: Date.now(),
+                editedBy: currentUser.uid
+            });
+            
+            showAlert('تم تحديث القصة بنجاح!', 'success');
+            loadStories();
+            loadStoriesForEdit();
+        }
+
+        // حذف قصة
+        async function deleteStory() {
+            if (!window.currentEditStoryId) return;
+            if (!confirm('هل أنت متأكد من حذف هذه القصة؟')) return;
+            
+            await database.ref('stories/' + window.currentEditStoryId).remove();
+            showAlert('تم حذف القصة', 'success');
+            loadStories();
+            loadStoriesForEdit();
+            document.getElementById('editStoryArea').classList.add('hidden');
+        }
+
+        // تحميل قائمة الأدمن
+        async function loadAdminsList() {
+            const adminsRef = database.ref('admins');
+            adminsRef.on('value', (snapshot) => {
+                const admins = snapshot.val();
+                const adminsList = document.getElementById('adminsList');
+                adminsList.innerHTML = '<h4>المشرفين الحاليين:</h4>';
+                
+                if (admins) {
+                    for (const [email, value] of Object.entries(admins)) {
+                        adminsList.innerHTML += `<div class="user-item">📧 ${email}</div>`;
+                    }
+                } else {
+                    adminsList.innerHTML += '<p>لا يوجد مشرفين</p>';
+                }
+            });
+        }
+
+        // تعيين أدمن
+        async function makeAdmin() {
+            const email = document.getElementById('adminUserEmail').value;
+            if (!email) {
+                showAlert('الرجاء إدخال البريد الإلكتروني', 'error');
+                return;
+            }
+            
+            await database.ref('admins/' + email.replace(/\./g, ',')).set(true);
+            showAlert('تم تعيين المستخدم كأدمن', 'success');
+            document.getElementById('adminUserEmail').value = '';
+        }
+
+        // إزالة أدمن
+        async function removeAdmin() {
+            const email = document.getElementById('adminUserEmail').value;
+            if (!email) {
+                showAlert('الرجاء إدخال البريد الإلكتروني', 'error');
+                return;
+            }
+            
+            await database.ref('admins/' + email.replace(/\./g, ',')).remove();
+            showAlert('تم إزالة الأدمن', 'success');
+            document.getElementById('adminUserEmail').value = '';
+        }
+
+        // عرض رسالة تنبيه
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerText = message;
+            document.querySelector('#app').prepend(alertDiv);
+            setTimeout(() => alertDiv.remove(), 3000);
+        }
+
+        // إضافة قصة افتراضية عند أول تشغيل (إذا لم توجد قصص)
+        async function addDefaultStory() {
+            const storiesRef = await database.ref('stories').once('value');
+            if (!storiesRef.exists()) {
+                database.ref('stories/default').set({
+                    title: "القصة الأولى",
+                    topic: "مرحباً بك في منصة القصص",
+                    content: "هذه هي قصتك الأولى.\n\nيمكنك قراءتها والتعديل عليها.\n\nالأدمن فقط هو من يستطيع تعديل القصص.\n\nاستمتع بالقراءة!",
+                    lastEdited: Date.now(),
+                    editedBy: "system"
+                });
+            }
+        }
+
+        addDefaultStory();
     </script>
 </body>
 </html>
